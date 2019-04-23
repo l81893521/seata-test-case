@@ -8,9 +8,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <groupId>com.seata.test</groupId>
-    <artifactId>springboot-dubbo</artifactId>
+    <artifactId>dubbo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>springboot-dubbo</name>
+    <name>dubbo</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -31,6 +31,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.fescar</groupId>
+            <artifactId>fescar-dubbo</artifactId>
         </dependency>
     </dependencies>
 
