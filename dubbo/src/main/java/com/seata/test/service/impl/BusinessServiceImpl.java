@@ -1,5 +1,6 @@
 package com.seata.test.service.impl;
 
+import com.alibaba.fescar.spring.annotation.GlobalTransactional;
 import com.seata.test.service.BusinessService;
 import com.seata.test.service.OrderService;
 import com.seata.test.service.StorageService;
@@ -35,20 +36,24 @@ public class BusinessServiceImpl implements BusinessService {
 
     private static final Logger logger = LoggerFactory.getLogger(BusinessService.class);
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @Autowired
     private StorageService storageService;
 
-    @Autowired
     private OrderService orderService;
 
     @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "dubbo-demo-tx")
     public void purchase(String userId, String commodityCode, int orderCount) {
         storageService.deduct(commodityCode, orderCount);
         orderService.create(userId, commodityCode, orderCount);
         //制造异常
         throw new RuntimeException("xxx");
+    }
+
+    public void setStorageService(StorageService storageService) {
+        this.storageService = storageService;
+    }
+
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
     }
 }

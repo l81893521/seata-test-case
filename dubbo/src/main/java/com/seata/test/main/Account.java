@@ -1,15 +1,12 @@
-package com.seata.test.service.impl;
+package com.seata.test.main;
 
-
-import com.seata.test.service.AccountService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.seata.test.ApplicationKeeper;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
   * @author will.zjw
-  * @date 2019-04-19 16:25
+  * @date 2019-04-23 18:39
   *            佛主保佑,不要出BUG
   *                 _ooOoo_
   *                o8888888o
@@ -30,19 +27,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
   * ======`-.____`-.___\_____/___.-`____.-'======
   *                 `=---='
   */
-public class AccountServiceImpl implements AccountService {
+public class Account {
 
-    private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
+    public static void main(String[] args) {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"spring/dubbo-account-service.xml"});
+        context.getBean("accountService");
+        JdbcTemplate accountJdbcTemplate = (JdbcTemplate) context.getBean("jdbcTemplate");
+        accountJdbcTemplate.update("delete from seata_account_tbl where user_id = 'U100001'");
+        accountJdbcTemplate.update("insert into seata_account_tbl(user_id, money) values ('U100001', 999)");
 
-    private JdbcTemplate jdbcTemplate;
-
-
-    @Override
-    public void debit(String userId, int money) {
-        jdbcTemplate.update("update seata_account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
-    }
-
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+        new ApplicationKeeper(context).keep();
     }
 }

@@ -39,10 +39,8 @@ public class OrderServiceImpl implements OrderService {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
-    @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
     private AccountService accountService;
 
     @Override
@@ -63,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement pst = connection.prepareStatement(
-                "insert into order_tbl (user_id, commodity_code, count, money) values (?, ?, ?, ?)",
+                "insert into seata_order_tbl (user_id, commodity_code, count, money) values (?, ?, ?, ?)",
                 PreparedStatement.RETURN_GENERATED_KEYS
             );
             pst.setObject(1, order.userId);
@@ -80,5 +78,13 @@ public class OrderServiceImpl implements OrderService {
 
     private int calculate(String commodityId, int orderCount) {
         return 200 * orderCount;
+    }
+
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public void setAccountService(AccountService accountService) {
+        this.accountService = accountService;
     }
 }

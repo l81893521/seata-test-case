@@ -33,12 +33,15 @@ public class StorageServiceImpl implements StorageService {
 
     private static final Logger logger = LoggerFactory.getLogger(StorageService.class);
 
-    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Override
     public void deduct(String commodityCode, int count) {
-        jdbcTemplate.update("update storage_tbl set count = count - ? where commodity_code = ?",
+        jdbcTemplate.update("update seata_storage_tbl set count = count - ? where commodity_code = ?",
                 new Object[] {count, commodityCode});
+    }
+
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 }
