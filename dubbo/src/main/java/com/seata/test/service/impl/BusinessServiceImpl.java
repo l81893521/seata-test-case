@@ -1,9 +1,10 @@
 package com.seata.test.service.impl;
 
-import com.alibaba.fescar.spring.annotation.GlobalTransactional;
 import com.seata.test.service.BusinessService;
 import com.seata.test.service.OrderService;
 import com.seata.test.service.StorageService;
+import io.seata.core.context.RootContext;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,8 @@ public class BusinessServiceImpl implements BusinessService {
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "dubbo-demo-tx")
     public void purchase(String userId, String commodityCode, int orderCount) {
+        logger.info("purchase begin ... xid: " + RootContext.getXID());
+
         storageService.deduct(commodityCode, orderCount);
         orderService.create(userId, commodityCode, orderCount);
         //制造异常
