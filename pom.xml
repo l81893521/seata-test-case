@@ -46,6 +46,7 @@
 
     <modules>
         <module>dubbo</module>
+        <module>spring-cloud-seata</module>
     </modules>
 
     <dependencyManagement>
