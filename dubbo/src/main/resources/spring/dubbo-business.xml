@@ -8,10 +8,12 @@
     <!-- 使用multicast广播注册中心暴露服务地址 -->
     <dubbo:registry address="multicast://224.5.6.7:1234?unicast=false"/>
     <!-- 生成远程服务代理 -->
+    <dubbo:reference id="accountService" check="false" interface="com.seata.test.service.AccountService"/>
     <dubbo:reference id="orderService" check="false" interface="com.seata.test.service.OrderService"/>
     <dubbo:reference id="storageService" check="false" interface="com.seata.test.service.StorageService"/>
 
     <bean id="businessService" class="com.seata.test.service.impl.BusinessServiceImpl">
+        <property name="accountService" ref="accountService"/>
         <property name="orderService" ref="orderService"/>
         <property name="storageService" ref="storageService"/>
     </bean>
