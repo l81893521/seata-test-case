@@ -9,4 +9,11 @@ public interface BusinessService {
      * @param orderCount 订购数量
      */
     void purchase(String userId, String commodityCode, int orderCount);
+
+    /**
+     * 创建账户
+     * @param userId
+     * @param money
+     */
+    void createAccount(String userId, int money);
 }

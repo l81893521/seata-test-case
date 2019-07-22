@@ -11,4 +11,11 @@ public interface AccountService {
      * @param money 扣款金额
      */
     void debit(String userId, int money);
+
+    /**
+     * 创建账户
+     * @param userId
+     * @param money
+     */
+    void createAcount(String userId, int money);
 }

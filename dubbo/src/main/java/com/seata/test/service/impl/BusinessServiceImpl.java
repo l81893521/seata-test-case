@@ -1,5 +1,6 @@
 package com.seata.test.service.impl;
 
+import com.seata.test.service.AccountService;
 import com.seata.test.service.BusinessService;
 import com.seata.test.service.OrderService;
 import com.seata.test.service.StorageService;
@@ -41,6 +42,8 @@ public class BusinessServiceImpl implements BusinessService {
 
     private OrderService orderService;
 
+    private AccountService accountService;
+
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "dubbo-demo-tx")
     public void purchase(String userId, String commodityCode, int orderCount) {
@@ -50,6 +53,22 @@ public class BusinessServiceImpl implements BusinessService {
         orderService.create(userId, commodityCode, orderCount);
         //制造异常
         throw new RuntimeException("xxx");
+    }
+
+    /**
+     * 创建账户
+     *
+     * @param userId
+     * @param money
+     */
+    @Override
+    public void createAccount(String userId, int money) {
+        accountService.createAcount(userId, money);
+        throw new RuntimeException("创建账户失败");
+    }
+
+    public void setAccountService(AccountService accountService) {
+        this.accountService = accountService;
     }
 
     public void setStorageService(StorageService storageService) {

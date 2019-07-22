@@ -42,6 +42,17 @@ public class AccountServiceImpl implements AccountService {
         jdbcTemplate.update("update seata_account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
     }
 
+    /**
+     * 创建账户
+     *
+     * @param userId
+     * @param money
+     */
+    @Override
+    public void createAcount(String userId, int money) {
+        jdbcTemplate.update("insert into seata_account_tbl(user_id, money) values (?, ?)", userId, money);
+    }
+
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
