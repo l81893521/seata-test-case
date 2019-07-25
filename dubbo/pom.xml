@@ -36,6 +36,11 @@
 
         <dependency>
             <groupId>io.seata</groupId>
+            <artifactId>seata-discovery-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.seata</groupId>
             <artifactId>seata-spring</artifactId>
         </dependency>
 

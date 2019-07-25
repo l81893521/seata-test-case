@@ -62,9 +62,17 @@ public class BusinessServiceImpl implements BusinessService {
      * @param money
      */
     @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "create-account-tx")
     public void createAccount(String userId, int money) {
         accountService.createAcount(userId, money);
         throw new RuntimeException("创建账户失败");
+    }
+
+    @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "delete-account-tx")
+    public void deleteAccount(String userId) {
+        accountService.deleteAccount(userId);
+        throw new RuntimeException("删除账户失败");
     }
 
     public void setAccountService(AccountService accountService) {

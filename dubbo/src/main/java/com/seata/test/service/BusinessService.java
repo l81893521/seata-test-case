@@ -16,4 +16,10 @@ public interface BusinessService {
      * @param money
      */
     void createAccount(String userId, int money);
+
+    /**
+     * 删除账户
+     * @param userId
+     */
+    void deleteAccount(String userId);
 }

@@ -53,6 +53,11 @@ public class AccountServiceImpl implements AccountService {
         jdbcTemplate.update("insert into seata_account_tbl(user_id, money) values (?, ?)", userId, money);
     }
 
+    @Override
+    public void deleteAccount(String userId) {
+        jdbcTemplate.update("delete from seata_account_tbl where user_id = ?", userId);
+    }
+
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
