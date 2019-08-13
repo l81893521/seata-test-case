@@ -50,12 +50,17 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public void createAcount(String userId, int money) {
-        jdbcTemplate.update("insert into seata_account_tbl(user_id, money) values (?, ?)", userId, money);
+        jdbcTemplate.update("insert into seata_account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
     }
 
     @Override
     public void deleteAccount(String userId) {
         jdbcTemplate.update("delete from seata_account_tbl where user_id = ?", userId);
+    }
+
+    @Override
+    public void updateAccountInformation(String userId, String information) {
+        jdbcTemplate.update("update seata_account_tbl set information = ? where user_id = ?", new Object[]{information.getBytes(), userId});
     }
 
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {

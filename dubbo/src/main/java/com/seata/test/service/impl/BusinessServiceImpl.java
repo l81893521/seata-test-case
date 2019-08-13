@@ -55,6 +55,13 @@ public class BusinessServiceImpl implements BusinessService {
         throw new RuntimeException("xxx");
     }
 
+    @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "debit-account-tx")
+    public void debit(String userId, int money){
+        accountService.debit(userId, money);
+        throw new RuntimeException("扣除余额失败");
+    }
+
     /**
      * 创建账户
      *
@@ -68,11 +75,27 @@ public class BusinessServiceImpl implements BusinessService {
         throw new RuntimeException("创建账户失败");
     }
 
+    /**
+     * 删除账户
+     * @param userId
+     */
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "delete-account-tx")
     public void deleteAccount(String userId) {
         accountService.deleteAccount(userId);
         throw new RuntimeException("删除账户失败");
+    }
+
+    /**
+     * 修改账户信息
+     * @param userId
+     * @param information
+     */
+    @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "update-account-information-tx")
+    public void updateAccountInformation(String userId, String information) {
+        accountService.updateAccountInformation(userId, information);
+        throw new RuntimeException("修改账户信息失败");
     }
 
     public void setAccountService(AccountService accountService) {

@@ -24,4 +24,10 @@ public interface AccountService {
      * @param userId
      */
     void deleteAccount(String userId);
+
+    /**
+     * 修改账户信息
+     * @param information
+     */
+    void updateAccountInformation(String userId, String information);
 }

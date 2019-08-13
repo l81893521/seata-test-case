@@ -11,6 +11,13 @@ public interface BusinessService {
     void purchase(String userId, String commodityCode, int orderCount);
 
     /**
+     * 扣除账户余额
+     * @param userId
+     * @param money
+     */
+    void debit(String userId, int money);
+
+    /**
      * 创建账户
      * @param userId
      * @param money
@@ -22,4 +29,11 @@ public interface BusinessService {
      * @param userId
      */
     void deleteAccount(String userId);
+
+    /**
+     * 修改账户信息
+     * @param userId
+     * @param information
+     */
+    void updateAccountInformation(String userId, String information);
 }

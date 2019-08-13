@@ -1,5 +1,9 @@
 package com.seata.test.main;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import com.seata.test.service.BusinessService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -33,6 +37,9 @@ public class Business {
                 new String[]{"spring/dubbo-business.xml"});
         final BusinessService businessService = (BusinessService) context.getBean("businessService");
         //businessService.purchase("U100001", "C00321", 2);
-        businessService.createAccount("U100004", 999);
+        //businessService.deleteAccount("U100009");
+        //businessService.createAccount("U100004", 999);
+        //businessService.debit("U100009", 0);
+        businessService.updateAccountInformation("U100009", "hello world");
     }
 }
