@@ -13,6 +13,13 @@ public interface AccountService {
     void debit(String userId, int money);
 
     /**
+     * platform数据源扣除余额
+     * @param userId
+     * @param money
+     */
+    void platformDebit(String userId, int money);
+
+    /**
      * 创建账户
      * @param userId
      * @param money
@@ -30,4 +37,5 @@ public interface AccountService {
      * @param information
      */
     void updateAccountInformation(String userId, String information);
+
 }

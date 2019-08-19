@@ -15,6 +15,7 @@
 
     <bean id="accountService" class="com.seata.test.service.impl.AccountServiceImpl">
         <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <property name="platformJdbcTemplate" ref="platformJdbcTemplate"/>
     </bean>
 
     <!-- 加载配置文件 -->
@@ -45,12 +46,42 @@
         <property name="filters" value="mergeStat" />
     </bean>
 
+    <bean name="platformAccountDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <property name="url" value="${jdbc.platform.account.url}"/>
+        <property name="username" value="${jdbc.account.username}"/>
+        <property name="password" value="${jdbc.account.password}"/>
+        <property name="driverClassName" value="${jdbc.account.driver}"/>
+        <property name="initialSize" value="0" />
+        <property name="maxActive" value="180" />
+        <property name="minIdle" value="0" />
+        <property name="maxWait" value="60000" />
+        <property name="validationQuery" value="Select 'x' from DUAL" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+        <property name="testWhileIdle" value="true" />
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <property name="minEvictableIdleTimeMillis" value="25200000" />
+        <property name="removeAbandoned" value="true" />
+        <property name="removeAbandonedTimeout" value="1800" />
+        <property name="logAbandoned" value="true" />
+        <property name="filters" value="mergeStat" />
+    </bean>
+
     <bean id="accountDataSourceProxy" class="io.seata.rm.datasource.DataSourceProxy">
         <constructor-arg ref="accountDataSource" />
     </bean>
 
+    <bean id="platformAccountDataSourceProxy" class="io.seata.rm.datasource.DataSourceProxy">
+        <constructor-arg ref="platformAccountDataSource" />
+    </bean>
+
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="accountDataSourceProxy" />
+    </bean>
+
+    <bean id="platformJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="platformAccountDataSourceProxy" />
     </bean>
 
     <bean class="io.seata.spring.annotation.GlobalTransactionScanner">

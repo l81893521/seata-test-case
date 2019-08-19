@@ -62,6 +62,14 @@ public class BusinessServiceImpl implements BusinessService {
         throw new RuntimeException("扣除余额失败");
     }
 
+    @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "debit-d-account-tx")
+    public void debitByDiffentDataSource(String userId, int money) {
+        accountService.debit(userId, money);
+        accountService.platformDebit(userId, money);
+        throw new RuntimeException("扣除余额失败");
+    }
+
     /**
      * 创建账户
      *

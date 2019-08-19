@@ -36,10 +36,17 @@ public class AccountServiceImpl implements AccountService {
 
     private JdbcTemplate jdbcTemplate;
 
+    private JdbcTemplate platformJdbcTemplate;
+
 
     @Override
     public void debit(String userId, int money) {
         jdbcTemplate.update("update seata_account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
+    }
+
+    @Override
+    public void platformDebit(String userId, int money) {
+        platformJdbcTemplate.update("update seata_account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
     }
 
     /**
@@ -65,5 +72,9 @@ public class AccountServiceImpl implements AccountService {
 
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public void setPlatformJdbcTemplate(JdbcTemplate platformJdbcTemplate) {
+        this.platformJdbcTemplate = platformJdbcTemplate;
     }
 }

@@ -18,6 +18,13 @@ public interface BusinessService {
     void debit(String userId, int money);
 
     /**
+     * 扣除不同数据源的余额
+     * @param userId
+     * @param money
+     */
+    void debitByDiffentDataSource(String userId, int money);
+
+    /**
      * 创建账户
      * @param userId
      * @param money
