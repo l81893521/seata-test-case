@@ -27,6 +27,14 @@ public interface AccountService {
     void createAcount(String userId, int money);
 
     /**
+     * 创建账户
+     * @param id
+     * @param userId
+     * @param money
+     */
+    void createAccount(int id, String userId, int money);
+
+    /**
      * 删除账户
      * @param userId
      */
