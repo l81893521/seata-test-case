@@ -6,7 +6,8 @@
 
     <dubbo:application name="dubbo-demo-order-service"/>
     <!-- 使用multicast广播注册中心暴露服务地址 -->
-    <dubbo:registry address="multicast://224.5.6.7:1234?unicast=false"/>
+    <!--<dubbo:registry address="multicast://224.5.6.7:1234?unicast=false"/>-->
+    <dubbo:registry address="N/A"/>
     <!-- 用dubbo协议在20883端口暴露服务 -->
     <dubbo:protocol name="dubbo" port="20883"/>
 
@@ -14,7 +15,7 @@
     <dubbo:service interface="com.seata.test.service.OrderService" ref="orderService" timeout="10000"/>
 
     <!-- 生成远程服务代理 -->
-    <dubbo:reference id="accountService" check="false" interface="com.seata.test.service.AccountService"/>
+    <dubbo:reference id="accountService" check="false" interface="com.seata.test.service.AccountService" url="dubbo://127.0.0.1:20881" timeout="10000"/>
 
     <bean id="orderService" class="com.seata.test.service.impl.OrderServiceImpl">
         <property name="jdbcTemplate" ref="jdbcTemplate"/>

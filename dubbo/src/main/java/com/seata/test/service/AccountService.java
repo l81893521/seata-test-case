@@ -13,6 +13,13 @@ public interface AccountService {
     void debit(String userId, int money);
 
     /**
+     * 余额扣款(oracle)
+     * @param userId
+     * @param money
+     */
+    void debitForOracle(String userId, int money);
+
+    /**
      * platform数据源扣除余额
      * @param userId
      * @param money

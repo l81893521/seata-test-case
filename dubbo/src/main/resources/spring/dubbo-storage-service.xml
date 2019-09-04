@@ -6,7 +6,8 @@
 
     <dubbo:application name="dubbo-demo-storage-service"/>
     <!-- 使用multicast广播注册中心暴露服务地址 -->
-    <dubbo:registry address="multicast://224.5.6.7:1234?unicast=false"/>
+    <!--<dubbo:registry address="multicast://224.5.6.7:1234?unicast=false"/>-->
+    <dubbo:registry address="N/A"/>
     <!-- 用dubbo协议在20882端口暴露服务 -->
     <dubbo:protocol name="dubbo" port="20882"/>
 

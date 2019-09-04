@@ -40,7 +40,8 @@ public class Business {
         //businessService.deleteAccount("U100009");
         //businessService.createAccount("U100004", 999);
         //businessService.debit("U100009", 0);
-        businessService.debitByDiffentDataSource("U100009", 100);
+        businessService.debitForOracle("U100001", 50);
+        //businessService.debitByDiffentDataSource("U100009", 100);
         //businessService.updateAccountInformation("U100009", "hello world");
     }
 }

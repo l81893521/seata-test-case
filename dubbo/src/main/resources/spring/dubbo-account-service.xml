@@ -6,7 +6,8 @@
 
     <dubbo:application name="dubbo-demo-account-service"/>
     <!-- 使用multicast广播注册中心暴露服务地址 -->
-    <dubbo:registry address="multicast://224.5.6.7:1234?unicast=false"/>
+    <!--<dubbo:registry address="multicast://224.5.6.8:1234?unicast=false"/>-->
+    <dubbo:registry address="N/A"/>
     <!-- 用dubbo协议在20881端口暴露服务 -->
     <dubbo:protocol name="dubbo" port="20881"/>
 
@@ -16,6 +17,7 @@
     <bean id="accountService" class="com.seata.test.service.impl.AccountServiceImpl">
         <property name="jdbcTemplate" ref="jdbcTemplate"/>
         <property name="platformJdbcTemplate" ref="platformJdbcTemplate"/>
+        <property name="oracleAccountJdbcTemplate" ref="oracleAccountJdbcTemplate"/>
     </bean>
 
     <!-- 加载配置文件 -->
@@ -67,6 +69,28 @@
         <property name="logAbandoned" value="true" />
         <property name="filters" value="mergeStat" />
     </bean>
+    <!-- oracle 数据源 -->
+    <bean name="oracleAccountDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <property name="url" value="${jdbc.oracle.account.url}"/>
+        <property name="username" value="${jdbc.oracle.account.username}"/>
+        <property name="password" value="${jdbc.oracle.account.password}"/>
+        <property name="driverClassName" value="${jdbc.oracle.driver}"/>
+        <property name="initialSize" value="0" />
+        <property name="maxActive" value="180" />
+        <property name="minIdle" value="0" />
+        <property name="maxWait" value="60000" />
+        <property name="validationQuery" value="Select 'x' from DUAL" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+        <property name="testWhileIdle" value="true" />
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <property name="minEvictableIdleTimeMillis" value="25200000" />
+        <property name="removeAbandoned" value="true" />
+        <property name="removeAbandonedTimeout" value="1800" />
+        <property name="logAbandoned" value="true" />
+        <property name="filters" value="mergeStat" />
+    </bean>
 
     <bean id="accountDataSourceProxy" class="io.seata.rm.datasource.DataSourceProxy">
         <constructor-arg ref="accountDataSource" />
@@ -76,12 +100,20 @@
         <constructor-arg ref="platformAccountDataSource" />
     </bean>
 
+    <bean id="oracleAccountDataSourceProxy" class="io.seata.rm.datasource.DataSourceProxy">
+        <constructor-arg ref="oracleAccountDataSource" />
+    </bean>
+
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="accountDataSourceProxy" />
     </bean>
 
     <bean id="platformJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="platformAccountDataSourceProxy" />
+    </bean>
+
+    <bean id="oracleAccountJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="oracleAccountDataSourceProxy" />
     </bean>
 
     <bean class="io.seata.spring.annotation.GlobalTransactionScanner">

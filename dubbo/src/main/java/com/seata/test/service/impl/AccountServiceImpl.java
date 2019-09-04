@@ -4,7 +4,6 @@ package com.seata.test.service.impl;
 import com.seata.test.service.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
@@ -38,10 +37,17 @@ public class AccountServiceImpl implements AccountService {
 
     private JdbcTemplate platformJdbcTemplate;
 
+    private JdbcTemplate oracleAccountJdbcTemplate;
+
 
     @Override
     public void debit(String userId, int money) {
         jdbcTemplate.update("update seata_account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
+    }
+
+    @Override
+    public void debitForOracle(String userId, int money) {
+        oracleAccountJdbcTemplate.update("update account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
     }
 
     @Override
@@ -76,5 +82,9 @@ public class AccountServiceImpl implements AccountService {
 
     public void setPlatformJdbcTemplate(JdbcTemplate platformJdbcTemplate) {
         this.platformJdbcTemplate = platformJdbcTemplate;
+    }
+
+    public void setOracleAccountJdbcTemplate(JdbcTemplate oracleAccountJdbcTemplate) {
+        this.oracleAccountJdbcTemplate = oracleAccountJdbcTemplate;
     }
 }

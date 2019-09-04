@@ -63,6 +63,20 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "debit-oracle-account-tx")
+    public void debitForOracle(String userId, int money) {
+        System.out.println("尝试调用方法");
+        try {
+            accountService.debitForOracle(userId, money);
+        } catch (Exception e){
+            System.out.println("进入方法失败");
+            throw new RuntimeException(e);
+        }
+
+        throw new RuntimeException("扣除余额失败");
+    }
+
+    @Override
     @GlobalTransactional(timeoutMills = 300000, name = "debit-d-account-tx")
     public void debitByDiffentDataSource(String userId, int money) {
         accountService.debit(userId, money);

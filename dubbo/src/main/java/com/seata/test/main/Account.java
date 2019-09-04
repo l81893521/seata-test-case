@@ -32,9 +32,9 @@ public class Account {
     public static void main(String[] args) {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"spring/dubbo-account-service.xml"});
         context.getBean("accountService");
-        JdbcTemplate accountJdbcTemplate = (JdbcTemplate) context.getBean("jdbcTemplate");
-        accountJdbcTemplate.update("delete from seata_account_tbl where user_id = 'U100001'");
-        accountJdbcTemplate.update("insert into seata_account_tbl(user_id, money) values ('U100001', 999)");
+        //JdbcTemplate accountJdbcTemplate = (JdbcTemplate) context.getBean("jdbcTemplate");
+        //accountJdbcTemplate.update("delete from seata_account_tbl where user_id = 'U100001'");
+        //accountJdbcTemplate.update("insert into seata_account_tbl(user_id, money) values ('U100001', 999)");
 
         new ApplicationKeeper(context).keep();
     }
