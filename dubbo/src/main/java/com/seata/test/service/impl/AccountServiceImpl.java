@@ -47,7 +47,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void debitForOracle(String userId, int money) {
-        oracleAccountJdbcTemplate.update("update account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
+        oracleAccountJdbcTemplate.update("update account_tbl set money = money - ?, information = 'bbbb', description = 'ccccc' where user_id = ?", new Object[] {money, userId});
     }
 
     @Override
@@ -64,6 +64,11 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void createAcount(String userId, int money) {
         jdbcTemplate.update("insert into seata_account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+    }
+
+    @Override
+    public void createAccountForOracle(String userId, int money) {
+        oracleAccountJdbcTemplate.update("insert into account_tbl(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)", userId, money, "a", "a");
     }
 
     @Override

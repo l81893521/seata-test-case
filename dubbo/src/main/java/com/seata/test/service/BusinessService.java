@@ -39,6 +39,13 @@ public interface BusinessService {
     void createAccount(String userId, int money);
 
     /**
+     * 创建账户(oracle)
+     * @param userId
+     * @param money
+     */
+    void createAccountForOracle(String userId, int money);
+
+    /**
      * 创建账户
      * @param id
      * @param userId

@@ -36,12 +36,17 @@ public class Business {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
                 new String[]{"spring/dubbo-business.xml"});
         final BusinessService businessService = (BusinessService) context.getBean("businessService");
+        //create
+        //businessService.createAccount("U100004", 999);
+        businessService.createAccountForOracle("U100004", 999);
+
         //businessService.purchase("U100001", "C00321", 2);
         //businessService.deleteAccount("U100009");
-        //businessService.createAccount("U100004", 999);
+
         //businessService.debit("U100009", 0);
-        businessService.debitForOracle("U100001", 50);
+        //businessService.debitForOracle("U100001", 50);
         //businessService.debitByDiffentDataSource("U100009", 100);
         //businessService.updateAccountInformation("U100009", "hello world");
+        //businessService.addStorage("C00321", 1);
     }
 }

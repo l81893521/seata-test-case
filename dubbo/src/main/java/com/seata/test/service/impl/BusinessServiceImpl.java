@@ -97,12 +97,19 @@ public class BusinessServiceImpl implements BusinessService {
         throw new RuntimeException("创建账户失败");
     }
 
+    @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "dubbo-demo-create-account-oracle")
+    public void createAccountForOracle(String userId, int money) {
+        accountService.createAccountForOracle(userId, money);
+        throw new RuntimeException("创建账户失败");
+    }
+
     /**
      * 删除账户
      * @param userId
      */
     @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "dubbo-demo-create-account")
+    @GlobalTransactional(timeoutMills = 300000, name = "dubbo-demo-create-account-1")
     public void createAccount(int id, String userId, int money) {
         accountService.createAccount(id, userId, money);
         throw new RuntimeException("创建账户失败");
