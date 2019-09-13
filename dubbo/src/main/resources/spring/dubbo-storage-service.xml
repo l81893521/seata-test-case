@@ -16,6 +16,7 @@
 
     <bean id="storageService" class="com.seata.test.service.impl.StorageServiceImpl">
         <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <property name="oracleJdbcTemplate" ref="oracleJdbcTemplate"/>
     </bean>
 
     <!-- 加载配置文件 -->
@@ -46,16 +47,46 @@
         <property name="filters" value="mergeStat" />
     </bean>
 
+    <bean name="oracleStorageDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <property name="url" value="${jdbc.oracle.storage.url}"/>
+        <property name="username" value="${jdbc.oracle.storage.username}"/>
+        <property name="password" value="${jdbc.oracle.storage.password}"/>
+        <property name="driverClassName" value="${jdbc.oracle.driver}"/>
+        <property name="initialSize" value="0" />
+        <property name="maxActive" value="180" />
+        <property name="minIdle" value="0" />
+        <property name="maxWait" value="60000" />
+        <property name="validationQuery" value="Select 'x' from DUAL" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+        <property name="testWhileIdle" value="true" />
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <property name="minEvictableIdleTimeMillis" value="25200000" />
+        <property name="removeAbandoned" value="true" />
+        <property name="removeAbandonedTimeout" value="1800" />
+        <property name="logAbandoned" value="true" />
+        <property name="filters" value="mergeStat" />
+    </bean>
+
     <bean id="storageDataSourceProxy" class="io.seata.rm.datasource.DataSourceProxy">
         <constructor-arg ref="storageDataSource" />
+    </bean>
+
+    <bean id="oracleStorageDataSourceProxy" class="io.seata.rm.datasource.DataSourceProxy">
+        <constructor-arg ref="oracleStorageDataSource" />
     </bean>
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="storageDataSourceProxy" />
     </bean>
 
+    <bean id="oracleJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="oracleStorageDataSourceProxy" />
+    </bean>
+
     <bean class="io.seata.spring.annotation.GlobalTransactionScanner">
         <constructor-arg value="dubbo-demo-storage-service"/>
-        <constructor-arg value="my_test_tx_group"/>
+        <constructor-arg value="ss"/>
     </bean>
 </beans>
