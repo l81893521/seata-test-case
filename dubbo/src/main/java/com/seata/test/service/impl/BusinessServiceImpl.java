@@ -127,6 +127,13 @@ public class BusinessServiceImpl implements BusinessService {
         throw new RuntimeException("修改账户信息失败");
     }
 
+    @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "add-storage-oracle-tx")
+    public void addStorage(String commodityCode, int count) {
+        storageService.add(commodityCode, count);
+        throw new RuntimeException("增加库存失败");
+    }
+
     public void setAccountService(AccountService accountService) {
         this.accountService = accountService;
     }

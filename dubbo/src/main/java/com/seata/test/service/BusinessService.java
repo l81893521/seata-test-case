@@ -58,4 +58,11 @@ public interface BusinessService {
      * @param information
      */
     void updateAccountInformation(String userId, String information);
+
+    /**
+     * 增加库存
+     * @param commodityCode
+     * @param count
+     */
+    void addStorage(String commodityCode, int count);
 }

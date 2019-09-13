@@ -35,13 +35,25 @@ public class StorageServiceImpl implements StorageService {
 
     private JdbcTemplate jdbcTemplate;
 
+    private JdbcTemplate oracleJdbcTemplate;
+
     @Override
     public void deduct(String commodityCode, int count) {
         jdbcTemplate.update("update seata_storage_tbl set count = count - ? where commodity_code = ?",
                 new Object[] {count, commodityCode});
     }
 
+    @Override
+    public void add(String commodityCode, int count) {
+        oracleJdbcTemplate.update("update storage_tbl set count = count + ? where commodity_code = ?",
+                new Object[] {count, commodityCode});
+    }
+
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public void setOracleJdbcTemplate(JdbcTemplate oracleJdbcTemplate) {
+        this.oracleJdbcTemplate = oracleJdbcTemplate;
     }
 }
