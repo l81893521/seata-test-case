@@ -3,6 +3,7 @@ package com.seata.test.service.impl;
 import com.seata.test.entity.Order;
 import com.seata.test.service.AccountService;
 import com.seata.test.service.OrderService;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,13 @@ public class OrderServiceImpl implements OrderService {
     private JdbcTemplate jdbcTemplate;
 
     private AccountService accountService;
+
+    @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "insert-order-global-tx")
+    public void insertOrder(String userId, String commodityCode, int orderCount, int money) {
+        jdbcTemplate.update("insert into `order`(user_id, commodity_code, count, money) values (?,?,?,?)", userId, commodityCode, orderCount, money);
+        throw new RuntimeException("插入订单失败");
+    }
 
     @Override
     public Order create(String userId, String commodityCode, int orderCount) {

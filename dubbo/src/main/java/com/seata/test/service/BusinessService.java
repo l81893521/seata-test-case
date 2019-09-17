@@ -1,5 +1,7 @@
 package com.seata.test.service;
 
+import io.seata.spring.annotation.GlobalTransactional;
+
 public interface BusinessService {
 
     /**

@@ -1,6 +1,7 @@
 package com.seata.test.main;
 
 import com.seata.test.ApplicationKeeper;
+import com.seata.test.service.OrderService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -30,6 +31,9 @@ public class Order {
 
     public static void main(String[] args) {
         ClassPathXmlApplicationContext orderContext = new ClassPathXmlApplicationContext(new String[]{"spring/dubbo-order-service.xml"});
+
+        OrderService orderService = (OrderService)orderContext.getBean("orderService");
+        orderService.insertOrder("U0000010", "C00321", 2, 400);
         new ApplicationKeeper(orderContext).keep();
     }
 }

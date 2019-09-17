@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.seata.test.service.AccountService;
 import com.seata.test.service.BusinessService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -35,10 +36,12 @@ public class Business {
     public static void main(String[] args) {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
                 new String[]{"spring/dubbo-business.xml"});
+
         final BusinessService businessService = (BusinessService) context.getBean("businessService");
+
         //create
         //businessService.createAccount("U100004", 999);
-        businessService.createAccountForOracle("U100004", 999);
+        //businessService.createAccountForOracle("U100004", 999);
 
         //businessService.purchase("U100001", "C00321", 2);
         //businessService.deleteAccount("U100009");
