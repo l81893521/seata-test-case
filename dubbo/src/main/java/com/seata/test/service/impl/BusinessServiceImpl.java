@@ -103,13 +103,13 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     /**
-     * 删除账户
+     * 创建账户
      * @param userId
      */
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "dubbo-demo-create-account-1")
     public void createAccount(int id, String userId, int money) {
-        accountService.createAccount(id, userId, money);
+        accountService.createAccountWithPk(id, userId, money);
         throw new RuntimeException("创建账户失败");
     }
 
