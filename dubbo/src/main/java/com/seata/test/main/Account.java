@@ -1,6 +1,7 @@
 package com.seata.test.main;
 
 import com.seata.test.ApplicationKeeper;
+import com.seata.test.service.AccountService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -29,12 +30,20 @@ import org.springframework.jdbc.core.JdbcTemplate;
   */
 public class Account {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"spring/dubbo-account-service.xml"});
-        context.getBean("accountService");
-        //JdbcTemplate accountJdbcTemplate = (JdbcTemplate) context.getBean("jdbcTemplate");
-        //accountJdbcTemplate.update("delete from seata_account_tbl where user_id = 'U100001'");
-        //accountJdbcTemplate.update("insert into seata_account_tbl(user_id, money) values ('U100001', 999)");
+
+        AccountService accountService = (AccountService)context.getBean("accountService");
+
+        //新增
+        //accountService.createAccountWithPk(1, "U100001", 1);
+        //accountService.testX();
+        //accountService.debitForOracle("U100001", 1);
+
+        //删除
+        accountService.deleteAccountForOracleWithIn("U100002");
+        //accountService.deleteAccountForOracleWithBetween(85);
+        //accountService.deleteAccountForOracleWithLike(85);
 
         new ApplicationKeeper(context).keep();
     }

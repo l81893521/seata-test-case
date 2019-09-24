@@ -2,6 +2,7 @@ package com.seata.test.service.impl;
 
 
 import com.seata.test.service.AccountService;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -39,6 +40,12 @@ public class AccountServiceImpl implements AccountService {
 
     private JdbcTemplate oracleAccountJdbcTemplate;
 
+    @Override
+    @GlobalTransactional
+    public void testX() {
+        oracleAccountJdbcTemplate.update("insert into \"TEST\".\"testX\" (id, name) values(4,'123')");
+        throw new RuntimeException("错误错误");
+    }
 
     @Override
     public void debit(String userId, int money) {
@@ -46,8 +53,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @GlobalTransactional
     public void debitForOracle(String userId, int money) {
-        oracleAccountJdbcTemplate.update("update account_tbl set money = money - ?, information = 'bbbb', description = 'ccccc' where user_id = ?", new Object[] {money, userId});
+        oracleAccountJdbcTemplate.update("update account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
+        throw new RuntimeException("扣除余额失败");
     }
 
     @Override
@@ -67,18 +76,44 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-create-account-with-pk")
+    public void createAccountWithPk(int id, String userId, int money) {
+        jdbcTemplate.update("insert into seata_account_tbl(id, user_id, money) values (?, ?, ?)", id, userId, money);
+    }
+
+
+    @Override
     public void createAccountForOracle(String userId, int money) {
         oracleAccountJdbcTemplate.update("insert into account_tbl(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)", userId, money, "a", "a");
     }
 
-    @Override
-    public void createAccount(int id, String userId, int money) {
-        jdbcTemplate.update("insert into seata_account_tbl(id, user_id, money) values (?, ?, ?)", id, userId, money);
-    }
 
     @Override
     public void deleteAccount(String userId) {
         jdbcTemplate.update("delete from seata_account_tbl where user_id = ?", userId);
+    }
+
+    @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account-for-oracle-with-in")
+    public void deleteAccountForOracleWithIn(String userId) {
+        oracleAccountJdbcTemplate.update("delete from account_tbl where user_id in (?)", userId);
+        String sql = "delete from account_tbl where user_id in (" + userId + ")";
+        oracleAccountJdbcTemplate.update(sql);
+        throw new RuntimeException("账户删除失败");
+    }
+
+    @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account-for-oracle-with-between")
+    public void deleteAccountForOracleWithBetween(int id) {
+        oracleAccountJdbcTemplate.update("delete from account_tbl where id between ? and ? ", id, id);
+        throw new RuntimeException("账户删除失败");
+    }
+
+    @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account-for-oracle-with-like")
+    public void deleteAccountForOracleWithLike(int id) {
+        oracleAccountJdbcTemplate.update("delete from account_tbl where user_id like ?", id);
+        throw new RuntimeException("账户删除失败");
     }
 
     @Override
