@@ -1,15 +1,28 @@
 package com.seata.test.service;
 
-import io.seata.spring.annotation.GlobalTransactional;
-
 /**
  * 账户
  * @Author will
  */
 public interface AccountService {
 
-    @GlobalTransactional(timeoutMills = 300000)
-    void testX();
+    /**
+     * 查询锁
+     * @param id
+     */
+    void forUpdate(int id);
+
+    /**
+     * 查询锁(in命令)
+     * @param id
+     */
+    void forUpdateWithIn(int id);
+
+    /**
+     * 查询锁(between命令)
+     * @param id
+     */
+    void forUpdateWithBetween(int id);
 
     /**
      * 余额扣款
@@ -19,11 +32,18 @@ public interface AccountService {
     void debit(String userId, int money);
 
     /**
-     * 余额扣款(oracle)
+     * 余额扣除(in命令)
      * @param userId
      * @param money
      */
-    void debitForOracle(String userId, int money);
+    void debitWithIn(String userId, int money);
+
+    /**
+     * 余额扣除(between命令)
+     * @param userId
+     * @param money
+     */
+    void debitWithBetween(String userId, int money);
 
     /**
      * platform数据源扣除余额
@@ -48,35 +68,22 @@ public interface AccountService {
     void createAccountWithPk(int id, String userId, int money);
 
     /**
-     * 创建账户(oracle)
-     * @param userId
-     * @param money
-     */
-    void createAccountForOracle(String userId, int money);
-
-    /**
      * 删除账户
      * @param userId
      */
     void deleteAccount(String userId);
 
     /**
-     * 删除账户 (in命令)
+     * 删除账户(in命令)
      * @param userId
      */
-    void deleteAccountForOracleWithIn(String userId);
+    void deleteAccountWithIn(String userId);
 
     /**
-     * 删除账户 (between命令)
+     * 删除账户(between命令)
      * @param id
      */
-    void deleteAccountForOracleWithBetween(int id);
-
-    /**
-     * 删除账户 (like命令)
-     * @param id
-     */
-    void deleteAccountForOracleWithLike(int id);
+    void deleteAccountWithBetween(int id);
 
     /**
      * 修改账户信息

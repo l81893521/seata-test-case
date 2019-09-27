@@ -66,7 +66,7 @@ public class BusinessServiceImpl implements BusinessService {
     @GlobalTransactional(timeoutMills = 300000, name = "debit-oracle-account-tx")
     public void debitForOracle(String userId, int money) {
         try {
-            accountService.debitForOracle(userId, money);
+            accountService.debit(userId, money);
         } catch (Exception e){
             throw new RuntimeException(e);
         }
@@ -98,7 +98,7 @@ public class BusinessServiceImpl implements BusinessService {
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "dubbo-demo-create-account-oracle")
     public void createAccountForOracle(String userId, int money) {
-        accountService.createAccountForOracle(userId, money);
+        accountService.createAcount(userId, money);
         throw new RuntimeException("创建账户失败");
     }
 

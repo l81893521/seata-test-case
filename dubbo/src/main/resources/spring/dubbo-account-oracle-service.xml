@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+
+    <dubbo:application name="dubbo-account-oracle-service"/>
+    <!-- 使用multicast广播注册中心暴露服务地址 -->
+    <!--<dubbo:registry address="multicast://224.5.6.8:1234?unicast=false"/>-->
+    <dubbo:registry address="N/A"/>
+    <!-- 用dubbo协议在20881端口暴露服务 -->
+    <dubbo:protocol name="dubbo" port="20662"/>
+
+    <!-- 声明需要暴露的服务接口 -->
+    <dubbo:service interface="com.seata.test.service.AccountService" ref="accountService" timeout="10000"/>
+
+    <bean id="accountService" class="com.seata.test.service.impl.OracleAccountServiceImpl">
+        <property name="oracleAccountJdbcTemplate" ref="oracleAccountJdbcTemplate"/>
+    </bean>
+
+    <!-- 加载配置文件 -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations" value="classpath:jdbc.properties"/>
+    </bean>
+
+    <!-- oracle 数据源 -->
+    <bean name="oracleAccountDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <property name="url" value="${jdbc.oracle.account.url}"/>
+        <property name="username" value="${jdbc.oracle.account.username}"/>
+        <property name="password" value="${jdbc.oracle.account.password}"/>
+        <property name="driverClassName" value="${jdbc.oracle.driver}"/>
+        <property name="initialSize" value="0" />
+        <property name="maxActive" value="180" />
+        <property name="minIdle" value="0" />
+        <property name="maxWait" value="60000" />
+        <property name="validationQuery" value="Select 'x' from DUAL" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+        <property name="testWhileIdle" value="true" />
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <property name="minEvictableIdleTimeMillis" value="25200000" />
+        <property name="removeAbandoned" value="true" />
+        <property name="removeAbandonedTimeout" value="1800" />
+        <property name="logAbandoned" value="true" />
+        <property name="filters" value="mergeStat" />
+    </bean>
+
+    <bean id="oracleAccountDataSourceProxy" class="io.seata.rm.datasource.DataSourceProxy">
+        <constructor-arg ref="oracleAccountDataSource" />
+    </bean>
+
+    <bean id="oracleAccountJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="oracleAccountDataSourceProxy" />
+    </bean>
+
+    <bean class="io.seata.spring.annotation.GlobalTransactionScanner">
+        <constructor-arg value="dubbo-account-oracle-service"/>
+        <constructor-arg value="my_test_tx_group"/>
+    </bean>
+</beans>
