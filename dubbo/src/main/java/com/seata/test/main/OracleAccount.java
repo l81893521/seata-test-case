@@ -35,54 +35,54 @@ public class OracleAccount {
 
         AccountService accountService = context.getBean("accountService", OracleAccountServiceImpl.class);
 
-        int id = 122;
-        String userId = "U100001";
+        int id = 123;
+        String userId = "U100002";
         int debitMoney = 10;
 
         //新增
         //accountService.createAccountWithPk(1, "U100001", 1);
 
-        try {
-            //普通修改
-            accountService.debit(userId, debitMoney);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        //try {
+        //    //普通修改
+        //    accountService.debit(userId, debitMoney);
+        //} catch (Exception e){
+        //    e.printStackTrace();
+        //}
+        //
+        //try {
+        //    //in修改
+        //    accountService.debitWithIn(userId, debitMoney);
+        //} catch (Exception e){
+        //    e.printStackTrace();
+        //}
+        //
+        //try {
+        //    //between修改
+        //    accountService.debitWithBetween(userId, debitMoney);
+        //} catch (Exception e){
+        //    e.printStackTrace();
+        //}
+        //
+        //try {
+        //    //普通删除
+        //    accountService.deleteAccount(userId);
+        //} catch (Exception e){
+        //    e.printStackTrace();
+        //}
 
-        try {
-            //in修改
-            accountService.debitWithIn(userId, debitMoney);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-        try {
-            //between修改
-            accountService.debitWithBetween(userId, debitMoney);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-        try {
-            //普通删除
-            accountService.deleteAccount(userId);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-        try {
-            //in删除
-            accountService.deleteAccountWithIn(userId);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-        try {
-            //between删除
-            accountService.deleteAccountWithBetween(id);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        //try {
+        //    //in删除
+        //    accountService.deleteAccountWithIn(userId);
+        //} catch (Exception e){
+        //    e.printStackTrace();
+        //}
+        //
+        //try {
+        //    //between删除
+        //    accountService.deleteAccountWithBetween(id);
+        //} catch (Exception e){
+        //    e.printStackTrace();
+        //}
 
         try {
             //普通查询锁

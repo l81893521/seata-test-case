@@ -3,6 +3,7 @@ package com.seata.test.main;
 import com.seata.test.ApplicationKeeper;
 import com.seata.test.service.AccountService;
 import com.seata.test.service.impl.MysqlAccountServiceImpl;
+import com.seata.test.service.impl.PostgreAccountServiceImpl;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -28,19 +29,27 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
   * ======`-.____`-.___\_____/___.-`____.-'======
   *                 `=---='
   */
-public class MysqlAccount {
+public class PostgreAccount {
 
     public static void main(String[] args) throws InterruptedException {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"spring/dubbo-account-mysql-service.xml"});
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"spring/dubbo-account-postgre-service.xml"});
+        context.getBean("beanA");
 
-        AccountService accountService = context.getBean("accountService", MysqlAccountServiceImpl.class);
+        //AccountService accountService = context.getBean("accountService", PostgreAccountServiceImpl.class);
 
-        int id = 65;
-        String userId = "U100002";
-        int debitMoney = 10;
+        //int id = 65;
+        //String userId = "U100002";
+        //int initMoney = 1000;
+        //int debitMoney = 10;
 
         //新增
         //accountService.createAccountWithPk(1, "U100001", 1);
+
+        //try {
+        //    accountService.createAccount(userId, initMoney);
+        //} catch (Exception e) {
+        //    e.printStackTrace();
+        //}
 
         //try {
         //    //普通修改
@@ -84,12 +93,12 @@ public class MysqlAccount {
         //    e.printStackTrace();
         //}
 
-        try {
-            //普通查询锁
-            accountService.forUpdate(id);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        //try {
+        //    //普通查询锁
+        //    accountService.forUpdate(id);
+        //} catch (Exception e){
+        //    e.printStackTrace();
+        //}
 
         //try {
         //    //in查询锁

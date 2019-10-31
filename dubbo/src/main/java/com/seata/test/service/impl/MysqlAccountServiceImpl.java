@@ -43,6 +43,7 @@ public class MysqlAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-account-for-update")
     public void forUpdate(int id) {
         jdbcTemplate.queryForList("select * from seata_account_tbl where id = ? for update", id);
+        jdbcTemplate.queryForList("select * from `seata_account_tbl` where id = ? for update", id);
         String sql = "select * from seata_account_tbl where id = " + id + " for update";
         jdbcTemplate.queryForList(sql);
         throw new RuntimeException("查询锁失败");
@@ -105,7 +106,7 @@ public class MysqlAccountServiceImpl implements AccountService {
      * @param money
      */
     @Override
-    public void createAcount(String userId, int money) {
+    public void createAccount(String userId, int money) {
         jdbcTemplate.update("insert into seata_account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
     }
 

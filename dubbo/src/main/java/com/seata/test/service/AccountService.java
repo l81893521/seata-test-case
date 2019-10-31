@@ -57,7 +57,7 @@ public interface AccountService {
      * @param userId
      * @param money
      */
-    void createAcount(String userId, int money);
+    void createAccount(String userId, int money);
 
     /**
      * 创建账户

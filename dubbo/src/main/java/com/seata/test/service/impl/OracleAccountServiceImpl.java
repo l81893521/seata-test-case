@@ -91,7 +91,7 @@ public class OracleAccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void createAcount(String userId, int money) {
+    public void createAccount(String userId, int money) {
         oracleAccountJdbcTemplate.update("insert into account_tbl(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)", userId, money, "a", "a");
     }
 

@@ -91,14 +91,14 @@ public class BusinessServiceImpl implements BusinessService {
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "dubbo-demo-create-account")
     public void createAccount(String userId, int money) {
-        accountService.createAcount(userId, money);
+        accountService.createAccount(userId, money);
         throw new RuntimeException("创建账户失败");
     }
 
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "dubbo-demo-create-account-oracle")
     public void createAccountForOracle(String userId, int money) {
-        accountService.createAcount(userId, money);
+        accountService.createAccount(userId, money);
         throw new RuntimeException("创建账户失败");
     }
 
