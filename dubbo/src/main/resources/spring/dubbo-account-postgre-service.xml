@@ -1,71 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+       xsi:schemaLocation="
+	   http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <dubbo:application name="dubbo-account-postgres-service"/>
+    <!-- 使用multicast广播注册中心暴露服务地址 -->
+    <!--<dubbo:registry address="multicast://224.5.6.8:1234?unicast=false"/>-->
+    <dubbo:registry address="N/A"/>
+    <!-- 用dubbo协议在20881端口暴露服务 -->
+    <dubbo:protocol name="dubbo" port="20663"/>
 
-    <!--<dubbo:application name="dubbo-account-postgres-service"/>-->
-    <!--&lt;!&ndash; 使用multicast广播注册中心暴露服务地址 &ndash;&gt;-->
-    <!--&lt;!&ndash;<dubbo:registry address="multicast://224.5.6.8:1234?unicast=false"/>&ndash;&gt;-->
-    <!--<dubbo:registry address="N/A"/>-->
-    <!--&lt;!&ndash; 用dubbo协议在20881端口暴露服务 &ndash;&gt;-->
-    <!--<dubbo:protocol name="dubbo" port="20663"/>-->
+    <!-- 声明需要暴露的服务接口 -->
+    <dubbo:service interface="com.seata.test.service.AccountService" ref="accountService" timeout="10000"/>
 
-    <!--&lt;!&ndash; 声明需要暴露的服务接口 &ndash;&gt;-->
-    <!--<dubbo:service interface="com.seata.test.service.AccountService" ref="accountService" timeout="10000"/>-->
+    <bean id="accountService" class="com.seata.test.service.impl.PostgreAccountServiceImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+    </bean>
 
-    <!--<bean id="accountService" class="com.seata.test.service.impl.PostgreAccountServiceImpl">-->
-        <!--<property name="jdbcTemplate" ref="jdbcTemplate"/>-->
-    <!--</bean>-->
+    <!-- 加载配置文件 -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations" value="classpath:jdbc.properties"/>
+    </bean>
 
-    <!--&lt;!&ndash; 加载配置文件 &ndash;&gt;-->
-    <!--<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
-        <!--<property name="locations" value="classpath:jdbc.properties"/>-->
-    <!--</bean>-->
+    <!-- 数据源 -->
+    <bean name="accountDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <property name="url" value="${jdbc.postgres.account.url}"/>
+        <property name="username" value="${jdbc.postgres.account.username}"/>
+        <property name="password" value="${jdbc.postgres.account.password}"/>
+        <property name="driverClassName" value="${jdbc.postgres.driver}"/>
+        <property name="initialSize" value="0" />
+        <property name="maxActive" value="180" />
+        <property name="minIdle" value="0" />
+        <property name="maxWait" value="60000" />
+        <!--<property name="validationQuery" value=""/>-->
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+        <property name="testWhileIdle" value="true" />
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <property name="minEvictableIdleTimeMillis" value="25200000" />
+        <property name="removeAbandoned" value="true" />
+        <property name="removeAbandonedTimeout" value="1800" />
+        <property name="logAbandoned" value="true" />
+        <property name="filters" value="mergeStat" />
+    </bean>
 
-    <!--&lt;!&ndash; 数据源 &ndash;&gt;-->
-    <!--<bean name="accountDataSource" class="com.alibaba.druid.pool.DruidDataSource"-->
-          <!--init-method="init" destroy-method="close">-->
-        <!--<property name="url" value="${jdbc.postgres.account.url}"/>-->
-        <!--<property name="username" value="${jdbc.postgres.account.username}"/>-->
-        <!--<property name="password" value="${jdbc.postgres.account.password}"/>-->
-        <!--<property name="driverClassName" value="${jdbc.postgres.driver}"/>-->
-        <!--<property name="initialSize" value="0" />-->
-        <!--<property name="maxActive" value="180" />-->
-        <!--<property name="minIdle" value="0" />-->
-        <!--<property name="maxWait" value="60000" />-->
-        <!--&lt;!&ndash;<property name="validationQuery" value=""/>&ndash;&gt;-->
-        <!--<property name="testOnBorrow" value="false" />-->
-        <!--<property name="testOnReturn" value="false" />-->
-        <!--<property name="testWhileIdle" value="true" />-->
-        <!--<property name="timeBetweenEvictionRunsMillis" value="60000" />-->
-        <!--<property name="minEvictableIdleTimeMillis" value="25200000" />-->
-        <!--<property name="removeAbandoned" value="true" />-->
-        <!--<property name="removeAbandonedTimeout" value="1800" />-->
-        <!--<property name="logAbandoned" value="true" />-->
-        <!--<property name="filters" value="mergeStat" />-->
-    <!--</bean>-->
+    <bean id="accountDataSourceProxy" class="io.seata.rm.datasource.DataSourceProxy">
+        <constructor-arg ref="accountDataSource" />
+    </bean>
 
-    <!--<bean id="accountDataSourceProxy" class="io.seata.rm.datasource.DataSourceProxy">-->
-        <!--<constructor-arg ref="accountDataSource" />-->
-    <!--</bean>-->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="accountDataSourceProxy" />
+    </bean>
 
-    <!--<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">-->
-        <!--<property name="dataSource" ref="accountDataSourceProxy" />-->
-    <!--</bean>-->
+    <bean class="io.seata.spring.annotation.GlobalTransactionScanner">
+        <constructor-arg value="dubbo-account-postgres-service"/>
+        <constructor-arg value="my_test_tx_group"/>
+    </bean>
 
-    <!--<bean class="io.seata.spring.annotation.GlobalTransactionScanner">-->
-        <!--<constructor-arg value="dubbo-account-postgres-service"/>-->
-        <!--<constructor-arg value="my_test_tx_group"/>-->
-    <!--</bean>-->
-
-    <!--<bean id="circleA" class="com.seata.test.entity.CircleA">-->
-        <!--<property name="circleB" ref="circleB"/>-->
-    <!--</bean>-->
-
-    <!--<bean id="circleB" class="com.seata.test.entity.CircleB">-->
-        <!--<property name="circleA" ref="circleA"/>-->
-    <!--</bean>-->
-
-    <bean id="beanA" class="com.seata.test.entity.BeanA"></bean>
 </beans>

@@ -44,6 +44,7 @@
         <oracle-connector.version>11.2.0.1.0</oracle-connector.version>
         <curator.version>4.1.0</curator.version>
         <log4j.version>2.3</log4j.version>
+        <jackson.version>2.9.9</jackson.version>
     </properties>
 
     <modules>
@@ -83,6 +84,11 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.typesafe</groupId>

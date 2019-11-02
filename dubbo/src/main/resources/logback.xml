@@ -31,7 +31,7 @@
         <appender-ref ref="fescar-default"/>
     </logger>
 
-    <root level="debug">
+    <root level="info">
         <appender-ref ref="fescar-default"/>
         <appender-ref ref="stdout"/>
     </root>

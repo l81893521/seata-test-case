@@ -1,9 +1,6 @@
 package com.seata.test.main;
 
 import com.seata.test.ApplicationKeeper;
-import com.seata.test.service.AccountService;
-import com.seata.test.service.impl.MysqlAccountServiceImpl;
-import com.seata.test.service.impl.PostgreAccountServiceImpl;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -33,9 +30,12 @@ public class PostgreAccount {
 
     public static void main(String[] args) throws InterruptedException {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"spring/dubbo-account-postgre-service.xml"});
-        context.getBean("beanA");
+        BeanA beanA = (BeanA)context.getBean("beanA");
+        //context.getBean("beanB");
+        //beanA.doSomething();
 
-        //AccountService accountService = context.getBean("accountService", PostgreAccountServiceImpl.class);
+        //AccountService accountService = (AccountService)context.getBean("accountService");
+        //context.getBean("accountService");
 
         //int id = 65;
         //String userId = "U100002";
