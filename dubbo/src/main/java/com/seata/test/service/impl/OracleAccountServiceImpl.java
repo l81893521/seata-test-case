@@ -86,6 +86,11 @@ public class OracleAccountServiceImpl implements AccountService {
     }
 
     @Override
+    public void debitWithExist(String userId, int money) {
+
+    }
+
+    @Override
     public void platformDebit(String userId, int money) {
 
     }

@@ -46,6 +46,13 @@ public interface AccountService {
     void debitWithBetween(String userId, int money);
 
     /**
+     * 扣除余额(exist 命令)
+     * @param userId
+     * @param money
+     */
+    void debitWithExist(String userId, int money);
+
+    /**
      * platform数据源扣除余额
      * @param userId
      * @param money

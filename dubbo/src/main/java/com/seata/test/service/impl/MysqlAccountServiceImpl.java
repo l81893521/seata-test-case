@@ -95,6 +95,14 @@ public class MysqlAccountServiceImpl implements AccountService {
     }
 
     @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-debit-with-exist")
+    public void debitWithExist(String userId, int money) {
+        jdbcTemplate.update("update seata_account_tbl a set money = money - ? "
+            + "where exists (select 1 from seata_order_tbl o where a.user_id = o.user_id and o.user_id = ?)", money, userId);
+        throw new RuntimeException("扣除余额失败");
+    }
+
+    @Override
     public void platformDebit(String userId, int money) {
         platformJdbcTemplate.update("update seata_account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
     }
