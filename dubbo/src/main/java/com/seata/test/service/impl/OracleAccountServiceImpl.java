@@ -35,9 +35,11 @@ public class OracleAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-account-for-update")
     public void forUpdate(int id) {
         oracleAccountJdbcTemplate.queryForList("select * from account_tbl where id = ? for update", id);
+        oracleAccountJdbcTemplate.queryForList("select * from account_tbl where ((id = ?)) for update", id);
         String sql = "select * from account_tbl where id = " + id + " for update";
         oracleAccountJdbcTemplate.queryForList(sql);
-        throw new RuntimeException("查询锁失败");
+        oracleAccountJdbcTemplate.update("update account_tbl set money = money - ? where id = ?", new Object[] {1, id});
+        //throw new RuntimeException("查询锁失败");
     }
 
     @Override
@@ -86,13 +88,23 @@ public class OracleAccountServiceImpl implements AccountService {
     }
 
     @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-debit-with-exist")
     public void debitWithExist(String userId, int money) {
-
+        oracleAccountJdbcTemplate.update("update account_tbl a set money = money - ? "
+            + "where exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = ?)", money, userId);
+        String sql = "update account_tbl a set money = money - " + money + " where exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = '" + userId + "')";
+        oracleAccountJdbcTemplate.update(sql);
+        throw new RuntimeException("扣除余额失败");
     }
 
     @Override
-    public void platformDebit(String userId, int money) {
-
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-debit-with-not-exist")
+    public void debitWithNotExist(String userId, int money) {
+        oracleAccountJdbcTemplate.update("update account_tbl a set money = money - ? "
+            + "where not exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = ?)", money, userId);
+        String sql = "update account_tbl a set money = money - " + money + " where not exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = '" + userId + "')";
+        oracleAccountJdbcTemplate.update(sql);
+        throw new RuntimeException("扣除余额失败");
     }
 
     @Override

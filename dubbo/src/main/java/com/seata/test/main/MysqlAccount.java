@@ -39,8 +39,14 @@ public class MysqlAccount {
         String userId = "U100002";
         int debitMoney = 10;
 
-        //新增
-        //accountService.createAccountWithPk(1, "U100001", 1);
+
+        //try {
+        //    //普通新增
+        //    accountService.createAccount(userId, 999);
+        //} catch (Exception e){
+        //    e.printStackTrace();
+        //}
+
 
         //try {
         //    //普通修改
@@ -55,28 +61,42 @@ public class MysqlAccount {
         //} catch (Exception e){
         //    e.printStackTrace();
         //}
-        //
+
         //try {
         //    //between修改
         //    accountService.debitWithBetween(userId, debitMoney);
         //} catch (Exception e){
         //    e.printStackTrace();
         //}
-        //
+
+        //try {
+        //    //exists修改
+        //    accountService.debitWithExist(userId, debitMoney);
+        //} catch (Exception e) {
+        //    e.printStackTrace();
+        //}
+
+        //try {
+        //    //not exists修改
+        //    accountService.debitWithNotExist(userId, debitMoney);
+        //} catch (Exception e) {
+        //    e.printStackTrace();
+        //}
+
         //try {
         //    //普通删除
         //    accountService.deleteAccount(userId);
         //} catch (Exception e){
         //    e.printStackTrace();
         //}
-        //
+
         //try {
         //    //in删除
         //    accountService.deleteAccountWithIn(userId);
         //} catch (Exception e){
         //    e.printStackTrace();
         //}
-        //
+
         //try {
         //    //between删除
         //    accountService.deleteAccountWithBetween(id);

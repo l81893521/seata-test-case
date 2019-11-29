@@ -2,7 +2,6 @@ package com.seata.test.service.impl;
 
 
 import com.seata.test.service.AccountService;
-import io.seata.spring.annotation.GlobalLock;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,15 +36,13 @@ public class MysqlAccountServiceImpl implements AccountService {
 
     private JdbcTemplate jdbcTemplate;
 
-    private JdbcTemplate platformJdbcTemplate;
-
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-account-for-update")
     public void forUpdate(int id) {
         jdbcTemplate.queryForList("select * from seata_account_tbl where id = ? for update", id);
+        jdbcTemplate.queryForList("select * from seata_account_TBL where id = ? for update", id);
         jdbcTemplate.queryForList("select * from `seata_account_tbl` where id = ? for update", id);
-        String sql = "select * from seata_account_tbl where id = " + id + " for update";
-        jdbcTemplate.queryForList(sql);
+        jdbcTemplate.queryForList("select * from locals_production.seata_account_tbl where id = ? for update", id);
         throw new RuntimeException("查询锁失败");
     }
 
@@ -71,8 +68,8 @@ public class MysqlAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-debit")
     public void debit(String userId, int money) {
         jdbcTemplate.update("update seata_account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
-        String sql = "update seata_account_tbl set money = money - " + money + " where user_id = '" + userId + "'";
-        jdbcTemplate.update(sql);
+        jdbcTemplate.update("update `seata_account_tbl` set money = money - ? where user_id = ?", new Object[] {money, userId});
+        jdbcTemplate.update("update locals_production.seata_account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
         throw new RuntimeException("扣除余额失败");
     }
 
@@ -99,12 +96,19 @@ public class MysqlAccountServiceImpl implements AccountService {
     public void debitWithExist(String userId, int money) {
         jdbcTemplate.update("update seata_account_tbl a set money = money - ? "
             + "where exists (select 1 from seata_order_tbl o where a.user_id = o.user_id and o.user_id = ?)", money, userId);
+        String sql = "update seata_account_tbl a set money = money - " + money + " where exists (select 1 from seata_order_tbl o where a.user_id = o.user_id and o.user_id = '" + userId + "')";
+        jdbcTemplate.update(sql);
         throw new RuntimeException("扣除余额失败");
     }
 
     @Override
-    public void platformDebit(String userId, int money) {
-        platformJdbcTemplate.update("update seata_account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-debit-with-not-exist")
+    public void debitWithNotExist(String userId, int money) {
+        jdbcTemplate.update("update seata_account_tbl a set money = money - ? "
+            + "where not exists (select 1 from seata_order_tbl o where a.user_id = o.user_id and o.user_id = ?)", money, userId);
+        String sql = "update seata_account_tbl a set money = money - " + money + " where not exists (select 1 from seata_order_tbl o where a.user_id = o.user_id and o.user_id = '" + userId + "')";
+        jdbcTemplate.update(sql);
+        throw new RuntimeException("扣除余额失败");
     }
 
     /**
@@ -114,8 +118,13 @@ public class MysqlAccountServiceImpl implements AccountService {
      * @param money
      */
     @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-create-account")
     public void createAccount(String userId, int money) {
         jdbcTemplate.update("insert into seata_account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into seata_account_TBL(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into `seata_account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into locals_production.seata_account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        throw new RuntimeException("创建账户失败");
     }
 
     @Override
@@ -128,8 +137,8 @@ public class MysqlAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account")
     public void deleteAccount(String userId) {
         jdbcTemplate.update("delete from seata_account_tbl where user_id = ?", userId);
-        String sql = "delete from seata_account_tbl where user_id = '" + userId + "'";
-        jdbcTemplate.update(sql);
+        jdbcTemplate.update("delete from `seata_account_tbl` where user_id = ?", userId);
+        jdbcTemplate.update("delete from locals_production.seata_account_tbl where user_id = ?", userId);
         throw new RuntimeException("账户删除失败");
     }
 
@@ -160,7 +169,4 @@ public class MysqlAccountServiceImpl implements AccountService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void setPlatformJdbcTemplate(JdbcTemplate platformJdbcTemplate) {
-        this.platformJdbcTemplate = platformJdbcTemplate;
-    }
 }

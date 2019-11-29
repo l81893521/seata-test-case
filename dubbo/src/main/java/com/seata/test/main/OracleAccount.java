@@ -63,12 +63,25 @@ public class OracleAccount {
         //    e.printStackTrace();
         //}
         //
-        try {
-            //普通删除
-            accountService.deleteAccount(userId);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        //try {
+        //    //exists修改
+        //    accountService.debitWithExist(userId, debitMoney);
+        //} catch (Exception e) {
+        //    e.printStackTrace();
+        //}
+
+        //try {
+        //    //not exists修改
+        //    accountService.debitWithNotExist(userId, debitMoney);
+        //} catch (Exception e) {
+        //    e.printStackTrace();
+        //}
+        //try {
+        //    //普通删除
+        //    accountService.deleteAccount(userId);
+        //} catch (Exception e){
+        //    e.printStackTrace();
+        //}
 
         //try {
         //    //in删除
@@ -84,12 +97,12 @@ public class OracleAccount {
         //    e.printStackTrace();
         //}
 
-        //try {
-        //    //普通查询锁
-        //    accountService.forUpdate(id);
-        //} catch (Exception e){
-        //    e.printStackTrace();
-        //}
+        try {
+            //普通查询锁
+            accountService.forUpdate(id);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         //
         //try {
         //    //in查询锁

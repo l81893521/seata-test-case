@@ -3,7 +3,6 @@ package com.seata.test.service.impl;
 import com.seata.test.service.StorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**

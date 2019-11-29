@@ -53,11 +53,11 @@ public interface AccountService {
     void debitWithExist(String userId, int money);
 
     /**
-     * platform数据源扣除余额
+     * 扣除余额(not exist 命令)
      * @param userId
      * @param money
      */
-    void platformDebit(String userId, int money);
+    void debitWithNotExist(String userId, int money);
 
     /**
      * 创建账户

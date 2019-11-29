@@ -78,7 +78,6 @@ public class BusinessServiceImpl implements BusinessService {
     @GlobalTransactional(timeoutMills = 300000, name = "debit-d-account-tx")
     public void debitByDiffentDataSource(String userId, int money) {
         accountService.debit(userId, money);
-        accountService.platformDebit(userId, money);
         throw new RuntimeException("扣除余额失败");
     }
 

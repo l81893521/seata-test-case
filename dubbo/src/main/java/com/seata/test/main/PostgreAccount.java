@@ -1,6 +1,7 @@
 package com.seata.test.main;
 
 import com.seata.test.ApplicationKeeper;
+import com.seata.test.service.AccountService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -30,20 +31,16 @@ public class PostgreAccount {
 
     public static void main(String[] args) throws InterruptedException {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"spring/dubbo-account-postgre-service.xml"});
-        BeanA beanA = (BeanA)context.getBean("beanA");
-        //context.getBean("beanB");
-        //beanA.doSomething();
 
-        //AccountService accountService = (AccountService)context.getBean("accountService");
+        AccountService accountService = (AccountService)context.getBean("accountService");
         //context.getBean("accountService");
 
         //int id = 65;
-        //String userId = "U100002";
-        //int initMoney = 1000;
+        String userId = "U100002";
+        int initMoney = 1000;
         //int debitMoney = 10;
 
         //新增
-        //accountService.createAccountWithPk(1, "U100001", 1);
 
         //try {
         //    accountService.createAccount(userId, initMoney);

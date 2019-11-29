@@ -71,14 +71,14 @@ public class PostgreAccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void platformDebit(String userId, int money) {
+    public void debitWithNotExist(String userId, int money) {
 
     }
 
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-create-account")
     public void createAccount(String userId, int money) {
-        jdbcTemplate.update("insert into seata_account_tbl(id, user_id, money) values (nextval('seq_seata_account_tbl_id'), ?, ?)", userId, money);
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (nextval('seq_account_tbl_id'), ?, ?)", userId, money);
         throw new RuntimeException("创建账户失败");
     }
 
