@@ -36,33 +36,45 @@ public class PostgreAccountServiceImpl implements AccountService {
     private JdbcTemplate jdbcTemplate;
 
     @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-account-for-update")
     public void forUpdate(int id) {
-
+        jdbcTemplate.queryForList("select * from account_tbl where id = ? for update", id);
+        throw new RuntimeException("查询锁失败");
     }
 
     @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-account-for-update-with-in")
     public void forUpdateWithIn(int id) {
-
+        jdbcTemplate.queryForList("select * from account_tbl where id in (?) for update", id);
+        throw new RuntimeException("查询锁失败");
     }
 
     @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-account-for-update-with-between")
     public void forUpdateWithBetween(int id) {
-
+        jdbcTemplate.queryForList("select * from account_tbl where id between ? and ? for update", id, id);
+        throw new RuntimeException("查询锁失败");
     }
 
     @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-debit")
     public void debit(String userId, int money) {
-
+        jdbcTemplate.update("update account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
+        throw new RuntimeException("修改账户失败");
     }
 
     @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-debit-with-in")
     public void debitWithIn(String userId, int money) {
-
+        jdbcTemplate.update("update account_tbl set money = money - ? where user_id in (?)", new Object[] {money, userId});
+        throw new RuntimeException("扣除余额失败");
     }
 
     @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-debit-with-between")
     public void debitWithBetween(String userId, int money) {
-
+        jdbcTemplate.update("update account_tbl set money = money - ? where user_id between ? and ?", new Object[] {money, userId, userId});
+        throw new RuntimeException("扣除余额失败");
     }
 
     @Override
@@ -83,23 +95,31 @@ public class PostgreAccountServiceImpl implements AccountService {
     }
 
     @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-create-account-with-pk")
     public void createAccountWithPk(int id, String userId, int money) {
-
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (?, ?, ?)", id, userId, money);
+        throw new RuntimeException("创建账户失败");
     }
 
     @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account")
     public void deleteAccount(String userId) {
-
+        jdbcTemplate.update("delete from account_tbl where user_id = ?", userId);
+        throw new RuntimeException("账户删除失败");
     }
 
     @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account-with-in")
     public void deleteAccountWithIn(String userId) {
-
+        jdbcTemplate.update("delete from account_tbl where user_id in (?)", userId);
+        throw new RuntimeException("账户删除失败");
     }
 
     @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account-with-between")
     public void deleteAccountWithBetween(int id) {
-
+        jdbcTemplate.update("delete from account_tbl where id between ? and ?", id, id);
+        throw new RuntimeException("账户删除失败");
     }
 
     @Override

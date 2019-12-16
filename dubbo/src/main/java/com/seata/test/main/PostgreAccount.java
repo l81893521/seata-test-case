@@ -35,15 +35,21 @@ public class PostgreAccount {
         AccountService accountService = (AccountService)context.getBean("accountService");
         //context.getBean("accountService");
 
-        //int id = 65;
+        int id = 15;
         String userId = "U100002";
         int initMoney = 1000;
-        //int debitMoney = 10;
-
-        //新增
+        int debitMoney = 10;
 
         //try {
+        //    //新增
         //    accountService.createAccount(userId, initMoney);
+        //} catch (Exception e) {
+        //    e.printStackTrace();
+        //}
+
+        //try {
+        //    //带主键新增
+        //    accountService.createAccountWithPk(1, userId, initMoney);
         //} catch (Exception e) {
         //    e.printStackTrace();
         //}
@@ -61,28 +67,28 @@ public class PostgreAccount {
         //} catch (Exception e){
         //    e.printStackTrace();
         //}
-        //
+
         //try {
         //    //between修改
         //    accountService.debitWithBetween(userId, debitMoney);
         //} catch (Exception e){
         //    e.printStackTrace();
         //}
-        //
+
         //try {
         //    //普通删除
         //    accountService.deleteAccount(userId);
         //} catch (Exception e){
         //    e.printStackTrace();
         //}
-        //
+
         //try {
         //    //in删除
         //    accountService.deleteAccountWithIn(userId);
         //} catch (Exception e){
         //    e.printStackTrace();
         //}
-        //
+
         //try {
         //    //between删除
         //    accountService.deleteAccountWithBetween(id);
@@ -90,12 +96,12 @@ public class PostgreAccount {
         //    e.printStackTrace();
         //}
 
-        //try {
-        //    //普通查询锁
-        //    accountService.forUpdate(id);
-        //} catch (Exception e){
-        //    e.printStackTrace();
-        //}
+        try {
+            //普通查询锁
+            accountService.forUpdate(id);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
         //try {
         //    //in查询锁
@@ -103,7 +109,7 @@ public class PostgreAccount {
         //} catch (Exception e){
         //    e.printStackTrace();
         //}
-        //
+
         //try {
         //    //between查询锁
         //    accountService.forUpdateWithBetween(id);

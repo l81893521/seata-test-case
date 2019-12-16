@@ -35,11 +35,10 @@ public class OracleAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-account-for-update")
     public void forUpdate(int id) {
         oracleAccountJdbcTemplate.queryForList("select * from account_tbl where id = ? for update", id);
-        oracleAccountJdbcTemplate.queryForList("select * from account_tbl where ((id = ?)) for update", id);
-        String sql = "select * from account_tbl where id = " + id + " for update";
-        oracleAccountJdbcTemplate.queryForList(sql);
-        oracleAccountJdbcTemplate.update("update account_tbl set money = money - ? where id = ?", new Object[] {1, id});
-        //throw new RuntimeException("查询锁失败");
+        oracleAccountJdbcTemplate.queryForList("select * from account_TBL where id = ? for update", id);
+        oracleAccountJdbcTemplate.queryForList("select * from \"ACCOUNT_TBL\" where id = ? for update", id);
+        oracleAccountJdbcTemplate.queryForList("select * from test.account_tbl where id = ? for update", id);
+        throw new RuntimeException("查询锁失败");
     }
 
     @Override
