@@ -43,6 +43,7 @@ public class MysqlAccountServiceImpl implements AccountService {
         jdbcTemplate.queryForList("select * from seata_account_TBL where id = ? for update", id);
         jdbcTemplate.queryForList("select * from `seata_account_tbl` where id = ? for update", id);
         jdbcTemplate.queryForList("select * from locals_production.seata_account_tbl where id = ? for update", id);
+        jdbcTemplate.queryForList("select * from locals_production.`seata_account_tbl` where id = ? for update", id);
         throw new RuntimeException("查询锁失败");
     }
 
@@ -50,8 +51,10 @@ public class MysqlAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-account-for-update-with-in")
     public void forUpdateWithIn(int id) {
         jdbcTemplate.queryForList("select * from seata_account_tbl where id in (?) for update", id);
-        String sql = "select * from seata_account_tbl where id in (" + id + ") for update";
-        jdbcTemplate.queryForList(sql);
+        jdbcTemplate.queryForList("select * from seata_account_TBL where id in (?) for update", id);
+        jdbcTemplate.queryForList("select * from `seata_account_tbl` where id in (?) for update", id);
+        jdbcTemplate.queryForList("select * from locals_production.seata_account_tbl where id in (?) for update", id);
+        jdbcTemplate.queryForList("select * from locals_production.`seata_account_tbl` where id in (?) for update", id);
         throw new RuntimeException("查询锁失败");
     }
 
@@ -59,8 +62,10 @@ public class MysqlAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-account-for-update-with-between")
     public void forUpdateWithBetween(int id) {
         jdbcTemplate.queryForList("select * from seata_account_tbl where id between ? and ? for update", id, id);
-        String sql = "select * from seata_account_tbl where id between " + id + " and " + id + " for update";
-        jdbcTemplate.queryForList(sql);
+        jdbcTemplate.queryForList("select * from seata_account_TBL where id between ? and ? for update", id, id);
+        jdbcTemplate.queryForList("select * from `seata_account_tbl` where id between ? and ? for update", id, id);
+        jdbcTemplate.queryForList("select * from locals_production.seata_account_tbl where id between ? and ? for update", id, id);
+        jdbcTemplate.queryForList("select * from locals_production.`seata_account_tbl` where id between ? and ? for update", id, id);
         throw new RuntimeException("查询锁失败");
     }
 
@@ -137,8 +142,10 @@ public class MysqlAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account")
     public void deleteAccount(String userId) {
         jdbcTemplate.update("delete from seata_account_tbl where user_id = ?", userId);
+        jdbcTemplate.update("delete from seata_account_TBL where user_id = ?", userId);
         jdbcTemplate.update("delete from `seata_account_tbl` where user_id = ?", userId);
         jdbcTemplate.update("delete from locals_production.seata_account_tbl where user_id = ?", userId);
+        jdbcTemplate.update("delete from locals_production.`seata_account_tbl` where user_id = ?", userId);
         throw new RuntimeException("账户删除失败");
     }
 
@@ -146,8 +153,10 @@ public class MysqlAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account-with-in")
     public void deleteAccountWithIn(String userId) {
         jdbcTemplate.update("delete from seata_account_tbl where user_id in (?)", userId);
-        String sql = "delete from seata_account_tbl where user_id in ('" + userId + "')";
-        jdbcTemplate.update(sql);
+        jdbcTemplate.update("delete from seata_account_TBL where user_id in (?)", userId);
+        jdbcTemplate.update("delete from `seata_account_tbl` where user_id in (?)", userId);
+        jdbcTemplate.update("delete from locals_production.seata_account_tbl where user_id in (?)", userId);
+        jdbcTemplate.update("delete from locals_production.`seata_account_tbl` where user_id in (?)", userId);
         throw new RuntimeException("账户删除失败");
     }
 
@@ -155,8 +164,10 @@ public class MysqlAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account-with-between")
     public void deleteAccountWithBetween(int id) {
         jdbcTemplate.update("delete from seata_account_tbl where id between ? and ?", id, id);
-        String sql = "delete from seata_account_tbl where id between " + id + " and " + id;
-        jdbcTemplate.update(sql);
+        jdbcTemplate.update("delete from seata_account_TBL where id between ? and ?", id, id);
+        jdbcTemplate.update("delete from `seata_account_tbl` where id between ? and ?", id, id);
+        jdbcTemplate.update("delete from locals_production.seata_account_tbl where id between ? and ?", id, id);
+        jdbcTemplate.update("delete from locals_production.`seata_account_tbl` where id between ? and ?", id, id);
         throw new RuntimeException("账户删除失败");
     }
 
