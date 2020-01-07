@@ -126,9 +126,9 @@ public class MysqlAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-create-account")
     public void createAccount(String userId, int money) {
         jdbcTemplate.update("insert into seata_account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into seata_account_TBL(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into `seata_account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into locals_production.seata_account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        //jdbcTemplate.update("insert into seata_account_TBL(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        //jdbcTemplate.update("insert into `seata_account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        //jdbcTemplate.update("insert into locals_production.seata_account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
         throw new RuntimeException("创建账户失败");
     }
 

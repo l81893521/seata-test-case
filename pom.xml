@@ -36,19 +36,21 @@
         <dubbo.registry.nacos>0.0.2</dubbo.registry.nacos>
         <spring-context-support.version>1.0.2</spring-context-support.version>
         <testng.version>6.4</testng.version>
-        <seata.version>1.0.0-SNAPSHOT</seata.version>
+        <seata.version>1.1.0-SNAPSHOT</seata.version>
         <!--<spring.version>5.1.3.RELEASE</spring.version>-->
         <spring.boot.version>2.1.9.RELEASE</spring.boot.version>
-        <dubbo.version>2.7.0</dubbo.version>
+        <dubbo.version>2.7.4.1</dubbo.version>
         <mysql-connector.version>5.1.31</mysql-connector.version>
         <oracle-connector.version>11.2.0.1.0</oracle-connector.version>
         <curator.version>4.1.0</curator.version>
         <log4j.version>2.3</log4j.version>
         <jackson.version>2.9.9</jackson.version>
+        <lombok.version>1.16.4</lombok.version>
     </properties>
 
     <modules>
         <module>dubbo</module>
+        <module>springboot-dubbo</module>
     </modules>
 
     <dependencyManagement>
@@ -195,6 +197,11 @@
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-slf4j-impl</artifactId>
                 <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
