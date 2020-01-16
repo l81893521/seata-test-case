@@ -4,7 +4,7 @@
 <mapper namespace="com.seata.dao.MysqlAccountMapper">
 
     <select id="get" resultType="com.seata.entity.Account">
-        select id from seata_account_tbl where id = #{id}
+        select id from account_tbl where id = #{id}
     </select>
 </mapper>
 
