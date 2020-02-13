@@ -39,8 +39,7 @@ public class MysqlKeywordServiceImpl implements KeywordService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-insert-keyword-table-name")
     public void insertWithKeywordTableName(String name) {
         jdbcTemplate.update("insert into `table`(name) values (?)", new Object[] {name});
-        String sql = "insert into `table`(name) values (" + name + ")";
-        jdbcTemplate.update(sql);
+        jdbcTemplate.update("insert into seata.`table`(name) values (?)", new Object[] {name});
         throw new RuntimeException("保存失败(关键字表名)");
     }
 

@@ -40,20 +40,20 @@ public class MysqlAccount {
         int debitMoney = 10;
 
 
-        try {
-            //普通新增
-            accountService.createAccount(userId, 999);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+//        try {
+//            //普通新增
+//            accountService.createAccount(userId, 999);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
 
 
-        //try {
-        //    //普通修改
-        //    accountService.debit(userId, debitMoney);
-        //} catch (Exception e){
-        //    e.printStackTrace();
-        //}
+//        try {
+//            //普通修改
+//            accountService.debit(userId, debitMoney);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
 
         //try {
         //    //in修改
@@ -83,13 +83,13 @@ public class MysqlAccount {
         //    e.printStackTrace();
         //}
 
-        //try {
-        //    //普通删除
-        //    accountService.deleteAccount(userId);
-        //} catch (Exception e){
-        //    e.printStackTrace();
-        //}
-        //
+//        try {
+//            //普通删除
+//            accountService.deleteAccount(userId);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
+
         //try {
         //    //in删除
         //    accountService.deleteAccountWithIn(userId);
@@ -104,13 +104,13 @@ public class MysqlAccount {
         //    e.printStackTrace();
         //}
 
-        //try {
-        //    //普通查询锁
-        //    accountService.forUpdate(id);
-        //} catch (Exception e){
-        //    e.printStackTrace();
-        //}
-        //
+        try {
+            //普通查询锁
+            accountService.forUpdate(id);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
         //try {
         //    //in查询锁
         //    accountService.forUpdateWithIn(id);

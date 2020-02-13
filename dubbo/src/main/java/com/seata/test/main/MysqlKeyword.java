@@ -37,12 +37,11 @@ public class MysqlKeyword {
 
         KeywordService keywordService = context.getBean("keywordService", MysqlKeywordServiceImpl.class);
 
-        int id = 123;
         String name = "name";
 
         try {
             //保存(表名关键字)
-            keywordService.insertWithKeywordTableName("name");
+            keywordService.insertWithKeywordTableName(name);
         } catch (Exception e){
             e.printStackTrace();
         }
