@@ -39,16 +39,23 @@ public class OracleAccount {
         String userId = "U100001";
         int debitMoney = 10;
 
+        //普通新增
+        try {
+            accountService.createAccount(userId, debitMoney);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
         //新增
         //accountService.createAccountWithPk(1, "U100001", 1);
 
-        //try {
-        //    //普通修改
-        //    accountService.debit(userId, debitMoney);
-        //} catch (Exception e){
-        //    e.printStackTrace();
-        //}
-        //
+//        try {
+//            //普通修改
+//            accountService.debit(userId, debitMoney);
+//        } catch (Exception e){r
+//            e.printStackTrace();
+//        }
+
         //try {
         //    //in修改
         //    accountService.debitWithIn(userId, debitMoney);
@@ -76,12 +83,12 @@ public class OracleAccount {
         //} catch (Exception e) {
         //    e.printStackTrace();
         //}
-        //try {
-        //    //普通删除
-        //    accountService.deleteAccount(userId);
-        //} catch (Exception e){
-        //    e.printStackTrace();
-        //}
+//        try {
+//            //普通删除
+//            accountService.deleteAccount(userId);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
 
         //try {
         //    //in删除
@@ -97,12 +104,12 @@ public class OracleAccount {
         //    e.printStackTrace();
         //}
 
-        try {
-            //普通查询锁
-            accountService.forUpdate(id);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+//        try {
+//            //普通查询锁
+//            accountService.forUpdate(id);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
         //
         //try {
         //    //in查询锁

@@ -6,6 +6,7 @@ import io.seata.spring.annotation.GlobalTransactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
   * @author will.zjw
@@ -123,12 +124,13 @@ public class MysqlAccountServiceImpl implements AccountService {
      * @param money
      */
     @Override
+    @Transactional
     @GlobalTransactional(timeoutMills = 300000, name = "gts-create-account")
     public void createAccount(String userId, int money) {
         jdbcTemplate.update("insert into account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
         jdbcTemplate.update("insert into `account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into seata.account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into seata.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into seatA.account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into seatA.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
         throw new RuntimeException("创建账户失败");
     }
 
