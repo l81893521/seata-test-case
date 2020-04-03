@@ -2,11 +2,15 @@ package com.seata.test.service.impl;
 
 
 import com.seata.test.service.AccountService;
+import io.seata.spring.annotation.GlobalLock;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
   * @author will.zjw
@@ -70,12 +74,26 @@ public class MysqlAccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
     @GlobalTransactional(timeoutMills = 300000, name = "gts-debit")
     public void debit(String userId, int money) {
-        jdbcTemplate.update("update account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
+        jdbcTemplate.update("update account_tbl set money = money - ?, sex = 1 where user_id = ?", new Object[] {money, userId});
         jdbcTemplate.update("update `account_tbl` set money = money - ? where user_id = ?", new Object[] {money, userId});
         jdbcTemplate.update("update seata.account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
         jdbcTemplate.update("update seata.`account_tbl` set money = money - ? where user_id = ?", new Object[] {money, userId});
+        throw new RuntimeException("扣除余额失败");
+    }
+
+    @Override
+    @GlobalTransactional(timeoutMills = 300000, name = "gts-batch-debit")
+    public void batchDebit(String[] userIds, int money) {
+        if (userIds.length != 2) throw new RuntimeException("userIds != 2");
+        jdbcTemplate.batchUpdate("update account_tbl set money = money - ?, sex = 1 where user_id = ?;update account_tbl set money = money - ?, sex = 1 where user_id = ?;",
+                Arrays.asList(
+                        new Object[] {money, userIds[0]},
+                        new Object[] {money, userIds[1]}
+                        )
+        );
         throw new RuntimeException("扣除余额失败");
     }
 
@@ -124,13 +142,15 @@ public class MysqlAccountServiceImpl implements AccountService {
      * @param money
      */
     @Override
-    @Transactional
+//    @Transactional
     @GlobalTransactional(timeoutMills = 300000, name = "gts-create-account")
     public void createAccount(String userId, int money) {
-        jdbcTemplate.update("insert into account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into `account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into seatA.account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into seatA.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+//        jdbcTemplate.update("insert into account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+//        jdbcTemplate.update("insert into `account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+//        jdbcTemplate.update("insert into seatA.account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+//        jdbcTemplate.update("insert into seatA.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("INSERT INTO t_dmsif_jk011_01 ( VIN, SUBDLRORDERID, DEALERNO, trans_if_status, CREATED_BY, CREATED_TIME, LAST_UPDATED_BY, LAST_UPDATED_TIME, update_control_id ) VALUES " +
+                "( 'LGJE5FE02FM377110', '78d6d66a0c1d41ea942cfae1f4d92a04', 'XN0001', '0', '1', NOW(), '1', NOW(), UUID() )");
         throw new RuntimeException("创建账户失败");
     }
 

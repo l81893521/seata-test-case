@@ -70,6 +70,11 @@ public class OracleAccountServiceImpl implements AccountService {
     }
 
     @Override
+    public void batchDebit(String[] userIds, int money) {
+
+    }
+
+    @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-debit-with-in")
     public void debitWithIn(String userId, int money) {
         oracleAccountJdbcTemplate.update("update account_tbl set money = money - ? where user_id in (?)", new Object[] {money, userId});
@@ -127,10 +132,12 @@ public class OracleAccountServiceImpl implements AccountService {
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account")
     public void deleteAccount(String userId) {
-        oracleAccountJdbcTemplate.update("delete from account_tbl where user_id = ?", userId);
-        oracleAccountJdbcTemplate.update("delete from \"ACCOUNT_TBL\" where user_id = ?", userId);
-        oracleAccountJdbcTemplate.update("delete from test.account_tbl where user_id = ?", userId);
-        oracleAccountJdbcTemplate.update("delete from test.\"ACCOUNT_TBL\" where user_id = ?", userId);
+//        oracleAccountJdbcTemplate.update("delete from account_tbl where user_id = ?", userId);
+//        oracleAccountJdbcTemplate.update("delete from \"ACCOUNT_TBL\" where user_id = ?", userId);
+//        oracleAccountJdbcTemplate.update("delete from test.account_tbl where user_id = ?", userId);
+//        oracleAccountJdbcTemplate.update("delete from test.\"ACCOUNT_TBL\" where user_id = ?", userId);
+        String id = "78fd951f34a846e6b1dee055cea189a2";
+        oracleAccountJdbcTemplate.update("delete from gg_js_cd where id = ?", id);
         throw new RuntimeException("账户删除失败");
     }
 

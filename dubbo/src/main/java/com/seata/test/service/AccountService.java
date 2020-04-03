@@ -32,6 +32,13 @@ public interface AccountService {
     void debit(String userId, int money);
 
     /**
+     * 批量扣除用余额
+     * @param userIds
+     * @param money
+     */
+    void batchDebit(String[] userIds, int money);
+
+    /**
      * 余额扣除(in命令)
      * @param userId
      * @param money

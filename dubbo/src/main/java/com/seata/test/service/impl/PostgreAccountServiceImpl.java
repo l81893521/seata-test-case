@@ -68,6 +68,11 @@ public class PostgreAccountServiceImpl implements AccountService {
     }
 
     @Override
+    public void batchDebit(String[] userIds, int money) {
+
+    }
+
+    @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-debit-with-in")
     public void debitWithIn(String userId, int money) {
         jdbcTemplate.update("update account_tbl set money = money - ? where user_id in (?)", new Object[] {money, userId});
