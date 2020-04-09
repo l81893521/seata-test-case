@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>locals.fescar.test</groupId>
-    <artifactId>demo</artifactId>
+    <groupId>io.seata.test</groupId>
+    <artifactId>test-case</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <name>demo</name>
@@ -48,8 +48,8 @@
     </properties>
 
     <modules>
-        <module>dubbo</module>
-        <module>springboot-dubbo</module>
+        <module>at-dubbo-spring</module>
+        <module>at-dubbo-springboot</module>
     </modules>
 
     <dependencyManagement>

@@ -40,11 +40,11 @@ public class OracleAccount {
         int debitMoney = 10;
 
         //普通新增
-        try {
-            accountService.createAccount(userId, debitMoney);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+//        try {
+//            accountService.createAccount(userId, debitMoney);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
 
         //新增
         //accountService.createAccountWithPk(1, "U100001", 1);
@@ -83,12 +83,12 @@ public class OracleAccount {
         //} catch (Exception e) {
         //    e.printStackTrace();
         //}
-//        try {
-//            //普通删除
-//            accountService.deleteAccount(userId);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
+        try {
+            //普通删除
+            accountService.deleteAccount(userId);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
         //try {
         //    //in删除

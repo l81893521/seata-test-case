@@ -37,8 +37,8 @@ public class MysqlAccount {
 
         int id = 65;
         String userId = "U100002";
+        String userId2 = "U100003";
         int debitMoney = 10;
-
 
         try {
             //普通新增
@@ -48,10 +48,18 @@ public class MysqlAccount {
         }
 
 
+
 //        try {
 //            //普通修改
 //            accountService.debit(userId, debitMoney);
 //        } catch (Exception e){
+//            e.printStackTrace();
+//        }
+
+//        try {
+//            //批量修改
+//            accountService.batchDebit(new String[]{userId, userId2}, debitMoney);
+//        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
 
