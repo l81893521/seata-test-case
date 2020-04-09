@@ -151,7 +151,7 @@
                 <artifactId>ojdbc6</artifactId>
                 <version>${oracle-connector.version}</version>
                 <scope>system</scope>
-                <systemPath>D:/Program Files/Oracle Driver/ojdbc6-11.2.0.1.0.jar</systemPath>
+                <systemPath>D:/Program Files/Oracle Driver/ojdbc8-19.3.jar</systemPath>
             </dependency>
 
             <dependency>
