@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
-    <property name="LOG_HOME" value="${user.home}/logs/fescar"/>
+    <property name="LOG_HOME" value="${user.home}/logs/seata"/>
 
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -9,12 +9,12 @@
         </encoder>
     </appender>
 
-    <appender name="fescar-default"
+    <appender name="seata-default"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_HOME}/fescar-server.log</file>
+        <file>${LOG_HOME}/seata-server.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_HOME}/fescar-server.log.%d{yyyy-MM-dd}.%i</fileNamePattern>
+            <fileNamePattern>${LOG_HOME}/seata-server.log.%d{yyyy-MM-dd}.%i</fileNamePattern>
             <maxFileSize>2GB</maxFileSize>
             <MaxHistory>7</MaxHistory>
             <totalSizeCap>7GB</totalSizeCap>
@@ -26,13 +26,13 @@
         </encoder>
     </appender>
 
-    <logger name="com.alibaba.fescar.server.store.FileTransactionStoreManager" additivity="false">
+    <logger name="com.alibaba.seata.server.store.FileTransactionStoreManager" additivity="false">
         <level value="INFO"/>
-        <appender-ref ref="fescar-default"/>
+        <appender-ref ref="seata-default"/>
     </logger>
 
     <root level="info">
-        <appender-ref ref="fescar-default"/>
+        <appender-ref ref="seata-default"/>
         <appender-ref ref="stdout"/>
     </root>
 </configuration>
