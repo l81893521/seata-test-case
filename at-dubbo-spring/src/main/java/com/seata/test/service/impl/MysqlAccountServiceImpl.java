@@ -89,23 +89,27 @@ public class MysqlAccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
     @GlobalTransactional(timeoutMills = 300000, name = "gts-batch-debit")
     public void batchDebit(String[] userIds, int money) {
-        jdbcTemplate.update("update seata.`account_tbl` set money = money - ? where user_id = ?;update seata.`account_tbl` set money = money - ? where user_id = ?;", new Object[] {money, userIds[0], money, userIds[1]});
-//        jdbcTemplate.batchUpdate("update account_tbl set money = money - " + money + ", sex = 1 where user_id = " + userIds[0] + "", "update account_tbl set money = money - " + money + ", sex = 1 where user_id = " + userIds[1] + "");
-//        jdbcTemplate.batchUpdate("update account_tbl set money = money - ?, sex = 1 where user_id = ?", new BatchPreparedStatementSetter() {
-//            @Override
-//            public void setValues(PreparedStatement ps, int i) throws SQLException {
-//                String userId = userIds[i];
-//                ps.setInt(1, money);
-//                ps.setString(2, userId);
-//            }
-//
-//            @Override
-//            public int getBatchSize() {
-//                return userIds.length;
-//            }
-//        });
+        jdbcTemplate.update("update seata.`account_tbl` set money = money - ? where user_id = ?;update seata.`account_tbl` set money = money - ? where user_id = ?;",
+                new Object[] {money, userIds[0], money, userIds[1]});
+        jdbcTemplate.batchUpdate(
+                "update account_tbl set money = money - " + money + ", sex = 1 where user_id = \"" + userIds[0] + "\"",
+                "update account_tbl set money = money - " + money + ", sex = 1 where user_id = \"" + userIds[1] + "\"");
+        jdbcTemplate.batchUpdate("update account_tbl set money = money - ?, sex = 1 where user_id = ?", new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                String userId = userIds[i];
+                ps.setInt(1, money);
+                ps.setString(2, userId);
+            }
+
+            @Override
+            public int getBatchSize() {
+                return userIds.length;
+            }
+        });
         throw new RuntimeException("扣除余额失败");
     }
 
