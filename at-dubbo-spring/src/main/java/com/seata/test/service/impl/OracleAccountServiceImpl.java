@@ -45,8 +45,6 @@ public class OracleAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-account-for-update-with-in")
     public void forUpdateWithIn(int id) {
         oracleAccountJdbcTemplate.queryForList("select * from account_tbl where id in (?) for update", id);
-        String sql = "select * from account_tbl where id in (" + id + ") for update";
-        oracleAccountJdbcTemplate.queryForList(sql);
         throw new RuntimeException("查询锁失败");
     }
 
@@ -54,8 +52,6 @@ public class OracleAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-account-for-update-with-between")
     public void forUpdateWithBetween(int id) {
         oracleAccountJdbcTemplate.queryForList("select * from account_tbl where id between ? and ? for update", id, id);
-        String sql = "select * from account_tbl where id between " + id + " and " + id + " for update";
-        oracleAccountJdbcTemplate.queryForList(sql);
         throw new RuntimeException("查询锁失败");
     }
 
@@ -78,8 +74,6 @@ public class OracleAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-debit-with-in")
     public void debitWithIn(String userId, int money) {
         oracleAccountJdbcTemplate.update("update account_tbl set money = money - ? where user_id in (?)", new Object[] {money, userId});
-        String sql = "update account_tbl set money = money - " + money + " where user_id in ('" + userId + "')";
-        oracleAccountJdbcTemplate.update(sql);
         throw new RuntimeException("扣除余额失败");
     }
 
@@ -87,8 +81,6 @@ public class OracleAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-debit-with-between")
     public void debitWithBetween(String userId, int money) {
         oracleAccountJdbcTemplate.update("update account_tbl set money = money - ? where user_id between ? and ?", new Object[] {money, userId, userId});
-        String sql = "update account_tbl set money = money - " + money + " where user_id between '" + userId + "' and '" + userId + "'";
-        oracleAccountJdbcTemplate.update(sql);
         throw new RuntimeException("扣除余额失败");
     }
 
@@ -97,8 +89,6 @@ public class OracleAccountServiceImpl implements AccountService {
     public void debitWithExist(String userId, int money) {
         oracleAccountJdbcTemplate.update("update account_tbl a set money = money - ? "
             + "where exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = ?)", money, userId);
-        String sql = "update account_tbl a set money = money - " + money + " where exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = '" + userId + "')";
-        oracleAccountJdbcTemplate.update(sql);
         throw new RuntimeException("扣除余额失败");
     }
 
@@ -107,8 +97,6 @@ public class OracleAccountServiceImpl implements AccountService {
     public void debitWithNotExist(String userId, int money) {
         oracleAccountJdbcTemplate.update("update account_tbl a set money = money - ? "
             + "where not exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = ?)", money, userId);
-        String sql = "update account_tbl a set money = money - " + money + " where not exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = '" + userId + "')";
-        oracleAccountJdbcTemplate.update(sql);
         throw new RuntimeException("扣除余额失败");
     }
 
@@ -132,12 +120,10 @@ public class OracleAccountServiceImpl implements AccountService {
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account")
     public void deleteAccount(String userId) {
-//        oracleAccountJdbcTemplate.update("delete from account_tbl where user_id = ?", userId);
-//        oracleAccountJdbcTemplate.update("delete from \"ACCOUNT_TBL\" where user_id = ?", userId);
-//        oracleAccountJdbcTemplate.update("delete from test.account_tbl where user_id = ?", userId);
-//        oracleAccountJdbcTemplate.update("delete from test.\"ACCOUNT_TBL\" where user_id = ?", userId);
-        String id = "78fd951f34a846e6b1dee055cea189a2";
-        oracleAccountJdbcTemplate.update("delete from gg_js_cd where id = ?", id);
+        oracleAccountJdbcTemplate.update("delete from account_tbl where user_id = ?", userId);
+        oracleAccountJdbcTemplate.update("delete from \"ACCOUNT_TBL\" where user_id = ?", userId);
+        oracleAccountJdbcTemplate.update("delete from test.account_tbl where user_id = ?", userId);
+        oracleAccountJdbcTemplate.update("delete from test.\"ACCOUNT_TBL\" where user_id = ?", userId);
         throw new RuntimeException("账户删除失败");
     }
 
@@ -145,8 +131,6 @@ public class OracleAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account-with-in")
     public void deleteAccountWithIn(String userId) {
         oracleAccountJdbcTemplate.update("delete from account_tbl where user_id in (?)", userId);
-        String sql = "delete from account_tbl where user_id in (\'" + userId + "\')";
-        oracleAccountJdbcTemplate.update(sql);
         throw new RuntimeException("账户删除失败");
     }
 
@@ -154,8 +138,6 @@ public class OracleAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account-with-between")
     public void deleteAccountWithBetween(int id) {
         oracleAccountJdbcTemplate.update("delete from account_tbl where id between ? and ?", id, id);
-        String sql = "delete from account_tbl where id between " + id + " and " + id;
-        oracleAccountJdbcTemplate.update(sql);
         throw new RuntimeException("账户删除失败");
     }
 
