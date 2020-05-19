@@ -6,7 +6,7 @@
     <artifactId>test-case</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <name>demo</name>
+    <name>seata-test-case</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,7 +19,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-
+        <seata.version>1.3.0-SNAPSHOT</seata.version>
+        <dubbo.version>2.7.4.1</dubbo.version>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <junit.version>4.12</junit.version>
         <dubbo.version>2.7.0</dubbo.version>
@@ -34,12 +35,10 @@
         <dubbo.registry.nacos>0.0.2</dubbo.registry.nacos>
         <spring-context-support.version>1.0.2</spring-context-support.version>
         <testng.version>6.4</testng.version>
-        <seata.version>1.3.0-SNAPSHOT</seata.version>
         <spring.boot.version>2.1.9.RELEASE</spring.boot.version>
-        <dubbo.version>2.7.4.1</dubbo.version>
+
         <mysql-connector.version>5.1.31</mysql-connector.version>
         <oracle-connector.version>11.2.0.1.0</oracle-connector.version>
-        <curator.version>4.1.0</curator.version>
         <log4j.version>2.3</log4j.version>
         <jackson.version>2.9.10.3</jackson.version>
         <lombok.version>1.16.4</lombok.version>
@@ -49,6 +48,7 @@
         <module>at-dubbo-spring</module>
         <module>at-dubbo-springboot-mybatis</module>
         <module>at-netflix-spring-cloud-mybatis</module>
+        <module>tcc-dubbo-spring</module>
     </modules>
 
     <dependencyManagement>
@@ -68,28 +68,28 @@
                 <artifactId>dubbo</artifactId>
                 <version>${dubbo.version}</version>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>org.springframework.boot</groupId>-->
-<!--                <artifactId>spring-boot-dependencies</artifactId>-->
-<!--                <version>${spring.boot.version}</version>-->
-<!--                <type>pom</type>-->
-<!--                <scope>import</scope>-->
-<!--            </dependency>-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 <!--            <dependency>-->
 <!--                <groupId>org.springframework.boot</groupId>-->
 <!--                <artifactId>spring-boot-starter-web</artifactId>-->
 <!--                <version>${spring.boot.version}</version>-->
 <!--            </dependency>-->
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>${fastjson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.alibaba</groupId>-->
+<!--                <artifactId>fastjson</artifactId>-->
+<!--                <version>${fastjson.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>com.fasterxml.jackson.core</groupId>-->
+<!--                <artifactId>jackson-databind</artifactId>-->
+<!--                <version>${jackson.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
@@ -157,12 +157,6 @@
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>42.1.4</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.curator</groupId>
-                <artifactId>curator-recipes</artifactId>
-                <version>${curator.version}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>

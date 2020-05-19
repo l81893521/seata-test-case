@@ -40,11 +40,11 @@ public class OracleAccount {
         int debitMoney = 10;
 
         //普通新增
-//        try {
-//            accountService.createAccount(userId, debitMoney);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
+        try {
+            accountService.createAccount(userId, debitMoney);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 //
 //        try {
 //            //普通修改
@@ -101,26 +101,26 @@ public class OracleAccount {
 //            e.printStackTrace();
 //        }
 
-        try {
-            //普通查询锁
-            accountService.forUpdate(id);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+//        try {
+//            //普通查询锁
+//            accountService.forUpdate(id);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
 
-        try {
-            //in查询锁
-            accountService.forUpdateWithIn(id);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+//        try {
+//            //in查询锁
+//            accountService.forUpdateWithIn(id);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
 
-        try {
-            //between查询锁
-            accountService.forUpdateWithBetween(id);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+//        try {
+//            //between查询锁
+//            accountService.forUpdateWithBetween(id);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
 
         new ApplicationKeeper(context).keep();
     }

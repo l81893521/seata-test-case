@@ -3,6 +3,7 @@ package com.seata.test.service.impl;
 import com.seata.test.service.AccountService;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
   * @author will.zjw
@@ -101,8 +102,11 @@ public class OracleAccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
     @GlobalTransactional(timeoutMills = 300000, name = "gts-create-account")
     public void createAccount(String userId, int money) {
+        oracleAccountJdbcTemplate.update("insert into account_tbl(id, user_id, money, information, description) values (1, ?, ?, ?, ?)", userId, money, "a", "a");
+        oracleAccountJdbcTemplate.update("insert into account_tbl(id, user_id, money, information, description) values (?, ?, ?, ?, ?)", 2, userId, money, "a", "a");
         oracleAccountJdbcTemplate.update("insert into account_tbl(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)", userId, money, "a", "a");
         oracleAccountJdbcTemplate.update("insert into \"ACCOUNT_TBL\"(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)", userId, money, "a", "a");
         oracleAccountJdbcTemplate.update("insert into test.account_tbl(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)", userId, money, "a", "a");
