@@ -4,10 +4,13 @@ package com.seata.test.service.impl;
 import com.seata.test.service.AccountService;
 import io.seata.spring.annotation.GlobalLock;
 import io.seata.spring.annotation.GlobalTransactional;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
@@ -38,6 +41,7 @@ import java.util.Collections;
   * ======`-.____`-.___\_____/___.-`____.-'======
   *                 `=---='
   */
+@Slf4j
 public class MysqlAccountServiceImpl implements AccountService {
 
     private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
@@ -85,6 +89,9 @@ public class MysqlAccountServiceImpl implements AccountService {
         jdbcTemplate.update("update `account_tbl` set money = money - ? where user_id = ?", new Object[] {money, userId});
         jdbcTemplate.update("update seata.account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
         jdbcTemplate.update("update seata.`account_tbl` set money = money - ? where user_id = ?", new Object[] {money, userId});
+        jdbcTemplate.update("update seata.`account_tbl` set money = money - ? where user_id in (?, ?)", new Object[] {money, "U100002", "U100003"});
+        jdbcTemplate.update("update seata.`account_tbl` set money = money - ? where user_id in (?, ?, ?)", new Object[] {money, "U100002", "U100003", "U100004"});
+        jdbcTemplate.update("update seata.`account_tbl` set money = money - ? where user_id in (?, ?)", new Object[] {money, "U100002", "U100004"});
         throw new RuntimeException("扣除余额失败");
     }
 
@@ -158,15 +165,50 @@ public class MysqlAccountServiceImpl implements AccountService {
      * @param money
      */
     @Override
-    @Transactional
+//    @Transactional
     @GlobalTransactional(timeoutMills = 300000, name = "gts-create-account")
     public void createAccount(String userId, int money) {
-        jdbcTemplate.update("insert into account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(con ->  {
+            PreparedStatement preparedStatement = con.prepareStatement("insert into account_tbl(user_id, money, information) values (?, ?, ?)");
+            int i = 1;
+            preparedStatement.setString(i++, userId);
+            preparedStatement.setInt(i++, money);
+            preparedStatement.setString(i++, "a");
+            return preparedStatement;
+        }, keyHolder);
+        log.info("key holder size: {}", keyHolder.getKeyList().size());
+        jdbcTemplate.update("insert into account_tbl(user_id, money, information, create_time) values (?, ?, ?, now())", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into account_tbl(create_time, money, information, user_id) values (now(), ?, ?, ?)", money, "hello world".getBytes(), userId);
         jdbcTemplate.update("insert into account_tbl(id, user_id, money, information) values (?, ?, ?, ?)", 9999999, userId, money, "hello world".getBytes());
         jdbcTemplate.update("insert into account_tbl(id, user_id, money, information) values (null, ?, ?, ?)", userId, money, "hello world".getBytes());
         jdbcTemplate.update("insert into `account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
         jdbcTemplate.update("insert into seata.account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
         jdbcTemplate.update("insert into seata.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        throw new RuntimeException("创建账户失败");
+    }
+
+    @Override
+    @GlobalTransactional(timeoutMills = 600000, name = "gts-batch-create-account")
+    public void batchCreateAccount(String[] userIds, int money) {
+        jdbcTemplate.update("insert into account_tbl(money, create_time, information, user_id) values (?, now(), ?, ?), (?, now(), ?, ?)", money, "hello world".getBytes(), userIds[0], money, "hello world".getBytes(), userIds[1]);
+        jdbcTemplate.update("insert into account_tbl(money, create_time, information, user_id, id) values (?, now(), ?, ?, ?), (?, now(), ?, ?, ?)", money, "hello world".getBytes(), userIds[0], 999, money, "hello world".getBytes(), userIds[1], 1000);
+        jdbcTemplate.update("insert into account_tbl(create_time, money, information, user_id) values (now(), ?, ?, ?), (now(), ?, ?, ?)", money, "hello world".getBytes(), userIds[0], money, "hello world".getBytes(), userIds[1]);
+        jdbcTemplate.update("insert into account_tbl(create_time, money, information, user_id, id) values (now(), ?, ?, ?, 1001), (now(), ?, ?, ?, 1002)", money, "hello world".getBytes(), userIds[0], money, "hello world".getBytes(), userIds[1]);
+        jdbcTemplate.batchUpdate("insert into account_tbl(create_time, money, information, user_id) values (now(), ?, ?, ?)", new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                String userId = userIds[i];
+                ps.setInt(1, money);
+                ps.setString(2, userId);
+                ps.setBytes(3, "hello world".getBytes());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return userIds.length;
+            }
+        });
         throw new RuntimeException("创建账户失败");
     }
 

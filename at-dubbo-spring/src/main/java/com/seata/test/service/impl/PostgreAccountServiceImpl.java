@@ -2,9 +2,14 @@ package com.seata.test.service.impl;
 
 import com.seata.test.service.AccountService;
 import io.seata.spring.annotation.GlobalTransactional;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+
+import java.sql.PreparedStatement;
 
 /**
   * @author will.zjw
@@ -29,6 +34,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
   * ======`-.____`-.___\_____/___.-`____.-'======
   *                 `=---='
   */
+@Slf4j
 public class PostgreAccountServiceImpl implements AccountService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
@@ -103,12 +109,27 @@ public class PostgreAccountServiceImpl implements AccountService {
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-create-account")
     public void createAccount(String userId, int money) {
+//        KeyHolder keyHolder = new GeneratedKeyHolder();
+//        jdbcTemplate.update(con ->  {
+//            PreparedStatement preparedStatement = con.prepareStatement("insert into account_tbl(id, user_id, money, information) values (nextval('seq_account_tbl_id'), ?, ?, ?)");
+//            int i = 1;
+//            preparedStatement.setString(i++, userId);
+//            preparedStatement.setInt(i++, money);
+//            preparedStatement.setArray(i++, con.createArrayOf("varchar", new String[]{"a", "b", "c"}));
+//            return preparedStatement;
+//        }, keyHolder);
+//        log.info("key holder size: {}", keyHolder.getKeyList().size());
         jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (1, trim(both ?), ?)", userId, money);
         jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (?, trim(both ?), ?)", 2, userId, money);
         jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (nextval('seq_account_tbl_id'), trim(both ?), ?)", userId, money);
         jdbcTemplate.update("insert into public.account_tbl(user_id, money, id) values (trim(both ?), ?, nextval('seq_account_tbl_id'))", userId, money);
         jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (default, ?, ?)", userId, money);
         throw new RuntimeException("创建账户失败");
+    }
+
+    @Override
+    public void batchCreateAccount(String[] userIds, int money) {
+
     }
 
     @Override

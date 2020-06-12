@@ -74,6 +74,13 @@ public interface AccountService {
     void createAccount(String userId, int money);
 
     /**
+     * 批量创建账户
+     * @param userIds
+     * @param money
+     */
+    void batchCreateAccount(String userIds[], int money);
+
+    /**
      * 创建账户
      * @param id
      * @param userId
