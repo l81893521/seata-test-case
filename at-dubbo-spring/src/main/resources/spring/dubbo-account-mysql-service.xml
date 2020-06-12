@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:dubbo="http://dubbo.apache.org/schema/dubbo" xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+       xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <dubbo:application name="dubbo-account-mysql-service"/>
     <!-- 使用multicast广播注册中心暴露服务地址 -->
@@ -64,4 +66,18 @@
     </bean>
 
     <tx:annotation-driven transaction-manager="txManager"/>
+
+    <!-- 手动配置全局事务切面代理 -->
+<!--    <bean id="interceptor" class="io.seata.spring.interceptor.AtGlobalTransactionalInterceptor"/>-->
+
+<!--    <bean id="proxyFactoryBean" class="org.springframework.aop.framework.ProxyFactoryBean">-->
+<!--        <property name="interfaces" value="com.seata.test.service.AccountService"/>-->
+<!--        <property name="target" ref="accountService"/>-->
+<!--        <property name="interceptorNames">-->
+<!--            <list>-->
+<!--                <value>interceptor</value>-->
+<!--            </list>-->
+<!--        </property>-->
+<!--        <property name="proxyTargetClass" value="true"/>-->
+<!--    </bean>-->
 </beans>

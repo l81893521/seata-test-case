@@ -34,6 +34,10 @@ public class MysqlAccount {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"spring/dubbo-account-mysql-service.xml"});
 
         AccountService accountService = (AccountService) context.getBean("accountService");
+        for (String s : context.getBeanNamesForType(AccountService.class)) {
+            System.out.println(s);
+        }
+//        AccountService accountServiceProxy = context.getBean("proxyFactoryBean", AccountService.class);
 
         int id = 65;
         String userId = "U100002";
@@ -42,12 +46,17 @@ public class MysqlAccount {
 
         try {
             //普通新增
-            accountService.createAccount(userId, 999);
+//            accountService.createAccount(userId, 999);
+//            accountServiceProxy.createAccount(userId, 999);
         } catch (Exception e){
             e.printStackTrace();
         }
 
-
+        try {
+//            accountService.batchCreateAccount(new String[]{"U100002", "U100003"}, 1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
 //        try {
@@ -94,7 +103,7 @@ public class MysqlAccount {
 
 //        try {
 //            //普通删除
-//            accountService.deleteAccount(userId);
+            accountService.deleteAccount(userId);
 //        } catch (Exception e){
 //            e.printStackTrace();
 //        }
