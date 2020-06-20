@@ -21,7 +21,6 @@
         <druid.version>1.1.21</druid.version>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <junit.version>4.12</junit.version>
-        <dubbo.version>2.7.0</dubbo.version>
         <fastjson.version>1.2.54</fastjson.version>
         <slf4j-api.version>1.7.22</slf4j-api.version>
         <logback-classic.version>1.2.3</logback-classic.version>
@@ -64,6 +63,11 @@
             <dependency>
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-spring-boot-starter</artifactId>
                 <version>${dubbo.version}</version>
             </dependency>
             <dependency>
@@ -160,7 +164,7 @@
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
-                <version>42.1.4</version>
+                <version>42.2.12</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
