@@ -13,6 +13,9 @@
     <packaging>pom</packaging>
     <modules>
         <module>account-service</module>
+        <module>storage-service</module>
+        <module>order-service</module>
+        <module>bussiness-service</module>
     </modules>
 
     <properties>

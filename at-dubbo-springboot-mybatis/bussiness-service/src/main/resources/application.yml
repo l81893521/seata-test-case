@@ -1,14 +1,15 @@
 spring:
   application:
-    name: account-service
+    name: bussiness-service
   datasource:
-    url: jdbc:mysql://x:3306/seata
-    username: x
-    password: x
+    url: jdbc:mysql://112.74.106.151:3306/seata?useInformationSchema=false&allowMultiQueries=true
+    username: root
+    password: mynameis__zhang5122
     driver-class-name: com.mysql.jdbc.Driver
   cloud:
     alibaba:
       seata:
+        applicationId: bussiness-service
         tx-service-group: my_test_tx_group
   output:
     ansi:
@@ -18,3 +19,5 @@ mybatis:
 logging:
   level:
     root: info
+server:
+  port: 8084
