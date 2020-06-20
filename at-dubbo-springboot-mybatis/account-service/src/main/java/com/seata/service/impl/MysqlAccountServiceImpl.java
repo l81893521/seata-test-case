@@ -5,11 +5,11 @@ import com.seata.dao.MysqlAccountMapper;
 import com.seata.entity.Account;
 import com.seata.service.AccountService;
 import io.seata.spring.annotation.GlobalTransactional;
+import org.apache.dubbo.config.annotation.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
 
 /**
   * @author will.zjw
@@ -34,7 +34,7 @@ import org.springframework.stereotype.Service;
   * ======`-.____`-.___\_____/___.-`____.-'======
   *                 `=---='
   */
-@Service()
+@Service(version = "1.0.0")
 public class MysqlAccountServiceImpl implements AccountService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MysqlAccountServiceImpl.class);
@@ -51,7 +51,7 @@ public class MysqlAccountServiceImpl implements AccountService {
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-account-for-update")
     public void forUpdate(int id) {
-        mysqlAccountMapper.forUpdate1(id);
+        mysqlAccountMapper.forUpdate(id);
         throw new RuntimeException("查询锁失败");
     }
 
@@ -70,8 +70,7 @@ public class MysqlAccountServiceImpl implements AccountService {
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-debit")
     public void debit(String userId, int money) {
-        mysqlAccountMapper.debit1(userId, money);
-        throw new RuntimeException("扣除余额失败");
+        mysqlAccountMapper.debit(userId, money);
     }
 
     @Override

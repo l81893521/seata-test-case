@@ -42,11 +42,4 @@ public class DataSourceConfig {
         DruidDataSource dataSource = new DruidDataSource();
         return dataSource;
     }
-
-    //@Primary
-    //@Bean
-    //public DataSourceProxy dataSourceProxy(DataSource druidDataSource) {
-    //    return new DataSourceProxy(druidDataSource);
-    //}
-
 }

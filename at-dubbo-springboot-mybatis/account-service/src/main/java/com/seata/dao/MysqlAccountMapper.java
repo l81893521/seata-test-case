@@ -17,8 +17,8 @@ public interface MysqlAccountMapper {
     Account get(@Param("id") int id);
 
     @Select("select id from account_tbl where id = #{id}")
-    Account forUpdate1(@Param("id") int id);
+    Account forUpdate(@Param("id") int id);
 
     @Update("update account_tbl set money = money - #{money} where user_id = #{userId}")
-    void debit1(@Param("userId")String userId, @Param("money")int money);
+    void debit(@Param("userId")String userId, @Param("money")int money);
 }

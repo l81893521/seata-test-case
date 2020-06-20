@@ -1,11 +1,13 @@
 package com.seata.service;
 
 import com.seata.entity.Account;
+import org.apache.dubbo.config.annotation.Service;
 
 /**
  * 账户
  * @Author will
  */
+@Service(version = "1.0.0")
 public interface AccountService {
 
     /**
