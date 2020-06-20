@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: storage-service
+  datasource:
+    url: jdbc:mysql://112.74.106.151:3306/seata?useInformationSchema=false&allowMultiQueries=true
+    username: root
+    password: mynameis__zhang5122
+    driver-class-name: com.mysql.jdbc.Driver
+  cloud:
+    alibaba:
+      seata:
+        tx-service-group: my_test_tx_group
+  output:
+    ansi:
+      enabled: always
+dubbo:
+  scan:
+    base-packages: com.seata.service
+  protocol:
+    name: dubbo
+    port: 28001
+  registry:
+    address: N/A
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+logging:
+  level:
+    root: info
+server:
+  port: 8081
