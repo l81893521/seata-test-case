@@ -109,18 +109,18 @@ public class PostgreAccountServiceImpl implements AccountService {
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-create-account")
     public void createAccount(String userId, int money) {
-//        KeyHolder keyHolder = new GeneratedKeyHolder();
-//        jdbcTemplate.update(con ->  {
-//            PreparedStatement preparedStatement = con.prepareStatement("insert into account_tbl(id, user_id, money, information) values (nextval('seq_account_tbl_id'), ?, ?, ?)");
-//            int i = 1;
-//            preparedStatement.setString(i++, userId);
-//            preparedStatement.setInt(i++, money);
-//            preparedStatement.setArray(i++, con.createArrayOf("varchar", new String[]{"a", "b", "c"}));
-//            return preparedStatement;
-//        }, keyHolder);
-//        log.info("key holder size: {}", keyHolder.getKeyList().size());
-        jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (1, trim(both ?), ?)", userId, money);
-        jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (?, trim(both ?), ?)", 2, userId, money);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(con ->  {
+            PreparedStatement preparedStatement = con.prepareStatement("insert into account_tbl(id, user_id, money, information) values (nextval('seq_account_tbl_id'), ?, ?, ?)");
+            int i = 1;
+            preparedStatement.setString(i++, userId);
+            preparedStatement.setInt(i++, money);
+            preparedStatement.setArray(i++, con.createArrayOf("varchar", new String[]{"a", "b", "c"}));
+            return preparedStatement;
+        }, keyHolder);
+        log.info("key holder size: {}", keyHolder.getKeyList().size());
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (11, trim(both ?), ?)", userId, money);
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (?, trim(both ?), ?)", 12, userId, money);
         jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (nextval('seq_account_tbl_id'), trim(both ?), ?)", userId, money);
         jdbcTemplate.update("insert into public.account_tbl(user_id, money, id) values (trim(both ?), ?, nextval('seq_account_tbl_id'))", userId, money);
         jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (default, ?, ?)", userId, money);

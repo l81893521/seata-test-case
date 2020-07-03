@@ -71,6 +71,7 @@ public class MysqlAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-debit")
     public void debit(String userId, int money) {
         mysqlAccountMapper.debit(userId, money);
+        throw new RuntimeException("扣除余额失败");
     }
 
     @Override

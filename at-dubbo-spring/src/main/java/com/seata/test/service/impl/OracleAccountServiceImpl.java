@@ -69,9 +69,9 @@ public class OracleAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 30000, name = "gts-debit")
     public void debit(String userId, int money) {
         oracleAccountJdbcTemplate.update("update account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
-//        oracleAccountJdbcTemplate.update("update \"ACCOUNT_TBL\" set money = money - ? where user_id = ?", new Object[] {money, userId});
-//        oracleAccountJdbcTemplate.update("update test.account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
-//        oracleAccountJdbcTemplate.update("update test.\"ACCOUNT_TBL\" set money = money - ? where user_id = ?", new Object[] {money, userId});
+        oracleAccountJdbcTemplate.update("update \"ACCOUNT_TBL\" set money = money - ? where user_id = ?", new Object[] {money, userId});
+        oracleAccountJdbcTemplate.update("update test.account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
+        oracleAccountJdbcTemplate.update("update test.\"ACCOUNT_TBL\" set money = money - ? where user_id = ?", new Object[] {money, userId});
         throw new RuntimeException("扣除余额失败");
     }
 
@@ -111,7 +111,6 @@ public class OracleAccountServiceImpl implements AccountService {
     }
 
     @Override
-//    @Transactional
     @GlobalTransactional(timeoutMills = 300000, name = "gts-create-account")
     public void createAccount(String userId, int money) {
         KeyHolder keyHolder = new GeneratedKeyHolder();

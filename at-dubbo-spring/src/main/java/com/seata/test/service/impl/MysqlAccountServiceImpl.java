@@ -53,10 +53,12 @@ public class MysqlAccountServiceImpl implements AccountService {
 //    @GlobalTransactional(timeoutMills = 300000, name = "gts-account-for-update")
     public void forUpdate(int id) {
         jdbcTemplate.queryForList("select * from account_tbl where id = ? for update", id);
-//        jdbcTemplate.queryForList("select * from `account_tbl` where id = ? for update", id);
-//        jdbcTemplate.queryForList("select * from seata.account_tbl where id = ? for update", id);
-//        jdbcTemplate.queryForList("select * from seata.`account_tbl` where id = ? for update", id);
-//        throw new RuntimeException("查询锁失败");
+        jdbcTemplate.queryForList("select * from `account_tbl` where id = ? for update", id);
+        jdbcTemplate.queryForList("select * from seata.account_tbl where id = ? for update", id);
+        jdbcTemplate.queryForList("select * from seata.`account_tbl` where id = ? for update", id);
+        //multi pk
+        jdbcTemplate.queryForList("select * from account_tbl_multi_pk where id = ? for update", id);
+        throw new RuntimeException("查询锁失败");
     }
 
     @Override
@@ -82,7 +84,6 @@ public class MysqlAccountServiceImpl implements AccountService {
     }
 
     @Override
-    @Transactional
     @GlobalTransactional(timeoutMills = 300000, name = "gts-debit")
     public void debit(String userId, int money) {
         jdbcTemplate.update("update account_tbl set money = money - ?, sex = 1 where user_id = ?", new Object[] {money, userId});
@@ -92,11 +93,12 @@ public class MysqlAccountServiceImpl implements AccountService {
         jdbcTemplate.update("update seata.`account_tbl` set money = money - ? where user_id in (?, ?)", new Object[] {money, "U100002", "U100003"});
         jdbcTemplate.update("update seata.`account_tbl` set money = money - ? where user_id in (?, ?, ?)", new Object[] {money, "U100002", "U100003", "U100004"});
         jdbcTemplate.update("update seata.`account_tbl` set money = money - ? where user_id in (?, ?)", new Object[] {money, "U100002", "U100004"});
+        //multi pk
+        jdbcTemplate.update("update account_tbl_multi_pk set money = money - ?, sex = 1 where user_id = ? or user_id = ?", new Object[] {money, userId, "U100003"});
         throw new RuntimeException("扣除余额失败");
     }
 
     @Override
-    @Transactional
     @GlobalTransactional(timeoutMills = 300000, name = "gts-batch-debit")
     public void batchDebit(String[] userIds, int money) {
         jdbcTemplate.update("update seata.`account_tbl` set money = money - ? where user_id = ?;update seata.`account_tbl` set money = money - ? where user_id = ?;",
@@ -105,6 +107,20 @@ public class MysqlAccountServiceImpl implements AccountService {
                 "update account_tbl set money = money - " + money + ", sex = 1 where user_id = \"" + userIds[0] + "\"",
                 "update account_tbl set money = money - " + money + ", sex = 1 where user_id = \"" + userIds[1] + "\"");
         jdbcTemplate.batchUpdate("update account_tbl set money = money - ?, sex = 1 where user_id = ?", new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                String userId = userIds[i];
+                ps.setInt(1, money);
+                ps.setString(2, userId);
+            }
+
+            @Override
+            public int getBatchSize() {
+                return userIds.length;
+            }
+        });
+        //multi pk
+        jdbcTemplate.batchUpdate("update account_tbl_multi_pk set money = money - ?, sex = 1 where user_id = ?", new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 String userId = userIds[i];
@@ -179,12 +195,16 @@ public class MysqlAccountServiceImpl implements AccountService {
         }, keyHolder);
         log.info("key holder size: {}", keyHolder.getKeyList().size());
         jdbcTemplate.update("insert into account_tbl(user_id, money, information, create_time) values (?, ?, ?, now())", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into account_tbl(USER_ID, money, information, create_time) values (?, ?, ?, now())", userId, money, "hello world".getBytes());
         jdbcTemplate.update("insert into account_tbl(create_time, money, information, user_id) values (now(), ?, ?, ?)", money, "hello world".getBytes(), userId);
         jdbcTemplate.update("insert into account_tbl(id, user_id, money, information) values (?, ?, ?, ?)", 9999999, userId, money, "hello world".getBytes());
         jdbcTemplate.update("insert into account_tbl(id, user_id, money, information) values (null, ?, ?, ?)", userId, money, "hello world".getBytes());
         jdbcTemplate.update("insert into `account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
         jdbcTemplate.update("insert into seata.account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
         jdbcTemplate.update("insert into seata.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into `seata`.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into account_tbl_multi_pk(user_id, sex, money) values (?, ?, ?)", userId, 1, money);
+        jdbcTemplate.update("insert into account_tbl_multi_pk(USER_ID, sex, money) values (?, ?, ?)", userId, 1, money);
         throw new RuntimeException("创建账户失败");
     }
 
@@ -225,6 +245,8 @@ public class MysqlAccountServiceImpl implements AccountService {
         jdbcTemplate.update("delete from `account_tbl` where user_id = ?", userId);
         jdbcTemplate.update("delete from seata.account_tbl where user_id = ?", userId);
         jdbcTemplate.update("delete from seata.`account_tbl` where user_id = ?", userId);
+        //multi pk
+        jdbcTemplate.update("delete from account_tbl_multi_pk where user_id = ?", userId);
         throw new RuntimeException("账户删除失败");
     }
 

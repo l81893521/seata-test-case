@@ -39,14 +39,14 @@ public class MysqlAccount {
         }
 //        AccountService accountServiceProxy = context.getBean("proxyFactoryBean", AccountService.class);
 
-        int id = 65;
+        int id = 1;
         String userId = "U100002";
         String userId2 = "U100003";
         int debitMoney = 10;
 
         try {
             //普通新增
-//            accountService.createAccount(userId, 999);
+            //accountService.createAccount(userId, 999);
 //            accountServiceProxy.createAccount(userId, 999);
         } catch (Exception e){
             e.printStackTrace();
@@ -59,19 +59,19 @@ public class MysqlAccount {
         }
 
 
-//        try {
-//            //普通修改
-//            accountService.debit(userId, debitMoney);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
+        try {
+            //普通修改
+            //accountService.debit(userId, debitMoney);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
-//        try {
-//            //批量修改
+        try {
+            //批量修改
 //            accountService.batchDebit(new String[]{userId, userId2}, debitMoney);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 //        try {
 //            //in修改
@@ -101,12 +101,12 @@ public class MysqlAccount {
 //            e.printStackTrace();
 //        }
 
-//        try {
-//            //普通删除
-            accountService.deleteAccount(userId);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
+        try {
+            //普通删除
+            //accountService.deleteAccount(userId);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
 //        try {
 //            //in删除
@@ -122,12 +122,12 @@ public class MysqlAccount {
 //            e.printStackTrace();
 //        }
 
-//        try {
-//            //普通查询锁
-//            accountService.forUpdate(id);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
+        try {
+            //普通查询锁
+            accountService.forUpdate(id);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
 //        try {
 //            //in查询锁

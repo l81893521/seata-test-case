@@ -42,7 +42,7 @@ public class PostgreAccount {
 
         try {
             //新增
-            accountService.createAccount(userId, initMoney);
+            //accountService.createAccount(userId, initMoney);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -54,12 +54,12 @@ public class PostgreAccount {
 //            e.printStackTrace();
 //        }
 
-//        try {
-//            //普通修改
-//            accountService.debit(userId, debitMoney);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
+        try {
+            //普通修改
+            //accountService.debit(userId, debitMoney);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
 //        try {
 //            //in修改
@@ -75,12 +75,12 @@ public class PostgreAccount {
 //            e.printStackTrace();
 //        }
 
-//        try {
-//            //普通删除
-//            accountService.deleteAccount(userId);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
+        try {
+            //普通删除
+            //accountService.deleteAccount(userId);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
 //        try {
 //        //in删除
@@ -96,12 +96,12 @@ public class PostgreAccount {
 //            e.printStackTrace();
 //        }
 
-//        try {
-//            //普通查询锁
-//            accountService.forUpdate(id);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
+        try {
+            //普通查询锁
+            accountService.forUpdate(id);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 //
 //        try {
 //            //in查询锁
