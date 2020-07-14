@@ -2,12 +2,14 @@ package io.seata.test.service;
 
 import io.seata.rm.tcc.api.BusinessActionContext;
 import io.seata.rm.tcc.api.BusinessActionContextParameter;
+import io.seata.rm.tcc.api.LocalTCC;
 import io.seata.rm.tcc.api.TwoPhaseBusinessAction;
 
 /**
  * 账户
  * @Author will
  */
+@LocalTCC
 public interface AccountService {
 
     /**

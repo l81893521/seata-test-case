@@ -19,7 +19,7 @@ public class MysqlBusiness {
         String userId = "U100002";
 
         try {
-            businessService.purchase(userId, "", 1);
+            //businessService.purchase(userId, "", 1);
         } catch (Exception e) {
             e.printStackTrace();
         }
