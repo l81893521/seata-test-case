@@ -21,25 +21,6 @@ import java.util.Collections;
 /**
   * @author will.zjw
   * @date 2019-04-19 16:25
-  *            佛主保佑,不要出BUG
-  *                 _ooOoo_
-  *                o8888888o
-  *                88" . "88
-  *                (| -_- |)
-  *                O\  =  /O
-  *             ____/`---'\____
-  *           .'  \\|     |//  `.
-  *          /  \\|||  :  |||//  \
-  *         /  _||||| -:- |||||-  \
-  *         |   | \\\  -  /// |   |
-  *         | \_|  ''\---/''  |   |
-  *          \  .-\__  `-`  ___/-. /
-  *        ___`. .'  /--.--\  `. . __
-  *      ."" '<  `.___\_<|>_/___.'  >'"".
-  *    | | :  `- \`.;`\ _ /`;.`/ - ` : | |
-  *    \  \ `-.   \_ __\ /__ _/   .-` /  /
-  * ======`-.____`-.___\_____/___.-`____.-'======
-  *                 `=---='
   */
 @Slf4j
 public class MysqlAccountServiceImpl implements AccountService {
@@ -184,27 +165,27 @@ public class MysqlAccountServiceImpl implements AccountService {
 //    @Transactional
     @GlobalTransactional(timeoutMills = 300000, name = "gts-create-account")
     public void createAccount(String userId, int money) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(con ->  {
-            PreparedStatement preparedStatement = con.prepareStatement("insert into account_tbl(user_id, money, information) values (?, ?, ?)");
-            int i = 1;
-            preparedStatement.setString(i++, userId);
-            preparedStatement.setInt(i++, money);
-            preparedStatement.setString(i++, "a");
-            return preparedStatement;
-        }, keyHolder);
-        log.info("key holder size: {}", keyHolder.getKeyList().size());
+//        KeyHolder keyHolder = new GeneratedKeyHolder();
+//        jdbcTemplate.update(con ->  {
+//            PreparedStatement preparedStatement = con.prepareStatement("insert into account_tbl(user_id, money, information) values (?, ?, ?)");
+//            int i = 1;
+//            preparedStatement.setString(i++, userId);
+//            preparedStatement.setInt(i++, money);
+//            preparedStatement.setString(i++, "a");
+//            return preparedStatement;
+//        }, keyHolder);
+//        log.info("key holder size: {}", keyHolder.getKeyList().size());
         jdbcTemplate.update("insert into account_tbl(user_id, money, information, create_time) values (?, ?, ?, now())", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into account_tbl(USER_ID, money, information, create_time) values (?, ?, ?, now())", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into account_tbl(create_time, money, information, user_id) values (now(), ?, ?, ?)", money, "hello world".getBytes(), userId);
-        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information) values (?, ?, ?, ?)", 9999999, userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information) values (null, ?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into `account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into seata.account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into seata.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into `seata`.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into account_tbl_multi_pk(user_id, sex, money) values (?, ?, ?)", userId, 1, money);
-        jdbcTemplate.update("insert into account_tbl_multi_pk(USER_ID, sex, money) values (?, ?, ?)", userId, 1, money);
+//        jdbcTemplate.update("insert into account_tbl(USER_ID, money, information, create_time) values (?, ?, ?, now())", userId, money, "hello world".getBytes());
+//        jdbcTemplate.update("insert into account_tbl(create_time, money, information, user_id) values (now(), ?, ?, ?)", money, "hello world".getBytes(), userId);
+//        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information) values (?, ?, ?, ?)", 9999999, userId, money, "hello world".getBytes());
+//        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information) values (null, ?, ?, ?)", userId, money, "hello world".getBytes());
+//        jdbcTemplate.update("insert into `account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+//        jdbcTemplate.update("insert into seata.account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+//        jdbcTemplate.update("insert into seata.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+//        jdbcTemplate.update("insert into `seata`.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+//        jdbcTemplate.update("insert into account_tbl_multi_pk(user_id, sex, money) values (?, ?, ?)", userId, 1, money);
+//        jdbcTemplate.update("insert into account_tbl_multi_pk(USER_ID, sex, money) values (?, ?, ?)", userId, 1, money);
         throw new RuntimeException("创建账户失败");
     }
 
