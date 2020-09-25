@@ -1,6 +1,7 @@
 package com.seata.test.service.impl;
 
 import com.seata.test.service.AccountService;
+import io.seata.spring.annotation.GlobalLock;
 import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Date;
 
 /**
   * @author will.zjw
@@ -23,13 +25,13 @@ public class OracleAccountServiceImpl implements AccountService {
     private JdbcTemplate oracleAccountJdbcTemplate;
 
     @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "gts-account-for-update")
+    @GlobalLock
+    @Transactional
     public void forUpdate(int id) {
         oracleAccountJdbcTemplate.queryForList("select * from account_tbl where id = ? for update", id);
         oracleAccountJdbcTemplate.queryForList("select * from \"ACCOUNT_TBL\" where id = ? for update", id);
         oracleAccountJdbcTemplate.queryForList("select * from test.account_tbl where id = ? for update", id);
         oracleAccountJdbcTemplate.queryForList("select * from test.\"ACCOUNT_TBL\" where id = ? for update", id);
-        throw new RuntimeException("查询锁失败");
     }
 
     @Override
@@ -49,11 +51,12 @@ public class OracleAccountServiceImpl implements AccountService {
     @Override
     @GlobalTransactional(timeoutMills = 30000, name = "gts-debit")
     public void debit(String userId, int money) {
-        oracleAccountJdbcTemplate.update("update account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
-        oracleAccountJdbcTemplate.update("update \"ACCOUNT_TBL\" set money = money - ? where user_id = ?", new Object[] {money, userId});
-        oracleAccountJdbcTemplate.update("update test.account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
-        oracleAccountJdbcTemplate.update("update test.\"ACCOUNT_TBL\" set money = money - ? where user_id = ?", new Object[] {money, userId});
-        throw new RuntimeException("扣除余额失败");
+        oracleAccountJdbcTemplate.update("update ut_user_log set yhid = ? where uuid = ?", new Object[] {"2", "AE4B84B8A6397FA8E05012AC02002FFA"});
+//        oracleAccountJdbcTemplate.update("update account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
+//        oracleAccountJdbcTemplate.update("update \"ACCOUNT_TBL\" set money = money - ? where user_id = ?", new Object[] {money, userId});
+//        oracleAccountJdbcTemplate.update("update test.account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
+//        oracleAccountJdbcTemplate.update("update test.\"ACCOUNT_TBL\" set money = money - ? where user_id = ?", new Object[] {money, userId});
+//        throw new RuntimeException("扣除余额失败");
     }
 
     @Override
@@ -94,27 +97,30 @@ public class OracleAccountServiceImpl implements AccountService {
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-create-account")
     public void createAccount(String userId, int money) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        oracleAccountJdbcTemplate.update(con ->  {
-            PreparedStatement preparedStatement = con.prepareStatement("insert into account_tbl(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)");
-            int i = 1;
-            preparedStatement.setString(i++, userId);
-            preparedStatement.setInt(i++, money);
-            preparedStatement.setString(i++, "a");
-            preparedStatement.setString(i++, "a");
-            return preparedStatement;
-        }, keyHolder);
-        log.info("key holder size: {}", keyHolder.getKeyList().size());
-
-        oracleAccountJdbcTemplate.update("insert into account_tbl(id, user_id, money, information, description) values (1, ?, ?, ?, ?)", userId, money, "a", "a");
-        oracleAccountJdbcTemplate.update("insert into account_tbl(id, user_id, money, information, description) values (?, ?, ?, ?, ?)", 2, userId, money, "a", "a");
-        oracleAccountJdbcTemplate.update("insert into account_tbl(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)", userId, money, "a", "a");
-        oracleAccountJdbcTemplate.update("insert into \"ACCOUNT_TBL\"(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)", userId, money, "a", "a");
-        oracleAccountJdbcTemplate.update("insert into test.account_tbl(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)", userId, money, "a", "a");
-        oracleAccountJdbcTemplate.update("insert into test.\"ACCOUNT_TBL\"(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)", userId, money, "a", "a");
-        oracleAccountJdbcTemplate.update("insert into \"test\".account_tbl(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)", userId, money, "a", "a");
-        oracleAccountJdbcTemplate.update("insert into \"test\".\"ACCOUNT_TBL\"(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)", userId, money, "a", "a");
-        throw new RuntimeException("新增账户失败");
+        oracleAccountJdbcTemplate.update("insert into ut_user_log(yhid) values (?)", "3");
+        oracleAccountJdbcTemplate.update("insert into ut_user_log(uuid, yhid) values (?, ?)", "ABCDEFG", "3");
+        oracleAccountJdbcTemplate.update("insert into ut_user_log(uuid, yhid, lrrq, cznr) values (?, ?, ?, ?)", "ABCDEFGH", "3", new Date(), "A");
+//        KeyHolder keyHolder = new GeneratedKeyHolder();
+//        oracleAccountJdbcTemplate.update(con ->  {
+//            PreparedStatement preparedStatement = con.prepareStatement("insert into account_tbl(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)");
+//            int i = 1;
+//            preparedStatement.setString(i++, userId);
+//            preparedStatement.setInt(i++, money);
+//            preparedStatement.setString(i++, "a");
+//            preparedStatement.setString(i++, "a");
+//            return preparedStatement;
+//        }, keyHolder);
+//        log.info("key holder size: {}", keyHolder.getKeyList().size());
+//
+//        oracleAccountJdbcTemplate.update("insert into account_tbl(id, user_id, money, information, description) values (1, ?, ?, ?, ?)", userId, money, "a", "a");
+//        oracleAccountJdbcTemplate.update("insert into account_tbl(id, user_id, money, information, description) values (?, ?, ?, ?, ?)", 2, userId, money, "a", "a");
+//        oracleAccountJdbcTemplate.update("insert into account_tbl(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)", userId, money, "a", "a");
+//        oracleAccountJdbcTemplate.update("insert into \"ACCOUNT_TBL\"(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)", userId, money, "a", "a");
+//        oracleAccountJdbcTemplate.update("insert into test.account_tbl(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)", userId, money, "a", "a");
+//        oracleAccountJdbcTemplate.update("insert into test.\"ACCOUNT_TBL\"(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)", userId, money, "a", "a");
+//        oracleAccountJdbcTemplate.update("insert into \"test\".account_tbl(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)", userId, money, "a", "a");
+//        oracleAccountJdbcTemplate.update("insert into \"test\".\"ACCOUNT_TBL\"(id, user_id, money, information, description) values (account_tbl_seq.nextval, ?, ?, ?, ?)", userId, money, "a", "a");
+//        throw new RuntimeException("新增账户失败");
     }
 
     @Override
@@ -130,10 +136,11 @@ public class OracleAccountServiceImpl implements AccountService {
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account")
     public void deleteAccount(String userId) {
-        oracleAccountJdbcTemplate.update("delete from account_tbl where user_id = ?", userId);
-        oracleAccountJdbcTemplate.update("delete from \"ACCOUNT_TBL\" where user_id = ?", userId);
-        oracleAccountJdbcTemplate.update("delete from test.account_tbl where user_id = ?", userId);
-        oracleAccountJdbcTemplate.update("delete from test.\"ACCOUNT_TBL\" where user_id = ?", userId);
+//        oracleAccountJdbcTemplate.update("delete from UT_USER_TEST where yhid = ?", 123123123);
+//        oracleAccountJdbcTemplate.update("delete from account_tbl where user_id = ?", userId);
+//        oracleAccountJdbcTemplate.update("delete from \"ACCOUNT_TBL\" where user_id = ?", userId);
+//        oracleAccountJdbcTemplate.update("delete from test.account_tbl where user_id = ?", userId);
+//        oracleAccountJdbcTemplate.update("delete from test.\"ACCOUNT_TBL\" where user_id = ?", userId);
         throw new RuntimeException("账户删除失败");
     }
 

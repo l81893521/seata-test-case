@@ -14,7 +14,7 @@ public class OracleAccount {
     public static void main(String[] args) throws InterruptedException {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"spring/dubbo-account-oracle-service.xml"});
 
-        AccountService accountService = context.getBean("accountService", OracleAccountServiceImpl.class);
+        AccountService accountService = (AccountService) context.getBean("accountService");
 
         int id = 144;
         String userId = "U100002";
@@ -22,7 +22,7 @@ public class OracleAccount {
 
         //普通新增
         try {
-            //accountService.createAccount(userId, debitMoney);
+            accountService.createAccount(userId, debitMoney);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -33,58 +33,58 @@ public class OracleAccount {
         } catch (Exception e){
             e.printStackTrace();
         }
-//
-//        try {
-//            //in修改
-//            accountService.debitWithIn(userId, debitMoney);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-//
-//        try {
-//            //between修改
-//            accountService.debitWithBetween(userId, debitMoney);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-//
-//        try {
-//            //exists修改
-//            accountService.debitWithExist(userId, debitMoney);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        try {
-//            //not exists修改
-//            accountService.debitWithNotExist(userId, debitMoney);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+
+        try {
+            //in修改
+            //accountService.debitWithIn(userId, debitMoney);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        try {
+            //between修改
+            //accountService.debitWithBetween(userId, debitMoney);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        try {
+            //exists修改
+            //accountService.debitWithExist(userId, debitMoney);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            //not exists修改
+            //accountService.debitWithNotExist(userId, debitMoney);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         try {
             //普通删除
             //accountService.deleteAccount(userId);
         } catch (Exception e){
             e.printStackTrace();
         }
-//
-//        try {
-//            //in删除
-//            accountService.deleteAccountWithIn(userId);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
 
-//        try {
-//            //between删除
-//            accountService.deleteAccountWithBetween(id);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
+        try {
+            //in删除
+            //accountService.deleteAccountWithIn(userId);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        try {
+            //between删除
+            //accountService.deleteAccountWithBetween(id);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
         try {
             //普通查询锁
-            accountService.forUpdate(id);
+            //accountService.forUpdate(id);
         } catch (Exception e){
             e.printStackTrace();
         }

@@ -31,15 +31,15 @@ public class MysqlAccountServiceImpl implements AccountService {
 
     @Override
     @GlobalLock
+    @Transactional
 //    @GlobalTransactional(timeoutMills = 300000, name = "gts-account-for-update")
     public void forUpdate(int id) {
         jdbcTemplate.queryForList("select * from account_tbl where id = ? for update", id);
-        jdbcTemplate.queryForList("select * from `account_tbl` where id = ? for update", id);
-        jdbcTemplate.queryForList("select * from seata.account_tbl where id = ? for update", id);
-        jdbcTemplate.queryForList("select * from seata.`account_tbl` where id = ? for update", id);
+//        jdbcTemplate.queryForList("select * from `account_tbl` where id = ? for update", id);
+//        jdbcTemplate.queryForList("select * from seata.account_tbl where id = ? for update", id);
+//        jdbcTemplate.queryForList("select * from seata.`account_tbl` where id = ? for update", id);
         //multi pk
-        jdbcTemplate.queryForList("select * from account_tbl_multi_pk where id = ? for update", id);
-        throw new RuntimeException("查询锁失败");
+//        jdbcTemplate.queryForList("select * from account_tbl_multi_pk where id = ? for update", id);
     }
 
     @Override
@@ -165,37 +165,37 @@ public class MysqlAccountServiceImpl implements AccountService {
 //    @Transactional
     @GlobalTransactional(timeoutMills = 300000, name = "gts-create-account")
     public void createAccount(String userId, int money) {
-//        KeyHolder keyHolder = new GeneratedKeyHolder();
-//        jdbcTemplate.update(con ->  {
-//            PreparedStatement preparedStatement = con.prepareStatement("insert into account_tbl(user_id, money, information) values (?, ?, ?)");
-//            int i = 1;
-//            preparedStatement.setString(i++, userId);
-//            preparedStatement.setInt(i++, money);
-//            preparedStatement.setString(i++, "a");
-//            return preparedStatement;
-//        }, keyHolder);
-//        log.info("key holder size: {}", keyHolder.getKeyList().size());
-        jdbcTemplate.update("insert into account_tbl(user_id, money, information, create_time) values (?, ?, ?, now())", userId, money, "hello world".getBytes());
-//        jdbcTemplate.update("insert into account_tbl(USER_ID, money, information, create_time) values (?, ?, ?, now())", userId, money, "hello world".getBytes());
-//        jdbcTemplate.update("insert into account_tbl(create_time, money, information, user_id) values (now(), ?, ?, ?)", money, "hello world".getBytes(), userId);
-//        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information) values (?, ?, ?, ?)", 9999999, userId, money, "hello world".getBytes());
-//        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information) values (null, ?, ?, ?)", userId, money, "hello world".getBytes());
-//        jdbcTemplate.update("insert into `account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-//        jdbcTemplate.update("insert into seata.account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-//        jdbcTemplate.update("insert into seata.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-//        jdbcTemplate.update("insert into `seata`.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-//        jdbcTemplate.update("insert into account_tbl_multi_pk(user_id, sex, money) values (?, ?, ?)", userId, 1, money);
-//        jdbcTemplate.update("insert into account_tbl_multi_pk(USER_ID, sex, money) values (?, ?, ?)", userId, 1, money);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(con ->  {
+            PreparedStatement preparedStatement = con.prepareStatement("insert ignore into account_tbl(user_id, money, information) values (?, ?, ?)");
+            int i = 1;
+            preparedStatement.setString(i++, userId);
+            preparedStatement.setInt(i++, money);
+            preparedStatement.setString(i++, "a");
+            return preparedStatement;
+        }, keyHolder);
+        log.info("key holder size: {}", keyHolder.getKeyList().size());
+        jdbcTemplate.update("replace into account_tbl(user_id, money, information, create_time) values (?, ?, ?, now())", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into account_tbl(USER_ID, money, information, create_time) values (?, ?, ?, now())", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into account_tbl(create_time, money, information, user_id) values (now(), ?, ?, ?)", money, "hello world".getBytes(), userId);
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information) values (?, ?, ?, ?)", 9999999, userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information) values (null, ?, ?, ?)", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into `account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into seata.account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into seata.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into `seata`.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into account_tbl_multi_pk(user_id, sex, money) values (?, ?, ?)", userId, 1, money);
+        jdbcTemplate.update("insert into account_tbl_multi_pk(USER_ID, sex, money) values (?, ?, ?)", userId, 1, money);
         throw new RuntimeException("创建账户失败");
     }
 
     @Override
     @GlobalTransactional(timeoutMills = 600000, name = "gts-batch-create-account")
     public void batchCreateAccount(String[] userIds, int money) {
-        jdbcTemplate.update("insert into account_tbl(money, create_time, information, user_id) values (?, now(), ?, ?), (?, now(), ?, ?)", money, "hello world".getBytes(), userIds[0], money, "hello world".getBytes(), userIds[1]);
-        jdbcTemplate.update("insert into account_tbl(money, create_time, information, user_id, id) values (?, now(), ?, ?, ?), (?, now(), ?, ?, ?)", money, "hello world".getBytes(), userIds[0], 999, money, "hello world".getBytes(), userIds[1], 1000);
-        jdbcTemplate.update("insert into account_tbl(create_time, money, information, user_id) values (now(), ?, ?, ?), (now(), ?, ?, ?)", money, "hello world".getBytes(), userIds[0], money, "hello world".getBytes(), userIds[1]);
-        jdbcTemplate.update("insert into account_tbl(create_time, money, information, user_id, id) values (now(), ?, ?, ?, 1001), (now(), ?, ?, ?, 1002)", money, "hello world".getBytes(), userIds[0], money, "hello world".getBytes(), userIds[1]);
+//        jdbcTemplate.update("insert into account_tbl(money, create_time, information, user_id) values (?, now(), ?, ?), (?, now(), ?, ?)", money, "hello world".getBytes(), userIds[0], money, "hello world".getBytes(), userIds[1]);
+//        jdbcTemplate.update("insert into account_tbl(money, create_time, information, user_id, id) values (?, now(), ?, ?, ?), (?, now(), ?, ?, ?)", money, "hello world".getBytes(), userIds[0], 999, money, "hello world".getBytes(), userIds[1], 1000);
+//        jdbcTemplate.update("insert into account_tbl(create_time, money, information, user_id) values (now(), ?, ?, ?), (now(), ?, ?, ?)", money, "hello world".getBytes(), userIds[0], money, "hello world".getBytes(), userIds[1]);
+//        jdbcTemplate.update("insert into account_tbl(create_time, money, information, user_id, id) values (now(), ?, ?, ?, 1001), (now(), ?, ?, ?, 1002)", money, "hello world".getBytes(), userIds[0], money, "hello world".getBytes(), userIds[1]);
         jdbcTemplate.batchUpdate("insert into account_tbl(create_time, money, information, user_id) values (now(), ?, ?, ?)", new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {

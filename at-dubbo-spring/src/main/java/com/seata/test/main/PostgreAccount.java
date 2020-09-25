@@ -14,9 +14,8 @@ public class PostgreAccount {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"spring/dubbo-account-postgre-service.xml"});
 
         AccountService accountService = (AccountService)context.getBean("accountService");
-        //context.getBean("accountService");
 
-        int id = 15;
+        int id = 5;
         String userId = "U100002";
         int initMoney = 1000;
         int debitMoney = 10;

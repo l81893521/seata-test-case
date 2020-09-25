@@ -16,7 +16,6 @@ public class MysqlAccount {
 
         AccountService accountService = (AccountService) context.getBean("accountService");
 //        AccountService accountServiceProxy = context.getBean("proxyFactoryBean", AccountService.class);
-
         int id = 1;
         String userId = "U100002";
         String userId2 = "U100003";
@@ -31,7 +30,7 @@ public class MysqlAccount {
         }
 
         try {
-//            accountService.batchCreateAccount(new String[]{"U100002", "U100003"}, 1000);
+            //accountService.batchCreateAccount(new String[]{"U100002", "U100003"}, 1000);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,38 +45,38 @@ public class MysqlAccount {
 
         try {
             //批量修改
-//            accountService.batchDebit(new String[]{userId, userId2}, debitMoney);
+            //accountService.batchDebit(new String[]{userId, userId2}, debitMoney);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-//        try {
-//            //in修改
-//            accountService.debitWithIn(userId, debitMoney);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-//
-//        try {
-//            //between修改
-//            accountService.debitWithBetween(userId, debitMoney);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
+        try {
+            //in修改
+            //accountService.debitWithIn(userId, debitMoney);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
-//        try {
-//            //exists修改
-//            accountService.debitWithExist(userId, debitMoney);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        try {
-//            //not exists修改
-//            accountService.debitWithNotExist(userId, debitMoney);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+            //between修改
+            //accountService.debitWithBetween(userId, debitMoney);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        try {
+            //exists修改
+            //accountService.debitWithExist(userId, debitMoney);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            //not exists修改
+            //accountService.debitWithNotExist(userId, debitMoney);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         try {
             //普通删除
@@ -86,23 +85,23 @@ public class MysqlAccount {
             e.printStackTrace();
         }
 
-//        try {
-//            //in删除
-//            accountService.deleteAccountWithIn(userId);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-//
-//        try {
-//            //between删除
-//            accountService.deleteAccountWithBetween(id);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
+        try {
+            //in删除
+            //accountService.deleteAccountWithIn(userId);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        try {
+            //between删除
+            //accountService.deleteAccountWithBetween(id);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
         try {
             //普通查询锁
-            //accountService.forUpdate(id);
+//            accountService.forUpdate(id);
         } catch (Exception e){
             e.printStackTrace();
         }

@@ -1,6 +1,7 @@
 package com.seata.test.service.impl;
 
 import com.seata.test.service.AccountService;
+import io.seata.spring.annotation.GlobalLock;
 import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 
@@ -23,11 +25,11 @@ public class PostgreAccountServiceImpl implements AccountService {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "gts-account-for-update")
+    @GlobalLock
+    @Transactional
     public void forUpdate(int id) {
         jdbcTemplate.queryForList("select * from account_tbl where id = ? for update", id);
         jdbcTemplate.queryForList("select * from \"account_tbl\" where id = ? for update", id);
-        throw new RuntimeException("查询锁失败");
     }
 
     @Override
@@ -90,21 +92,21 @@ public class PostgreAccountServiceImpl implements AccountService {
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-create-account")
     public void createAccount(String userId, int money) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(con ->  {
-            PreparedStatement preparedStatement = con.prepareStatement("insert into account_tbl(id, user_id, money, information) values (nextval('seq_account_tbl_id'), ?, ?, ?)");
-            int i = 1;
-            preparedStatement.setString(i++, userId);
-            preparedStatement.setInt(i++, money);
-            preparedStatement.setArray(i++, con.createArrayOf("varchar", new String[]{"a", "b", "c"}));
-            return preparedStatement;
-        }, keyHolder);
-        log.info("key holder size: {}", keyHolder.getKeyList().size());
-        jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (11, trim(both ?), ?)", userId, money);
-        jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (?, trim(both ?), ?)", 12, userId, money);
-        jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (nextval('seq_account_tbl_id'), trim(both ?), ?)", userId, money);
-        jdbcTemplate.update("insert into public.account_tbl(user_id, money, id) values (trim(both ?), ?, nextval('seq_account_tbl_id'))", userId, money);
-        jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (default, ?, ?)", userId, money);
+//        KeyHolder keyHolder = new GeneratedKeyHolder();
+//        jdbcTemplate.update(con ->  {
+//            PreparedStatement preparedStatement = con.prepareStatement("insert into account_tbl(id, user_id, money) values (nextval('\"seata\".account_tbl_id_seq'), ?, ?)");
+//            int i = 1;
+//            preparedStatement.setString(i++, userId);
+//            preparedStatement.setInt(i++, money);
+//            return preparedStatement;
+//        }, keyHolder);
+//        log.info("key holder size: {}", keyHolder.getKeyList().size());
+//        jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (9999, trim(both ?), ?)", userId, money);
+//        jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (?, trim(both ?), ?)", 99999, userId, money);
+//        jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (nextval('\"seata\".account_tbl_id_seq'), trim(both ?), ?)", userId, money);
+//        jdbcTemplate.update("insert into seata.account_tbl(user_id, money, id) values (trim(both ?), ?, nextval('\"seata\".account_tbl_id_seq'))", userId, money);
+//        jdbcTemplate.update("insert into account_tbl(id, user_id, money) values (default, ?, ?)", userId, money);
+        jdbcTemplate.update("insert into \"table\"(id, user_id, money) values (9999, ?, ?)", userId, money);
         throw new RuntimeException("创建账户失败");
     }
 

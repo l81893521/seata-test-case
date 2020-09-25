@@ -158,7 +158,8 @@
                 <scope>system</scope>
                 <!--                <systemPath>D:/Program Files/Oracle Driver/ojdbc8-19.3.jar</systemPath>-->
                 <!--                <systemPath>D:/Program Files/Oracle Driver/ojdbc6-11.2.0.1.0.jar</systemPath>-->
-                <systemPath>D:/Program Files/Oracle Driver/ojdbc8-12.2.0.1.jar</systemPath>
+                <systemPath>D:/Program Files/Oracle Driver/ojdbc6-11.2.0.3.jar</systemPath>
+<!--                <systemPath>D:/Program Files/Oracle Driver/ojdbc8-12.2.0.1.jar</systemPath>-->
             </dependency>
 
             <dependency>
