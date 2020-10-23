@@ -2,7 +2,6 @@ package com.seata.test.main;
 
 import com.seata.test.ApplicationKeeper;
 import com.seata.test.service.AccountService;
-import com.seata.test.service.impl.MysqlAccountServiceImpl;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -23,7 +22,7 @@ public class MysqlAccount {
 
         try {
             //普通新增
-            accountService.createAccount(userId, 999);
+            //accountService.createAccount(userId, 999);
             //accountServiceProxy.createAccount(userId, 999);
         } catch (Exception e){
             e.printStackTrace();
@@ -79,22 +78,8 @@ public class MysqlAccount {
         }
 
         try {
-            //普通删除
+            //删除
             //accountService.deleteAccount(userId);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-        try {
-            //in删除
-            //accountService.deleteAccountWithIn(userId);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-        try {
-            //between删除
-            //accountService.deleteAccountWithBetween(id);
         } catch (Exception e){
             e.printStackTrace();
         }
