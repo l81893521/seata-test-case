@@ -128,22 +128,10 @@ public class PostgreAccountServiceImpl implements AccountService {
     public void deleteAccount(String userId) {
         jdbcTemplate.update("delete from account_tbl where user_id = ?", userId);
         jdbcTemplate.update("delete from \"account_tbl\" where user_id = ?", userId);
-        throw new RuntimeException("账户删除失败");
-    }
-
-    @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account-with-in")
-    public void deleteAccountWithIn(String userId) {
+        //in
         jdbcTemplate.update("delete from account_tbl where user_id in (?)", userId);
-        jdbcTemplate.update("delete from \"account_tbl\" where user_id in (?)", userId);
-        throw new RuntimeException("账户删除失败");
-    }
-
-    @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account-with-between")
-    public void deleteAccountWithBetween(int id) {
-        jdbcTemplate.update("delete from account_tbl where id between ? and ?", id, id);
-        jdbcTemplate.update("delete from \"account_tbl\" where id between ? and ?", id, id);
+        //between
+        jdbcTemplate.update("delete from account_tbl where user_id between ? and ?", userId, userId);
         throw new RuntimeException("账户删除失败");
     }
 

@@ -226,30 +226,21 @@ public class MysqlAccountServiceImpl implements AccountService {
         jdbcTemplate.update("delete from `account_tbl` where user_id = ?", userId);
         jdbcTemplate.update("delete from seata.account_tbl where user_id = ?", userId);
         jdbcTemplate.update("delete from seata.`account_tbl` where user_id = ?", userId);
+        //order by
+        jdbcTemplate.update("delete from account_tbl where user_id = ? order by user_id", userId);
+        jdbcTemplate.update("delete from account_tbl where user_id = ? order by user_id desc", userId);
+        jdbcTemplate.update("delete from account_tbl where user_id = ? order by user_id asc", userId);
+        //limit
+        jdbcTemplate.update("delete from account_tbl where user_id = ? limit 1", userId);
+        //order by + limit
+        jdbcTemplate.update("delete from account_tbl where user_id = ? order by user_id limit 1", userId);
+        jdbcTemplate.update("delete from account_tbl where user_id = ? order by user_id desc limit 1", userId);
+        //in
+        jdbcTemplate.update("delete from account_tbl where user_id in (?)", userId);
+        //between
+        jdbcTemplate.update("delete from account_tbl where user_id between ? and ?", userId, userId);
         //multi pk
         jdbcTemplate.update("delete from account_tbl_multi_pk where user_id = ?", userId);
-        throw new RuntimeException("账户删除失败");
-    }
-
-    @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account-with-in")
-    public void deleteAccountWithIn(String userId) {
-        jdbcTemplate.update("delete from account_tbl where user_id in (?)", userId);
-        jdbcTemplate.update("delete from account_tbl where user_id in (?)", userId);
-        jdbcTemplate.update("delete from `account_tbl` where user_id in (?)", userId);
-        jdbcTemplate.update("delete from seata.account_tbl where user_id in (?)", userId);
-        jdbcTemplate.update("delete from seata.`account_tbl` where user_id in (?)", userId);
-        throw new RuntimeException("账户删除失败");
-    }
-
-    @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account-with-between")
-    public void deleteAccountWithBetween(int id) {
-        jdbcTemplate.update("delete from account_tbl where id between ? and ?", id, id);
-        jdbcTemplate.update("delete from account_tbl where id between ? and ?", id, id);
-        jdbcTemplate.update("delete from `account_tbl` where id between ? and ?", id, id);
-        jdbcTemplate.update("delete from seata.account_tbl where id between ? and ?", id, id);
-        jdbcTemplate.update("delete from seata.`account_tbl` where id between ? and ?", id, id);
         throw new RuntimeException("账户删除失败");
     }
 

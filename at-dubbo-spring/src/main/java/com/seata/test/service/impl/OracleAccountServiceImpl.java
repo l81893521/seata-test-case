@@ -136,25 +136,14 @@ public class OracleAccountServiceImpl implements AccountService {
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account")
     public void deleteAccount(String userId) {
-//        oracleAccountJdbcTemplate.update("delete from UT_USER_TEST where yhid = ?", 123123123);
-//        oracleAccountJdbcTemplate.update("delete from account_tbl where user_id = ?", userId);
-//        oracleAccountJdbcTemplate.update("delete from \"ACCOUNT_TBL\" where user_id = ?", userId);
-//        oracleAccountJdbcTemplate.update("delete from test.account_tbl where user_id = ?", userId);
-//        oracleAccountJdbcTemplate.update("delete from test.\"ACCOUNT_TBL\" where user_id = ?", userId);
-        throw new RuntimeException("账户删除失败");
-    }
-
-    @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account-with-in")
-    public void deleteAccountWithIn(String userId) {
+        oracleAccountJdbcTemplate.update("delete from account_tbl where user_id = ?", userId);
+        oracleAccountJdbcTemplate.update("delete from \"ACCOUNT_TBL\" where user_id = ?", userId);
+        oracleAccountJdbcTemplate.update("delete from test.account_tbl where user_id = ?", userId);
+        oracleAccountJdbcTemplate.update("delete from test.\"ACCOUNT_TBL\" where user_id = ?", userId);
+        //in
         oracleAccountJdbcTemplate.update("delete from account_tbl where user_id in (?)", userId);
-        throw new RuntimeException("账户删除失败");
-    }
-
-    @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account-with-between")
-    public void deleteAccountWithBetween(int id) {
-        oracleAccountJdbcTemplate.update("delete from account_tbl where id between ? and ?", id, id);
+        //between
+        oracleAccountJdbcTemplate.update("delete from account_tbl where user_id between ? and ?", userId, userId);
         throw new RuntimeException("账户删除失败");
     }
 

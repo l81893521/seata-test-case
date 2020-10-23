@@ -95,18 +95,6 @@ public interface AccountService {
     void deleteAccount(String userId);
 
     /**
-     * 删除账户(in命令)
-     * @param userId
-     */
-    void deleteAccountWithIn(String userId);
-
-    /**
-     * 删除账户(between命令)
-     * @param id
-     */
-    void deleteAccountWithBetween(int id);
-
-    /**
      * 修改账户信息
      * @param information
      */
