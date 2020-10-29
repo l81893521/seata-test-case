@@ -22,7 +22,8 @@ public class PostgreAccount {
 
         try {
             //新增
-            //accountService.createAccount(userId, initMoney);
+            accountService.createAccount(userId, initMoney, false);
+            accountService.createAccount(userId, initMoney, true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -78,7 +79,8 @@ public class PostgreAccount {
 
         try {
             //普通查询锁
-            accountService.forUpdate(id);
+            accountService.forUpdate(id, false);
+            accountService.forUpdate(id, true);
         } catch (Exception e){
             e.printStackTrace();
         }

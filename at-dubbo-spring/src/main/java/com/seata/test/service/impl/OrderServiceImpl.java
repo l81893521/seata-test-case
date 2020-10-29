@@ -65,7 +65,7 @@ public class OrderServiceImpl implements OrderService {
         int orderMoney = calculate(commodityCode, orderCount);
 
         // 从账户余额扣款
-        accountService.debit(userId, orderMoney);
+        accountService.debit(userId, orderMoney, false);
 
         final Order order = new Order();
         order.userId = userId;

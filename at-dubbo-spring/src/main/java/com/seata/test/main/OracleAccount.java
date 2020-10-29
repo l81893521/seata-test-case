@@ -22,7 +22,8 @@ public class OracleAccount {
 
         //普通新增
         try {
-            accountService.createAccount(userId, debitMoney);
+            accountService.createAccount(userId, debitMoney, false);
+            accountService.createAccount(userId, debitMoney, true);
         } catch (Exception e){
             e.printStackTrace();
         }

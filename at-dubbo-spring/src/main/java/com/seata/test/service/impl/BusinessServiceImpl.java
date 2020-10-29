@@ -39,7 +39,7 @@ public class BusinessServiceImpl implements BusinessService {
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "debit-account-tx")
     public void debit(String userId, int money){
-        accountService.debit(userId, money);
+        accountService.debit(userId, money, true);
         throw new RuntimeException("扣除余额失败");
     }
 
@@ -47,7 +47,7 @@ public class BusinessServiceImpl implements BusinessService {
     @GlobalTransactional(timeoutMills = 300000, name = "debit-oracle-account-tx")
     public void debitForOracle(String userId, int money) {
         try {
-            accountService.debit(userId, money);
+            accountService.debit(userId, money, true);
         } catch (Exception e){
             throw new RuntimeException(e);
         }
@@ -58,7 +58,7 @@ public class BusinessServiceImpl implements BusinessService {
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "debit-d-account-tx")
     public void debitByDiffentDataSource(String userId, int money) {
-        accountService.debit(userId, money);
+        accountService.debit(userId, money, true);
         throw new RuntimeException("扣除余额失败");
     }
 
@@ -71,32 +71,21 @@ public class BusinessServiceImpl implements BusinessService {
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "dubbo-demo-create-account")
     public void createAccount(String userId, int money) {
-        accountService.createAccount(userId, money);
+        accountService.createAccount(userId, money, true);
         throw new RuntimeException("创建账户失败");
     }
 
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "dubbo-demo-create-account-oracle")
     public void createAccountForOracle(String userId, int money) {
-        accountService.createAccount(userId, money);
-        throw new RuntimeException("创建账户失败");
-    }
-
-    /**
-     * 创建账户
-     * @param userId
-     */
-    @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "dubbo-demo-create-account-1")
-    public void createAccount(int id, String userId, int money) {
-        accountService.createAccountWithPk(id, userId, money);
+        accountService.createAccount(userId, money, true);
         throw new RuntimeException("创建账户失败");
     }
 
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "delete-account-tx")
     public void deleteAccount(String userId) {
-        accountService.deleteAccount(userId);
+        accountService.deleteAccount(userId, true);
         throw new RuntimeException("删除账户失败");
     }
 

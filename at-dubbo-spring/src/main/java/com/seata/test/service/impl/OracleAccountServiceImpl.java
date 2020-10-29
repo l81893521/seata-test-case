@@ -27,31 +27,20 @@ public class OracleAccountServiceImpl implements AccountService {
     @Override
     @GlobalLock
     @Transactional
-    public void forUpdate(int id) {
+    public void forUpdate(int id, boolean shouldThrowException) {
         oracleAccountJdbcTemplate.queryForList("select * from account_tbl where id = ? for update", id);
         oracleAccountJdbcTemplate.queryForList("select * from \"ACCOUNT_TBL\" where id = ? for update", id);
         oracleAccountJdbcTemplate.queryForList("select * from test.account_tbl where id = ? for update", id);
         oracleAccountJdbcTemplate.queryForList("select * from test.\"ACCOUNT_TBL\" where id = ? for update", id);
-    }
-
-    @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "gts-account-for-update-with-in")
-    public void forUpdateWithIn(int id) {
+        //in
         oracleAccountJdbcTemplate.queryForList("select * from account_tbl where id in (?) for update", id);
-        throw new RuntimeException("查询锁失败");
-    }
-
-    @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "gts-account-for-update-with-between")
-    public void forUpdateWithBetween(int id) {
+        //between
         oracleAccountJdbcTemplate.queryForList("select * from account_tbl where id between ? and ? for update", id, id);
-        throw new RuntimeException("查询锁失败");
     }
 
     @Override
     @GlobalTransactional(timeoutMills = 30000, name = "gts-debit")
-    public void debit(String userId, int money) {
-        oracleAccountJdbcTemplate.update("update ut_user_log set yhid = ? where uuid = ?", new Object[] {"2", "AE4B84B8A6397FA8E05012AC02002FFA"});
+    public void debit(String userId, int money, boolean shouldThrowException) {
 //        oracleAccountJdbcTemplate.update("update account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
 //        oracleAccountJdbcTemplate.update("update \"ACCOUNT_TBL\" set money = money - ? where user_id = ?", new Object[] {money, userId});
 //        oracleAccountJdbcTemplate.update("update test.account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
@@ -59,44 +48,44 @@ public class OracleAccountServiceImpl implements AccountService {
 //        throw new RuntimeException("扣除余额失败");
     }
 
-    @Override
-    public void batchDebit(String[] userIds, int money) {
-
-    }
-
-    @Override
-    @GlobalTransactional(timeoutMills = 30000, name = "gts-debit-with-in")
-    public void debitWithIn(String userId, int money) {
-        oracleAccountJdbcTemplate.update("update account_tbl set money = money - ? where user_id in (?)", new Object[] {money, userId});
-        throw new RuntimeException("扣除余额失败");
-    }
-
-    @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "gts-debit-with-between")
-    public void debitWithBetween(String userId, int money) {
-        oracleAccountJdbcTemplate.update("update account_tbl set money = money - ? where user_id between ? and ?", new Object[] {money, userId, userId});
-        throw new RuntimeException("扣除余额失败");
-    }
-
-    @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "gts-debit-with-exist")
-    public void debitWithExist(String userId, int money) {
-        oracleAccountJdbcTemplate.update("update account_tbl a set money = money - ? "
-            + "where exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = ?)", money, userId);
-        throw new RuntimeException("扣除余额失败");
-    }
-
-    @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "gts-debit-with-not-exist")
-    public void debitWithNotExist(String userId, int money) {
-        oracleAccountJdbcTemplate.update("update account_tbl a set money = money - ? "
-            + "where not exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = ?)", money, userId);
-        throw new RuntimeException("扣除余额失败");
-    }
+//    @Override
+//    public void batchDebit(String[] userIds, int money) {
+//
+//    }
+//
+//    @Override
+//    @GlobalTransactional(timeoutMills = 30000, name = "gts-debit-with-in")
+//    public void debitWithIn(String userId, int money) {
+//        oracleAccountJdbcTemplate.update("update account_tbl set money = money - ? where user_id in (?)", new Object[] {money, userId});
+//        throw new RuntimeException("扣除余额失败");
+//    }
+//
+//    @Override
+//    @GlobalTransactional(timeoutMills = 300000, name = "gts-debit-with-between")
+//    public void debitWithBetween(String userId, int money) {
+//        oracleAccountJdbcTemplate.update("update account_tbl set money = money - ? where user_id between ? and ?", new Object[] {money, userId, userId});
+//        throw new RuntimeException("扣除余额失败");
+//    }
+//
+//    @Override
+//    @GlobalTransactional(timeoutMills = 300000, name = "gts-debit-with-exist")
+//    public void debitWithExist(String userId, int money) {
+//        oracleAccountJdbcTemplate.update("update account_tbl a set money = money - ? "
+//            + "where exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = ?)", money, userId);
+//        throw new RuntimeException("扣除余额失败");
+//    }
+//
+//    @Override
+//    @GlobalTransactional(timeoutMills = 300000, name = "gts-debit-with-not-exist")
+//    public void debitWithNotExist(String userId, int money) {
+//        oracleAccountJdbcTemplate.update("update account_tbl a set money = money - ? "
+//            + "where not exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = ?)", money, userId);
+//        throw new RuntimeException("扣除余额失败");
+//    }
 
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-create-account")
-    public void createAccount(String userId, int money) {
+    public void createAccount(String userId, int money, boolean shouldThrowException) {
         oracleAccountJdbcTemplate.update("insert into ut_user_log(yhid) values (?)", "3");
         oracleAccountJdbcTemplate.update("insert into ut_user_log(uuid, yhid) values (?, ?)", "ABCDEFG", "3");
         oracleAccountJdbcTemplate.update("insert into ut_user_log(uuid, yhid, lrrq, cznr) values (?, ?, ?, ?)", "ABCDEFGH", "3", new Date(), "A");
@@ -124,18 +113,8 @@ public class OracleAccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void batchCreateAccount(String[] userIds, int money) {
-
-    }
-
-    @Override
-    public void createAccountWithPk(int id, String userId, int money) {
-
-    }
-
-    @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account")
-    public void deleteAccount(String userId) {
+    public void deleteAccount(String userId, boolean shouldThrowException) {
         oracleAccountJdbcTemplate.update("delete from account_tbl where user_id = ?", userId);
         oracleAccountJdbcTemplate.update("delete from \"ACCOUNT_TBL\" where user_id = ?", userId);
         oracleAccountJdbcTemplate.update("delete from test.account_tbl where user_id = ?", userId);
