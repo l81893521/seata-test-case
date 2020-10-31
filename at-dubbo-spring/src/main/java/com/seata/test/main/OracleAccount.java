@@ -22,87 +22,35 @@ public class OracleAccount {
 
         //普通新增
         try {
-            accountService.createAccount(userId, debitMoney, false);
-            accountService.createAccount(userId, debitMoney, true);
+            //accountService.createAccount(userId, debitMoney, false);
+            //accountService.createAccount(userId, debitMoney, true);
         } catch (Exception e){
             e.printStackTrace();
         }
 
         try {
             //普通修改
-            //accountService.debit(userId, debitMoney);
+            accountService.debit(userId, debitMoney, false);
+            accountService.debit(userId, debitMoney, true);
         } catch (Exception e){
             e.printStackTrace();
         }
 
-        try {
-            //in修改
-            //accountService.debitWithIn(userId, debitMoney);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-        try {
-            //between修改
-            //accountService.debitWithBetween(userId, debitMoney);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-        try {
-            //exists修改
-            //accountService.debitWithExist(userId, debitMoney);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            //not exists修改
-            //accountService.debitWithNotExist(userId, debitMoney);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         try {
             //普通删除
-            //accountService.deleteAccount(userId);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-        try {
-            //in删除
-            //accountService.deleteAccountWithIn(userId);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-        try {
-            //between删除
-            //accountService.deleteAccountWithBetween(id);
+            //accountService.deleteAccount(userId, false);
+            //accountService.deleteAccount(userId, true);
         } catch (Exception e){
             e.printStackTrace();
         }
 
         try {
             //普通查询锁
-            //accountService.forUpdate(id);
+            //accountService.forUpdate(id, false);
+            //accountService.forUpdate(id, true);
         } catch (Exception e){
             e.printStackTrace();
         }
-
-//        try {
-//            //in查询锁
-//            accountService.forUpdateWithIn(id);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-
-//        try {
-//            //between查询锁
-//            accountService.forUpdateWithBetween(id);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
 
         new ApplicationKeeper(context).keep();
     }
