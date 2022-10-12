@@ -34,7 +34,8 @@
         <testng.version>6.4</testng.version>
         <spring.boot.version>2.1.9.RELEASE</spring.boot.version>
 
-        <mysql-connector.version>5.1.31</mysql-connector.version>
+<!--        <mysql-connector.version>5.1.31</mysql-connector.version>-->
+        <mysql-connector.version>8.0.27</mysql-connector.version>
         <mysql-8-connector.version>8.0.16</mysql-8-connector.version>
         <oracle-connector.version>11.2.0.1.0</oracle-connector.version>
         <log4j.version>2.3</log4j.version>
@@ -163,8 +164,8 @@
                 <artifactId>ojdbc6</artifactId>
                 <version>19.3</version>
                 <scope>system</scope>
-                <systemPath>D:/Program Files/Oracle Driver/ojdbc8-19.3.jar</systemPath>
-                <!--                <systemPath>D:/Program Files/Oracle Driver/ojdbc6-11.2.0.1.0.jar</systemPath>-->
+<!--                <systemPath>D:/Program Files/Oracle Driver/ojdbc8-19.3.jar</systemPath>-->
+<!--                    <systemPath>D:/Program Files/Oracle Driver/ojdbc6-11.2.0.1.0.jar</systemPath>-->
 <!--                <systemPath>D:/Program Files/Oracle Driver/ojdbc6-11.2.0.3.jar</systemPath>-->
 <!--                <systemPath>D:/Program Files/Oracle Driver/ojdbc8-12.2.0.1.jar</systemPath>-->
             </dependency>
