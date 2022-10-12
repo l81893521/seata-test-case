@@ -22,8 +22,8 @@ public class MysqlAccount {
 
         try {
             //普通新增
-            accountService.createAccount(userId, 999, false);
-            accountService.createAccount(userId, 999, true);
+//            accountService.createAccount(userId, 999, false);
+//            accountService.createAccount(userId, 999, true);
             //accountServiceProxy.createAccount(userId, 999);
         } catch (Exception e){
             e.printStackTrace();
@@ -31,7 +31,7 @@ public class MysqlAccount {
 
         try {
             //普通修改
-            accountService.debit(userId, debitMoney, false);
+//            accountService.debit(userId, debitMoney, false);
             accountService.debit(userId, debitMoney, true);
         } catch (Exception e){
             e.printStackTrace();
@@ -39,16 +39,16 @@ public class MysqlAccount {
 
         try {
             //删除
-            accountService.deleteAccount(userId, false);
-            accountService.deleteAccount(userId, true);
+//            accountService.deleteAccount(userId, false);
+//            accountService.deleteAccount(userId, true);
         } catch (Exception e){
             e.printStackTrace();
         }
 
         try {
             //查询锁
-            accountService.forUpdate(id, false);
-            accountService.forUpdate(id, true);
+//            accountService.forUpdate(id, false);
+//            accountService.forUpdate(id, true);
         } catch (Exception e){
             e.printStackTrace();
         }

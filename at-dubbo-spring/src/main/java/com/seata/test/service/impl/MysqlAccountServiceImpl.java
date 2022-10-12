@@ -36,8 +36,8 @@ public class MysqlAccountServiceImpl implements AccountService {
     public void forUpdate(int id, boolean shouldThrowException) {
         jdbcTemplate.queryForList("select * from account_tbl where id = ? for update", id);
         jdbcTemplate.queryForList("select * from `account_tbl` where id = ? for update", id);
-        jdbcTemplate.queryForList("select * from seata.account_tbl where id = ? for update", id);
-        jdbcTemplate.queryForList("select * from seata.`account_tbl` where id = ? for update", id);
+        jdbcTemplate.queryForList("select * from seata_client.account_tbl where id = ? for update", id);
+        jdbcTemplate.queryForList("select * from seata_client.`account_tbl` where id = ? for update", id);
         //in
         jdbcTemplate.queryForList("select * from account_tbl where id in (?) for update", id);
         //between
@@ -56,11 +56,11 @@ public class MysqlAccountServiceImpl implements AccountService {
     public void debit(String userId, int money, boolean shouldThrowException) {
         jdbcTemplate.update("update account_tbl set money = money - ?, sex = 1 where user_id = ?", new Object[] {money, userId});
         jdbcTemplate.update("update `account_tbl` set money = money - ? where user_id = ?", new Object[] {money, userId});
-        jdbcTemplate.update("update seata.account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
-        jdbcTemplate.update("update seata.`account_tbl` set money = money - ? where user_id = ?", new Object[] {money, userId});
-        jdbcTemplate.update("update seata.`account_tbl` set money = money - ? where user_id in (?, ?)", new Object[] {money, "U100002", "U100003"});
-        jdbcTemplate.update("update seata.`account_tbl` set money = money - ? where user_id in (?, ?, ?)", new Object[] {money, "U100002", "U100003", "U100004"});
-        jdbcTemplate.update("update seata.`account_tbl` set money = money - ? where user_id in (?, ?)", new Object[] {money, "U100002", "U100004"});
+        jdbcTemplate.update("update seata_client.account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
+        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id = ?", new Object[] {money, userId});
+        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id in (?, ?)", new Object[] {money, "U100002", "U100003"});
+        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id in (?, ?, ?)", new Object[] {money, "U100002", "U100003", "U100004"});
+        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id in (?, ?)", new Object[] {money, "U100002", "U100004"});
         //in
         jdbcTemplate.update("update account_tbl set money = money - ? where user_id in (?)", new Object[] {money, userId});
         jdbcTemplate.update("update account_tbl set money = money - \" + money + \" where user_id in ('\" + userId + \"')");
@@ -77,9 +77,9 @@ public class MysqlAccountServiceImpl implements AccountService {
         jdbcTemplate.update("update account_tbl a set money = money - " + money + " where not exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = '" + userId + "')");
         //multi pk
         jdbcTemplate.update("update account_tbl_multi_pk set money = money - ?, sex = 1 where user_id = ? or user_id = ?", new Object[] {money, userId, "U100003"});
-        //batch
-        jdbcTemplate.update("update seata.`account_tbl` set money = money - ? where user_id = ?;update seata.`account_tbl` set money = money - ? where user_id = ?;",
-                new Object[] {money, userId, money, userId});
+        //batch(mysql8好像不支持)
+//        jdbcTemplate.update("update seata_client_client.`account_tbl` set money = money - ? where user_id = ?;update seata_client.`account_tbl` set money = money - ? where user_id = ?;",
+//                new Object[] {money, userId, money, userId});
         jdbcTemplate.batchUpdate(
                 "update account_tbl set money = money - " + money + ", sex = 1 where user_id = \"" + userId + "\"",
                 "update account_tbl set money = money - " + money + ", sex = 1 where user_id = \"" + userId + "\"");
@@ -143,8 +143,8 @@ public class MysqlAccountServiceImpl implements AccountService {
         jdbcTemplate.update("insert into account_tbl(id, user_id, money, information) values (?, ?, ?, ?)", primaryKey, userId, money, "hello world".getBytes());
         jdbcTemplate.update("insert into account_tbl(id, user_id, money, information) values (null, ?, ?, ?)", userId, money, "hello world".getBytes());
         jdbcTemplate.update("insert into `account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into seata.account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into seata.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into seata_client.account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
+        jdbcTemplate.update("insert into seata_client.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
         jdbcTemplate.update("insert into `seata`.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
         jdbcTemplate.update("insert into account_tbl_multi_pk(user_id, sex, money) values (?, ?, ?)", userId, 1, money);
         jdbcTemplate.update("insert into account_tbl_multi_pk(USER_ID, sex, money) values (?, ?, ?)", userId, 1, money);
@@ -179,8 +179,8 @@ public class MysqlAccountServiceImpl implements AccountService {
     public void deleteAccount(String userId, boolean shouldThrowException) {
         jdbcTemplate.update("delete from account_tbl where user_id = ?", userId);
         jdbcTemplate.update("delete from `account_tbl` where user_id = ?", userId);
-        jdbcTemplate.update("delete from seata.account_tbl where user_id = ?", userId);
-        jdbcTemplate.update("delete from seata.`account_tbl` where user_id = ?", userId);
+        jdbcTemplate.update("delete from seata_client.account_tbl where user_id = ?", userId);
+        jdbcTemplate.update("delete from seata_client.`account_tbl` where user_id = ?", userId);
         //order by
         jdbcTemplate.update("delete from account_tbl where user_id = ? order by user_id", userId);
         jdbcTemplate.update("delete from account_tbl where user_id = ? order by user_id desc", userId);
