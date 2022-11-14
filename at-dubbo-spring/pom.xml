@@ -21,7 +21,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
-<!--            <version>${spring.jdbc.version}</version>-->
+            <version>${spring.jdbc.version}</version>
         </dependency>
 
         <dependency>
@@ -68,6 +68,5 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-
     </dependencies>
 </project>
