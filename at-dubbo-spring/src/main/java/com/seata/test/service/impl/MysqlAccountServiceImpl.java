@@ -55,58 +55,58 @@ public class MysqlAccountServiceImpl implements AccountService {
     @GlobalTransactional(timeoutMills = 300000, name = "gts-debit")
     public void debit(String userId, int money, boolean shouldThrowException) {
         jdbcTemplate.update("update account_tbl set money = money - ?, sex = 1 where user_id = ?", new Object[] {money, userId});
-        jdbcTemplate.update("update `account_tbl` set money = money - ? where user_id = ?", new Object[] {money, userId});
-        jdbcTemplate.update("update seata_client.account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
-        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id = ?", new Object[] {money, userId});
-        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id in (?, ?)", new Object[] {money, "U100002", "U100003"});
-        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id in (?, ?, ?)", new Object[] {money, "U100002", "U100003", "U100004"});
-        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id in (?, ?)", new Object[] {money, "U100002", "U100004"});
+//        jdbcTemplate.update("update `account_tbl` set money = money - ? where user_id = ?", new Object[] {money, userId});
+//        jdbcTemplate.update("update seata_client.account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
+//        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id = ?", new Object[] {money, userId});
+//        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id in (?, ?)", new Object[] {money, "U100002", "U100003"});
+//        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id in (?, ?, ?)", new Object[] {money, "U100002", "U100003", "U100004"});
+//        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id in (?, ?)", new Object[] {money, "U100002", "U100004"});
         //in
-        jdbcTemplate.update("update account_tbl set money = money - ? where user_id in (?)", new Object[] {money, userId});
-        jdbcTemplate.update("update account_tbl set money = money - \" + money + \" where user_id in ('\" + userId + \"')");
+//        jdbcTemplate.update("update account_tbl set money = money - ? where user_id in (?)", new Object[] {money, userId});
+//        jdbcTemplate.update("update account_tbl set money = money - \" + money + \" where user_id in ('\" + userId + \"')");
         //between
-        jdbcTemplate.update("update account_tbl set money = money - ? where user_id between ? and ?", new Object[] {money, userId, userId});
-        jdbcTemplate.update("update account_tbl set money = money - " + money + " where user_id between '" + userId + "' and '" + userId + "'");
+//        jdbcTemplate.update("update account_tbl set money = money - ? where user_id between ? and ?", new Object[] {money, userId, userId});
+//        jdbcTemplate.update("update account_tbl set money = money - " + money + " where user_id between '" + userId + "' and '" + userId + "'");
         //exist
-        jdbcTemplate.update("update account_tbl a set money = money - ? "
-                + "where exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = ?)", money, userId);
-        jdbcTemplate.update("update account_tbl a set money = money - " + money + " where exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = '" + userId + "')");
+//        jdbcTemplate.update("update account_tbl a set money = money - ? "
+//                + "where exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = ?)", money, userId);
+//        jdbcTemplate.update("update account_tbl a set money = money - " + money + " where exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = '" + userId + "')");
         //not exist
-        jdbcTemplate.update("update account_tbl a set money = money - ? "
-                + "where not exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = ?)", money, userId);
-        jdbcTemplate.update("update account_tbl a set money = money - " + money + " where not exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = '" + userId + "')");
+//        jdbcTemplate.update("update account_tbl a set money = money - ? "
+//                + "where not exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = ?)", money, userId);
+//        jdbcTemplate.update("update account_tbl a set money = money - " + money + " where not exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = '" + userId + "')");
         //multi pk
-        jdbcTemplate.update("update account_tbl_multi_pk set money = money - ?, sex = 1 where user_id = ? or user_id = ?", new Object[] {money, userId, "U100003"});
+//        jdbcTemplate.update("update account_tbl_multi_pk set money = money - ?, sex = 1 where user_id = ? or user_id = ?", new Object[] {money, userId, "U100003"});
         //batch(mysql8好像不支持)
 //        jdbcTemplate.update("update seata_client_client.`account_tbl` set money = money - ? where user_id = ?;update seata_client.`account_tbl` set money = money - ? where user_id = ?;",
 //                new Object[] {money, userId, money, userId});
-        jdbcTemplate.batchUpdate(
-                "update account_tbl set money = money - " + money + ", sex = 1 where user_id = \"" + userId + "\"",
-                "update account_tbl set money = money - " + money + ", sex = 1 where user_id = \"" + userId + "\"");
-        jdbcTemplate.batchUpdate("update account_tbl set money = money - ?, sex = 1 where user_id = ?", new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setInt(1, money);
-                ps.setString(2, userId);
-            }
-            @Override
-            public int getBatchSize() {
-                return 2;
-            }
-        });
+//        jdbcTemplate.batchUpdate(
+//                "update account_tbl set money = money - " + money + ", sex = 1 where user_id = \"" + userId + "\"",
+//                "update account_tbl set money = money - " + money + ", sex = 1 where user_id = \"" + userId + "\"");
+//        jdbcTemplate.batchUpdate("update account_tbl set money = money - ?, sex = 1 where user_id = ?", new BatchPreparedStatementSetter() {
+//            @Override
+//            public void setValues(PreparedStatement ps, int i) throws SQLException {
+//                ps.setInt(1, money);
+//                ps.setString(2, userId);
+//            }
+//            @Override
+//            public int getBatchSize() {
+//                return 2;
+//            }
+//        });
         //batch with multi pk
-        jdbcTemplate.batchUpdate("update account_tbl_multi_pk set money = money - ?, sex = 1 where user_id = ?", new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setInt(1, money);
-                ps.setString(2, userId);
-            }
-
-            @Override
-            public int getBatchSize() {
-                return 2;
-            }
-        });
+//        jdbcTemplate.batchUpdate("update account_tbl_multi_pk set money = money - ?, sex = 1 where user_id = ?", new BatchPreparedStatementSetter() {
+//            @Override
+//            public void setValues(PreparedStatement ps, int i) throws SQLException {
+//                ps.setInt(1, money);
+//                ps.setString(2, userId);
+//            }
+//
+//            @Override
+//            public int getBatchSize() {
+//                return 2;
+//            }
+//        });
         if (shouldThrowException) {
             throw new RuntimeException("扣除余额失败");
         } else {
@@ -171,6 +171,17 @@ public class MysqlAccountServiceImpl implements AccountService {
             throw new RuntimeException("创建账户失败");
         } else {
             log.info("-----------------------------创建账户成功-----------------------------");
+        }
+    }
+
+    @Override
+    public void createOrUpdateAccount(String userId, boolean shouldThrowException) {
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information, create_time) values (?, ?, ?, ?, now())" +
+                " on duplicate key update money = 1000");
+        if (shouldThrowException) {
+            throw new RuntimeException("create or update failed");
+        } else {
+            log.info("create or update successed");
         }
     }
 

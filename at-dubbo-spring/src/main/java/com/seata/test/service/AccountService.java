@@ -27,6 +27,13 @@ public interface AccountService {
     void createAccount(String userId, int money, boolean shouldThrowException);
 
     /**
+     * 创建或更新账户
+     * @param userId
+     * @param shouldThrowException
+     */
+    void createOrUpdateAccount(String userId, boolean shouldThrowException);
+
+    /**
      * 删除账户
      * @param userId
      */

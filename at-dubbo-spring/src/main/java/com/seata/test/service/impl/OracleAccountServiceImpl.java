@@ -97,6 +97,11 @@ public class OracleAccountServiceImpl implements AccountService {
     }
 
     @Override
+    public void createOrUpdateAccount(String userId, boolean shouldThrowException) {
+
+    }
+
+    @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account")
     public void deleteAccount(String userId, boolean shouldThrowException) {
         oracleAccountJdbcTemplate.update("delete from account_tbl where user_id = ?", userId);

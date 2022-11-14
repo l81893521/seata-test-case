@@ -30,6 +30,12 @@ public class MysqlAccount {
         }
 
         try {
+            accountService.createOrUpdateAccount(userId, true );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
             //普通修改
 //            accountService.debit(userId, debitMoney, false);
             accountService.debit(userId, debitMoney, true);
