@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.seata.test</groupId>
-        <artifactId>test-case</artifactId>
+        <artifactId>seata-test-case</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>tcc-dubbo-spring</artifactId>
@@ -42,10 +42,10 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc6</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.oracle</groupId>-->
+<!--            <artifactId>ojdbc6</artifactId>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.postgresql</groupId>
