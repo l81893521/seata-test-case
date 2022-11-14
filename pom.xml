@@ -47,6 +47,7 @@
         <module>at-dubbo-springboot-mybatis</module>
         <module>at-netflix-springcloud-mybatis</module>
         <module>tcc-dubbo-spring</module>
+        <module>script</module>
     </modules>
 
     <dependencyManagement>
