@@ -13,6 +13,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -175,9 +176,22 @@ public class MysqlAccountServiceImpl implements AccountService {
     }
 
     @Override
+    @GlobalTransactional(timeoutMills = 300000)
     public void createOrUpdateAccount(String userId, boolean shouldThrowException) {
-        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information, create_time) values (?, ?, ?, ?, now())" +
-                " on duplicate key update money = 1000");
+        //normal
+//        jdbcTemplate.update("insert into account_tbl(user_id, money, information, create_time) values (?, ?, ?, now())" +
+//                " on duplicate key update money = 1000", userId, 1000, "hello world".getBytes(StandardCharsets.UTF_8));
+        //insert null
+        jdbcTemplate.update("insert into account_tbl(user_id, money, information, create_time) values (null, ?, ?, now())" +
+                " on duplicate key update money = 1000", 1000, "hello world".getBytes(StandardCharsets.UTF_8));
+
+//        jdbcTemplate.update("insert into account_tbl(user_id, money, information, create_time) " +
+//                "values (?, ?, ?, now()), (?, ?, ?, now())" +
+//                " on duplicate key update money = 1000",
+//                userId, 1000, "hello world".getBytes(StandardCharsets.UTF_8),
+//                userId, 1000, "hello world".getBytes(StandardCharsets.UTF_8));
+
+
         if (shouldThrowException) {
             throw new RuntimeException("create or update failed");
         } else {

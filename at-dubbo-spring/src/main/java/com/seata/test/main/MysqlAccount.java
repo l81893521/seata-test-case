@@ -21,7 +21,7 @@ public class MysqlAccount {
         int debitMoney = 10;
 
         try {
-            //普通新增
+            // insert
 //            accountService.createAccount(userId, 999, false);
 //            accountService.createAccount(userId, 999, true);
             //accountServiceProxy.createAccount(userId, 999);
@@ -30,6 +30,7 @@ public class MysqlAccount {
         }
 
         try {
+            // insert on duplicate
             accountService.createOrUpdateAccount(userId, true );
         } catch (Exception e) {
             e.printStackTrace();
@@ -38,7 +39,7 @@ public class MysqlAccount {
         try {
             //普通修改
 //            accountService.debit(userId, debitMoney, false);
-            accountService.debit(userId, debitMoney, true);
+//            accountService.debit(userId, debitMoney, true);
         } catch (Exception e){
             e.printStackTrace();
         }
