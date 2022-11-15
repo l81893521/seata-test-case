@@ -2,7 +2,7 @@ create table account_tbl
 (
     id          bigint auto_increment comment 'id'
         primary key,
-    user_id     varchar(50)                        not null comment 'user_id',
+    user_id     varchar(50)                        null comment 'user_id',
     money       bigint                             not null comment 'money',
     sex         tinyint  default 1                 not null comment 'sex',
     information text                               null comment 'information',
