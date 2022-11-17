@@ -27,22 +27,6 @@ public class OrderServiceImpl implements OrderService {
 
     private AccountService accountService;
 
-    @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "gt-seata-for-success")
-    public void testSeataForSuccess() {
-        int orderId = insertOrder("U0000010", "C00321", 2, 400);
-        updateOrder(orderId, 300);
-        deleteOrder(orderId);
-    }
-
-    @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "gt-seata-for-success")
-    public void testSeataForFail() {
-        int orderId = insertOrder("U0000010", "C00321", 2, 400);
-        updateOrder(orderId, 300);
-        deleteOrder(orderId);
-        throw new RuntimeException("操作失败");
-    }
 
     @Override
     public int insertOrder(String userId, String commodityCode, int orderCount, int money) {

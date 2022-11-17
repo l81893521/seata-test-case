@@ -5,19 +5,6 @@ import com.seata.test.entity.Order;
 public interface OrderService {
 
     /**
-     * 分别正常执行
-     * 插入->更新->删除
-     */
-    void testSeataForSuccess();
-
-    /**
-     * 分别执行
-     * 插入->更新->删除
-     * 然后抛出异常
-     */
-    void testSeataForFail();
-
-    /**
      * 插入订单
      * @param userId
      * @param commodityCode
