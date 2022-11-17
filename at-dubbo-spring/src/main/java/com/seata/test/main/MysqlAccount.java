@@ -2,6 +2,7 @@ package com.seata.test.main;
 
 import com.seata.test.ApplicationKeeper;
 import com.seata.test.service.AccountService;
+import com.seata.test.service.OrderService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -14,10 +15,12 @@ public class MysqlAccount {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"spring/dubbo-account-mysql-service.xml"});
 
         AccountService accountService = (AccountService) context.getBean("accountService");
+        OrderService orderService = (OrderService) context.getBean("orderService");
+
 //        AccountService accountServiceProxy = context.getBean("proxyFactoryBean", AccountService.class);
         int id = 1;
+        int orderId = 1;
         String userId = "U100002";
-        String userId2 = "U100003";
         int debitMoney = 10;
 
         try {
@@ -31,7 +34,7 @@ public class MysqlAccount {
 
         try {
             // insert on duplicate
-            accountService.createOrUpdateAccount(userId, true );
+//            accountService.createOrUpdateAccount(userId, true );
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,10 +56,16 @@ public class MysqlAccount {
         }
 
         try {
-            //查询锁
+            // check lock
 //            accountService.forUpdate(id, false);
 //            accountService.forUpdate(id, true);
         } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        try {
+            orderService.updateJoinOrderStatus(orderId, userId, true);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

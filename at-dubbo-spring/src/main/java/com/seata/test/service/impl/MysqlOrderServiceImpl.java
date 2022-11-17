@@ -4,6 +4,7 @@ import com.seata.test.entity.Order;
 import com.seata.test.service.AccountService;
 import com.seata.test.service.OrderService;
 import io.seata.spring.annotation.GlobalTransactional;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,8 @@ import java.sql.PreparedStatement;
   * @author will.zjw
   * @date 2019-04-19 16:26
   */
-public class OrderServiceImpl implements OrderService {
+@Slf4j
+public class MysqlOrderServiceImpl implements OrderService {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
@@ -52,6 +54,20 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void updateOrder(int orderId, int money) {
         jdbcTemplate.update("update seata_order_tbl set money = money - ? where id = ?", money, orderId);
+    }
+
+    @Override
+    public void updateJoinOrderStatus(int orderId, String userId, boolean shouldThrowException) {
+        jdbcTemplate.update("update order_tbl o " +
+                "left join account_tbl a on o.user_id = a.user_id " +
+                "set o.order_status = 1 " +
+                "where o.user_id = ? and o.id = ?",
+                userId, orderId);
+
+        if (shouldThrowException) {
+            throw new RuntimeException("update join order status failed.");
+        }
+        log.info("update join order status success");
     }
 
     @Override

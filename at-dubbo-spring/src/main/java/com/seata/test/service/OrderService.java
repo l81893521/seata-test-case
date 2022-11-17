@@ -33,6 +33,13 @@ public interface OrderService {
     void updateOrder(int orderId, int money);
 
     /**
+     * 更新订单状态
+     * @param orderId
+     * @param userId
+     */
+    void updateJoinOrderStatus(int orderId, String userId, boolean shouldThrowException);
+
+    /**
      * 删除订单
      * @param orderId
      */
