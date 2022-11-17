@@ -13,8 +13,10 @@ create table account_tbl
 
 create table order_tbl
 (
-    id bigint           not null auto_increment primary key comment 'id',
-    user_id varchar(50)  not null comment 'user_id'
+    id           bigint auto_increment comment 'id'
+        primary key,
+    user_id      varchar(50)       not null comment 'user_id',
+    order_status tinyint default 0 not null comment '订单状态'
 );
 
 create table account_tbl_multi_pk
