@@ -1,7 +1,9 @@
 package com.seata.test.service.impl;
 
 
+import com.alibaba.nacos.common.utils.UuidUtils;
 import com.seata.test.service.AccountService;
+import com.seata.test.util.UUIDGenerator;
 import io.seata.spring.annotation.GlobalLock;
 import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
@@ -178,18 +180,33 @@ public class MysqlAccountServiceImpl implements AccountService {
     @Override
     @GlobalTransactional(timeoutMills = 300000)
     public void createOrUpdateAccount(String userId, boolean shouldThrowException) {
+
+        /**
+         * single
+         */
         //normal
 //        jdbcTemplate.update("insert into account_tbl(user_id, money, information, create_time) values (?, ?, ?, now())" +
 //                " on duplicate key update money = 1000", userId, 1000, "hello world".getBytes(StandardCharsets.UTF_8));
         //insert null
-        jdbcTemplate.update("insert into account_tbl(user_id, money, information, create_time) values (null, ?, ?, now())" +
-                " on duplicate key update money = 1000", 1000, "hello world".getBytes(StandardCharsets.UTF_8));
+//        jdbcTemplate.update("insert into account_tbl(user_id, money, information, create_time) values (null, ?, ?, now())" +
+//                " on duplicate key update money = 1000", 1000, "hello world".getBytes(StandardCharsets.UTF_8));
 
+        /**
+         * batch
+         */
+        //normal
 //        jdbcTemplate.update("insert into account_tbl(user_id, money, information, create_time) " +
 //                "values (?, ?, ?, now()), (?, ?, ?, now())" +
 //                " on duplicate key update money = 1000",
 //                userId, 1000, "hello world".getBytes(StandardCharsets.UTF_8),
 //                userId, 1000, "hello world".getBytes(StandardCharsets.UTF_8));
+
+        //insert null
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information, create_time) " +
+                "values (?, ?, ?, ?, now()), (null, ?, ?, ?, now()) " +
+                "on duplicate key update money = 1000",
+                UUIDGenerator.generateUUID(), userId, 1000, "hello world".getBytes(StandardCharsets.UTF_8),
+                userId, 1000, "hello wolrd".getBytes(StandardCharsets.UTF_8));
 
 
         if (shouldThrowException) {
