@@ -6,7 +6,7 @@
        xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    <dubbo:application name="dubbo-account-mysql-service"/>
+    <dubbo:application name="dubbo-mysql-service"/>
     <!-- 使用multicast广播注册中心暴露服务地址 -->
     <!--<dubbo:registry address="multicast://224.5.6.8:1234?unicast=false"/>-->
     <dubbo:registry address="N/A"/>
@@ -16,11 +16,11 @@
     <!-- 声明需要暴露的服务接口 -->
     <dubbo:service interface="com.seata.test.service.AccountService" ref="accountService" timeout="10000"/>
 
-    <bean id="accountService" class="com.seata.test.service.impl.MysqlAccountServiceImpl">
+    <bean id="accountService" class="com.seata.test.service.mysql.AccountServiceImpl">
         <property name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
 
-    <bean id="orderService" class="com.seata.test.service.impl.MysqlOrderServiceImpl">
+    <bean id="orderService" class="com.seata.test.service.mysql.OrderServiceImpl">
         <property name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
 
@@ -30,12 +30,12 @@
     </bean>
 
     <!-- 数据源 -->
-    <bean name="accountDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+    <bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
           init-method="init" destroy-method="close">
-        <property name="url" value="${jdbc.account.url}"/>
-        <property name="username" value="${jdbc.account.username}"/>
-        <property name="password" value="${jdbc.account.password}"/>
-        <property name="driverClassName" value="${jdbc.account.driver}"/>
+        <property name="url" value="${jdbc.mysql.url}"/>
+        <property name="username" value="${jdbc.mysql.username}"/>
+        <property name="password" value="${jdbc.mysql.password}"/>
+        <property name="driverClassName" value="${jdbc.mysql.driver}"/>
         <property name="initialSize" value="0" />
         <property name="maxActive" value="180" />
         <property name="minIdle" value="0" />
@@ -52,36 +52,23 @@
         <property name="filters" value="mergeStat" />
     </bean>
 
-    <bean id="accountDataSourceProxy" class="io.seata.rm.datasource.DataSourceProxy">
-        <constructor-arg ref="accountDataSource" />
+    <bean id="dataSourceProxy" class="io.seata.rm.datasource.DataSourceProxy">
+        <constructor-arg ref="dataSource" />
     </bean>
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource" ref="accountDataSourceProxy" />
+        <property name="dataSource" ref="dataSourceProxy" />
     </bean>
 
     <bean class="io.seata.spring.annotation.GlobalTransactionScanner">
-        <constructor-arg value="dubbo-account-mysql-service"/>
+        <constructor-arg value="dubbo-mysql-service"/>
         <constructor-arg value="my_test_tx_group"/>
     </bean>
 
     <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="accountDataSourceProxy"/>
+        <property name="dataSource" ref="dataSourceProxy"/>
     </bean>
 
     <tx:annotation-driven transaction-manager="txManager"/>
 
-    <!-- 手动配置全局事务切面代理 -->
-<!--    <bean id="interceptor" class="io.seata.spring.interceptor.AtGlobalTransactionalInterceptor"/>-->
-
-<!--    <bean id="proxyFactoryBean" class="org.springframework.aop.framework.ProxyFactoryBean">-->
-<!--        <property name="interfaces" value="com.seata.test.service.AccountService"/>-->
-<!--        <property name="target" ref="accountService"/>-->
-<!--        <property name="interceptorNames">-->
-<!--            <list>-->
-<!--                <value>interceptor</value>-->
-<!--            </list>-->
-<!--        </property>-->
-<!--        <property name="proxyTargetClass" value="true"/>-->
-<!--    </bean>-->
 </beans>

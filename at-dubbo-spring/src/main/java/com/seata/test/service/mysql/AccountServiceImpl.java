@@ -1,4 +1,4 @@
-package com.seata.test.service.impl;
+package com.seata.test.service.mysql;
 
 
 import com.alibaba.nacos.common.utils.UuidUtils;
@@ -27,7 +27,7 @@ import java.util.Random;
   * @date 2019-04-19 16:25
   */
 @Slf4j
-public class MysqlAccountServiceImpl implements AccountService {
+public class AccountServiceImpl implements AccountService {
 
     private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
 

@@ -9,10 +9,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
   * @author will.zjw
   * @date 2019-04-23 18:39
   */
-public class MysqlAccount {
+public class MysqlTestCase {
 
     public static void main(String[] args) throws InterruptedException {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"spring/dubbo-account-mysql-service.xml"});
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"spring/dubbo-mysql-service.xml"});
 
         AccountService accountService = (AccountService) context.getBean("accountService");
         OrderService orderService = (OrderService) context.getBean("orderService");

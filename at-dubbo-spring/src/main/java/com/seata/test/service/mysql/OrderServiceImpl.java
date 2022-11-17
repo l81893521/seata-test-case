@@ -1,4 +1,4 @@
-package com.seata.test.service.impl;
+package com.seata.test.service.mysql;
 
 import com.seata.test.entity.Order;
 import com.seata.test.service.AccountService;
@@ -19,7 +19,7 @@ import java.sql.PreparedStatement;
   * @date 2019-04-19 16:26
   */
 @Slf4j
-public class MysqlOrderServiceImpl implements OrderService {
+public class OrderServiceImpl implements OrderService {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
@@ -57,6 +57,7 @@ public class MysqlOrderServiceImpl implements OrderService {
     }
 
     @Override
+    @GlobalTransactional(timeoutMills = 300000)
     public void updateJoinOrderStatus(int orderId, String userId, boolean shouldThrowException) {
         jdbcTemplate.update("update order_tbl o " +
                 "left join account_tbl a on o.user_id = a.user_id " +
