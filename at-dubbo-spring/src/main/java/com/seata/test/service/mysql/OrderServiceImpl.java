@@ -43,11 +43,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @GlobalTransactional(timeoutMills = 300000)
     public void updateJoinOrderStatus(int orderId, String userId, boolean shouldThrowException) {
+        // normal
+//        jdbcTemplate.update("update order_tbl o " +
+//                "left join account_tbl a on o.user_id = a.user_id " +
+//                "set o.order_status = 1 " +
+//                "where o.user_id = ? and o.id = ?",
+//                userId, orderId);
+
+        // param in join
         jdbcTemplate.update("update order_tbl o " +
-                "left join account_tbl a on o.user_id = a.user_id " +
-                "set o.order_status = 1 " +
-                "where o.user_id = ? and o.id = ?",
-                userId, orderId);
+                "inner join account_tbl a on o.user_id = a.user_id and a.user_id = ? " +
+                "set o.order_status = 1", userId);
 
         if (shouldThrowException) {
             throw new RuntimeException("update join order status failed.");
