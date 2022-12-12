@@ -25,9 +25,8 @@ public class MysqlTestCase {
 
         try {
             // insert
-//            accountService.createAccount(userId, 999, false);
-//            accountService.createAccount(userId, 999, true);
-            //accountServiceProxy.createAccount(userId, 999);
+            accountService.createAccount(userId, 999, false);
+            accountService.createAccount(userId, 999, true);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -64,7 +63,7 @@ public class MysqlTestCase {
         }
 
         try {
-            orderService.updateJoinOrderStatus(orderId, userId, true);
+//            orderService.updateJoinOrderStatus(orderId, userId, true);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
+import java.util.UUID;
 
 /**
   * @author will.zjw
@@ -124,45 +125,53 @@ public class AccountServiceImpl implements AccountService {
      * @param money
      */
     @Override
-    //@Transactional
     @GlobalTransactional(timeoutMills = 300000, name = "gts-create-account")
     public void createAccount(String userId, int money, boolean shouldThrowException) {
-        int primaryKey = new Random().nextInt(999999);
 
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(con ->  {
-            PreparedStatement preparedStatement = con.prepareStatement("insert ignore into account_tbl(user_id, money, information) values (?, ?, ?)");
-            int i = 1;
-            preparedStatement.setString(i++, userId);
-            preparedStatement.setInt(i++, money);
-            preparedStatement.setString(i++, "a");
-            return preparedStatement;
-        }, keyHolder);
-        log.info("key holder size: {}", keyHolder.getKeyList().size());
-        jdbcTemplate.update("replace into account_tbl(user_id, money, information, create_time) values (?, ?, ?, now())", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information, create_time) values (?, ?, ?, ?, now())", primaryKey++, userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into account_tbl(USER_ID, money, information, create_time) values (?, ?, ?, now())", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into account_tbl(create_time, money, information, user_id) values (now(), ?, ?, ?)", money, "hello world".getBytes(), userId);
-        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information) values (?, ?, ?, ?)", primaryKey, userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information) values (null, ?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into `account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into seata_client.account_tbl(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into seata_client.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into `seata`.`account_tbl`(user_id, money, information) values (?, ?, ?)", userId, money, "hello world".getBytes());
-        jdbcTemplate.update("insert into account_tbl_multi_pk(user_id, sex, money) values (?, ?, ?)", userId, 1, money);
-        jdbcTemplate.update("insert into account_tbl_multi_pk(USER_ID, sex, money) values (?, ?, ?)", userId, 1, money);
+//        KeyHolder keyHolder = new GeneratedKeyHolder();
+//        jdbcTemplate.update(con ->  {
+//            PreparedStatement preparedStatement = con.prepareStatement("insert ignore into account_tbl(user_id, money, information) values (?, ?, ?)");
+//            int i = 1;
+//            preparedStatement.setString(i++, userId);
+//            preparedStatement.setInt(i++, money);
+//            preparedStatement.setString(i++, "a");
+//            return preparedStatement;
+//        }, keyHolder);
+//        log.info("key holder size: {}", keyHolder.getKeyList().size());
+//        jdbcTemplate.update("replace into account_tbl(user_id, money, information, create_time) values (?, ?, ?, now())", userId, money, "hello world".getBytes());
+        // auto increment
+        jdbcTemplate.update("insert into account_tbl(USER_ID, money, information, create_time) values (?, ?, ?, now())", UUID.randomUUID().toString(), money, "hello world".getBytes());
+        jdbcTemplate.update("insert into account_tbl(create_time, money, information, user_id) values (now(), ?, ?, ?)", money, "hello world".getBytes(), UUID.randomUUID().toString());
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information) values (null, ?, ?, ?)", UUID.randomUUID().toString(), money, "hello world".getBytes());
+        jdbcTemplate.update("insert into `account_tbl`(user_id, money, information) values (?, ?, ?)", UUID.randomUUID().toString(), money, "hello world".getBytes());
+        jdbcTemplate.update("insert into seata_client.account_tbl(user_id, money, information) values (?, ?, ?)", UUID.randomUUID().toString(), money, "hello world".getBytes());
+        jdbcTemplate.update("insert into seata_client.`account_tbl`(user_id, money, information) values (?, ?, ?)", UUID.randomUUID().toString(), money, "hello world".getBytes());
+        jdbcTemplate.update("insert into `seata_client`.`account_tbl`(user_id, money, information) values (?, ?, ?)", UUID.randomUUID().toString(), money, "hello world".getBytes());
+        // insert primary key
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information, create_time) values (?, ?, ?, ?, now())", UUIDGenerator.generateUUID(), UUID.randomUUID().toString(), money, "hello world".getBytes());
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information) values (?, ?, ?, ?)", UUIDGenerator.generateUUID(), UUID.randomUUID().toString(), money, "hello world".getBytes());
+        // multi pk
+        jdbcTemplate.update("insert into account_tbl_multi_pk(user_id, sex, money) values (?, ?, ?)", UUID.randomUUID().toString(), 1, money);
+        jdbcTemplate.update("insert into account_tbl_multi_pk(USER_ID, sex, money) values (?, ?, ?)", UUID.randomUUID().toString(), 1, money);
         //batch
-        jdbcTemplate.update("insert into account_tbl(money, create_time, information, user_id) values (?, now(), ?, ?), (?, now(), ?, ?)", money, "hello world".getBytes(), primaryKey++, money, "hello world".getBytes(), primaryKey++);
-        jdbcTemplate.update("insert into account_tbl(money, create_time, information, user_id, id) values (?, now(), ?, ?, ?), (?, now(), ?, ?, ?)", money, "hello world".getBytes(), "U100009", primaryKey++, money, "hello world".getBytes(), "U100009", primaryKey++);
-        jdbcTemplate.update("insert into account_tbl(create_time, money, information, user_id) values (now(), ?, ?, ?), (now(), ?, ?, ?)", money, "hello world".getBytes(), "U100009", money, "hello world".getBytes(), "U100009");
-        jdbcTemplate.update("insert into account_tbl(create_time, money, information, user_id, id) values (now(), ?, ?, ?, ?), (now(), ?, ?, ?, ?)", money, "hello world".getBytes(), "U100009", primaryKey++, money, "hello world".getBytes(), "U100009", primaryKey++);
+        jdbcTemplate.update("insert into account_tbl(money, create_time, information, user_id) values (?, now(), ?, ?), (?, now(), ?, ?)",
+                money, "hello world".getBytes(), UUID.randomUUID().toString(),
+                money, "hello world".getBytes(), UUID.randomUUID().toString());
+        jdbcTemplate.update("insert into account_tbl(money, create_time, information, user_id, id) values (?, now(), ?, ?, ?), (?, now(), ?, ?, ?)",
+                money, "hello world".getBytes(), UUID.randomUUID().toString(), UUIDGenerator.generateUUID(),
+                money, "hello world".getBytes(), UUID.randomUUID().toString(), UUIDGenerator.generateUUID());
+        jdbcTemplate.update("insert into account_tbl(create_time, money, information, user_id) values (now(), ?, ?, ?), (now(), ?, ?, ?)",
+                money, "hello world".getBytes(), UUID.randomUUID().toString(),
+                money, "hello world".getBytes(), UUID.randomUUID().toString());
+        jdbcTemplate.update("insert into account_tbl(create_time, money, information, user_id, id) values (now(), ?, ?, ?, ?), (now(), ?, ?, ?, ?)",
+                money, "hello world".getBytes(), UUID.randomUUID().toString(), UUIDGenerator.generateUUID(),
+                money, "hello world".getBytes(), UUID.randomUUID().toString(), UUIDGenerator.generateUUID());
         jdbcTemplate.batchUpdate("insert into account_tbl(create_time, money, information, user_id) values (now(), ?, ?, ?)", new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
-                String userId = "U100009";
                 ps.setInt(1, money);
-                ps.setString(2, userId);
-                ps.setBytes(3, "hello world".getBytes());
+                ps.setBytes(2, "hello world".getBytes());
+                ps.setString(3, UUID.randomUUID().toString());
             }
 
             @Override
