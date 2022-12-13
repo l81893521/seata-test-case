@@ -2,6 +2,7 @@ package com.seata.test.service.mysql;
 
 
 import com.alibaba.nacos.common.utils.UuidUtils;
+import com.google.common.collect.Lists;
 import com.seata.test.service.AccountService;
 import com.seata.test.util.UUIDGenerator;
 import io.seata.spring.annotation.GlobalLock;
@@ -61,29 +62,26 @@ public class AccountServiceImpl implements AccountService {
         jdbcTemplate.update("update account_tbl set money = money - ?, sex = 1 where user_id = ?", money, userId);
         jdbcTemplate.update("update `account_tbl` set money = money - ? where user_id = ?", money, userId);
         jdbcTemplate.update("update seata_client.account_tbl set money = money - ? where user_id = ?", money, userId);
-//        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id = ?", new Object[] {money, userId});
-//        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id in (?, ?)", new Object[] {money, "U100002", "U100003"});
-//        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id in (?, ?, ?)", new Object[] {money, "U100002", "U100003", "U100004"});
-//        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id in (?, ?)", new Object[] {money, "U100002", "U100004"});
+        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id = ?", money, userId);
         //in
-//        jdbcTemplate.update("update account_tbl set money = money - ? where user_id in (?)", new Object[] {money, userId});
-//        jdbcTemplate.update("update account_tbl set money = money - \" + money + \" where user_id in ('\" + userId + \"')");
+        jdbcTemplate.update("update account_tbl set money = money - ? where user_id in (?)", money, userId);
         //between
-//        jdbcTemplate.update("update account_tbl set money = money - ? where user_id between ? and ?", new Object[] {money, userId, userId});
-//        jdbcTemplate.update("update account_tbl set money = money - " + money + " where user_id between '" + userId + "' and '" + userId + "'");
+        jdbcTemplate.update("update account_tbl set money = money - ? where user_id between ? and ?", money, userId, userId);
         //exist
-//        jdbcTemplate.update("update account_tbl a set money = money - ? "
-//                + "where exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = ?)", money, userId);
-//        jdbcTemplate.update("update account_tbl a set money = money - " + money + " where exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = '" + userId + "')");
+        jdbcTemplate.update("update account_tbl a set money = money - ? "
+                + "where exists (select 'U100002' as user_id from dual)", money);
+
         //not exist
-//        jdbcTemplate.update("update account_tbl a set money = money - ? "
-//                + "where not exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = ?)", money, userId);
-//        jdbcTemplate.update("update account_tbl a set money = money - " + money + " where not exists (select 1 from order_tbl o where a.user_id = o.user_id and o.user_id = '" + userId + "')");
+        jdbcTemplate.update("update account_tbl a set money = money - ? "
+                + "where not exists (select 'U100003' as user_id from dual)", money);
+
         //multi pk
-//        jdbcTemplate.update("update account_tbl_multi_pk set money = money - ?, sex = 1 where user_id = ? or user_id = ?", new Object[] {money, userId, "U100003"});
+        jdbcTemplate.update("update account_tbl_multi_pk set money = money - ?, sex = 1 where user_id = ?", money, userId);
+
         //batch(mysql8好像不支持)
-//        jdbcTemplate.update("update seata_client_client.`account_tbl` set money = money - ? where user_id = ?;update seata_client.`account_tbl` set money = money - ? where user_id = ?;",
-//                new Object[] {money, userId, money, userId});
+//        jdbcTemplate.batchUpdate("update account_tbl set money = money - ? where user_id = ?; " +
+//                        "update account_tbl set money = money - ? where user_id = ?;",
+//                Lists.newArrayList(new Object[]{money, userId}, new Object[]{money, userId}));
 //        jdbcTemplate.batchUpdate(
 //                "update account_tbl set money = money - " + money + ", sex = 1 where user_id = \"" + userId + "\"",
 //                "update account_tbl set money = money - " + money + ", sex = 1 where user_id = \"" + userId + "\"");
