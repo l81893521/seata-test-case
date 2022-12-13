@@ -58,9 +58,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-debit")
     public void debit(String userId, int money, boolean shouldThrowException) {
-        jdbcTemplate.update("update account_tbl set money = money - ?, sex = 1 where user_id = ?", new Object[] {money, userId});
-//        jdbcTemplate.update("update `account_tbl` set money = money - ? where user_id = ?", new Object[] {money, userId});
-//        jdbcTemplate.update("update seata_client.account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
+        jdbcTemplate.update("update account_tbl set money = money - ?, sex = 1 where user_id = ?", money, userId);
+        jdbcTemplate.update("update `account_tbl` set money = money - ? where user_id = ?", money, userId);
+        jdbcTemplate.update("update seata_client.account_tbl set money = money - ? where user_id = ?", money, userId);
 //        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id = ?", new Object[] {money, userId});
 //        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id in (?, ?)", new Object[] {money, "U100002", "U100003"});
 //        jdbcTemplate.update("update seata_client.`account_tbl` set money = money - ? where user_id in (?, ?, ?)", new Object[] {money, "U100002", "U100003", "U100004"});
@@ -228,25 +228,64 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @GlobalTransactional(timeoutMills = 300000, name = "gts-delete-account")
     public void deleteAccount(String userId, boolean shouldThrowException) {
-        jdbcTemplate.update("delete from account_tbl where user_id = ?", userId);
-        jdbcTemplate.update("delete from `account_tbl` where user_id = ?", userId);
-        jdbcTemplate.update("delete from seata_client.account_tbl where user_id = ?", userId);
-        jdbcTemplate.update("delete from seata_client.`account_tbl` where user_id = ?", userId);
+        Long id = UUIDGenerator.generateUUID();
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information, create_time) values (?, ?, ?, ?, now())",
+                id, UUID.randomUUID().toString(), 999, "hello world".getBytes());
+        jdbcTemplate.update("delete from account_tbl where id = ?", id);
+
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information, create_time) values (?, ?, ?, ?, now())",
+                id, UUID.randomUUID().toString(), 999, "hello world".getBytes());
+        jdbcTemplate.update("delete from `account_tbl` where id = ?", id);
+
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information, create_time) values (?, ?, ?, ?, now())",
+                id, UUID.randomUUID().toString(), 999, "hello world".getBytes());
+        jdbcTemplate.update("delete from seata_client.account_tbl where id = ?", id);
+
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information, create_time) values (?, ?, ?, ?, now())",
+                id, UUID.randomUUID().toString(), 999, "hello world".getBytes());
+        jdbcTemplate.update("delete from seata_client.`account_tbl` where id = ?", id);
+
         //order by
-        jdbcTemplate.update("delete from account_tbl where user_id = ? order by user_id", userId);
-        jdbcTemplate.update("delete from account_tbl where user_id = ? order by user_id desc", userId);
-        jdbcTemplate.update("delete from account_tbl where user_id = ? order by user_id asc", userId);
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information, create_time) values (?, ?, ?, ?, now())",
+                id, UUID.randomUUID().toString(), 999, "hello world".getBytes());
+        jdbcTemplate.update("delete from account_tbl where id = ? order by user_id", id);
+
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information, create_time) values (?, ?, ?, ?, now())",
+                id, UUID.randomUUID().toString(), 999, "hello world".getBytes());
+        jdbcTemplate.update("delete from account_tbl where id = ? order by user_id desc", id);
+
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information, create_time) values (?, ?, ?, ?, now())",
+                id, UUID.randomUUID().toString(), 999, "hello world".getBytes());
+        jdbcTemplate.update("delete from account_tbl where id = ? order by user_id asc", id);
+
         //limit
-        jdbcTemplate.update("delete from account_tbl where user_id = ? limit 1", userId);
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information, create_time) values (?, ?, ?, ?, now())",
+                id, UUID.randomUUID().toString(), 999, "hello world".getBytes());
+        jdbcTemplate.update("delete from account_tbl where id = ? limit 1", id);
+
         //order by + limit
-        jdbcTemplate.update("delete from account_tbl where user_id = ? order by user_id limit 1", userId);
-        jdbcTemplate.update("delete from account_tbl where user_id = ? order by user_id desc limit 1", userId);
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information, create_time) values (?, ?, ?, ?, now())",
+                id, UUID.randomUUID().toString(), 999, "hello world".getBytes());
+        jdbcTemplate.update("delete from account_tbl where id = ? order by user_id limit 1", id);
+
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information, create_time) values (?, ?, ?, ?, now())",
+                id, UUID.randomUUID().toString(), 999, "hello world".getBytes());
+        jdbcTemplate.update("delete from account_tbl where id = ? order by user_id desc limit 1", id);
+
         //in
-        jdbcTemplate.update("delete from account_tbl where user_id in (?)", userId);
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information, create_time) values (?, ?, ?, ?, now())",
+                id, UUID.randomUUID().toString(), 999, "hello world".getBytes());
+        jdbcTemplate.update("delete from account_tbl where id in (?)", id);
+
         //between
-        jdbcTemplate.update("delete from account_tbl where user_id between ? and ?", userId, userId);
+        jdbcTemplate.update("insert into account_tbl(id, user_id, money, information, create_time) values (?, ?, ?, ?, now())",
+                id, UUID.randomUUID().toString(), 999, "hello world".getBytes());
+        jdbcTemplate.update("delete from account_tbl where id between ? and ?", id, id);
+
         //multi pk
-        jdbcTemplate.update("delete from account_tbl_multi_pk where user_id = ?", userId);
+        jdbcTemplate.update("insert into account_tbl_multi_pk(id, user_id, money, information, create_time) values (?, ?, ?, ?, now())",
+                id, UUID.randomUUID().toString(), 999, "hello world".getBytes());
+        jdbcTemplate.update("delete from account_tbl_multi_pk where id = ?", id);
         if (shouldThrowException) {
             throw new RuntimeException("账户删除失败");
         } else {
