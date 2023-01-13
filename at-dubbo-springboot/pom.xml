@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>at-dubbo-springboot-mybatis</artifactId>
+    <artifactId>at-dubbo-springboot</artifactId>
     <packaging>pom</packaging>
     <modules>
         <module>account-service</module>
