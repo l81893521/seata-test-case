@@ -16,7 +16,15 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
+        <!-- spring -->
+        <spring.boot.version>2.7.6</spring.boot.version>
+
+
+        <!-- middleware(checked) -->
         <seata.version>1.6.1</seata.version>
+        <mybatis.spring.boot.version>2.3.0</mybatis.spring.boot.version>
+
+
         <dubbo.version>2.7.4.1</dubbo.version>
         <druid.version>1.1.21</druid.version>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
@@ -32,7 +40,7 @@
         <dubbo.registry.nacos>0.0.2</dubbo.registry.nacos>
         <spring-context-support.version>1.0.2</spring-context-support.version>
         <testng.version>6.4</testng.version>
-        <spring.boot.version>2.7.6</spring.boot.version>
+
 
         <mysql-connector.version>5.1.31</mysql-connector.version>
         <mysql-8-connector.version>8.0.16</mysql-8-connector.version>
@@ -86,7 +94,7 @@
                 <version>${seata.version}</version>
             </dependency>
 
-            <!-- duboo -->
+            <!-- middleware -->
             <dependency>
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo</artifactId>
@@ -97,6 +105,13 @@
                 <artifactId>dubbo-spring-boot-starter</artifactId>
                 <version>${dubbo.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis.spring.boot.version}</version>
+            </dependency>
+
+
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid</artifactId>
