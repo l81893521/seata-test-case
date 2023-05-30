@@ -1,11 +1,11 @@
-name: API workflow
+name: build
 
 on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Test python API
+    name: Codecov
     steps:
     - uses: actions/checkout@v1
     - name: Install requirements
